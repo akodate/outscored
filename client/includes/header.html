@@ -1,5 +1,5 @@
 <template name="header">
-  <header class="navbar navbar-default" role="header">
+  <header class="navbar navbar-default header" role="header">
     <div class="container-fluid">
 
       <!-- Brand and toggle get grouped for better mobile display -->
@@ -10,12 +10,12 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="{{pathFor 'home'}}">Outsco.red</a>
+        <a class="navbar-brand" href="{{pathFor 'home'}}">Outscored</a>
       </div>
 
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
         <ul>
-          <li class="nav navbar-nav navbar-right">{{> loginButtons}}</li>
+          <li class="nav navbar-nav navbar-right login">{{> loginButtons}}</li>
         </ul>
       </div><!-- /.navbar-collapse -->
 

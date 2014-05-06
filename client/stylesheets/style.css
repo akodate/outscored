@@ -1,18 +1,57 @@
+html {
+  background: url(/notebook-paper.jpg) no-repeat fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: 1280px 1077px;
+  background-position: 0px -50px;
+}
+
 body {
-  font-family: 'Fugaz One', cursive;
+  border-radius: 10px;
+  font-family: 'La Belle Aurore', cursive;
+  background: transparent;
+  border: transparent;
+  position: absolute; left: 65px; top: 22px;
+  width: 90%;
+}
+
+.header {
+  background: transparent;
+  border: transparent;
+}
+
+.navbar-brand {
+  font-family: 'Homemade Apple';
+  padding-left: 45px;
+  font-size: 3.5em;
+}
+
+.login {
+  font-size: 2em;
+  margin-top: 10px;
 }
 
 .search-group {
-  margin: 3em 0em 0em 5em
+  margin: 100px 0em 0em 60px;
 }
 
 .search-heading {
+  font-family: 'Courgette';
   font-size: 2.2em;
 }
 
 .search-box {
-  font-family: 'Belgrano';
+  background: transparent;
+  border: transparent;
+  background: none;
+/*  font-family: 'Belgrano';*/
+  opacity: .9;
   font-size: 1.4em;
   width: 40em;
   height: 2.8em;
+}
+
+.search-box:focus {
+  outline: none !important;
 }
