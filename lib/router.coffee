@@ -5,7 +5,7 @@ Router.configure({
 })
 
 Router.map(() ->
-  this.route('layout', {
+  this.route('home', {
     path: '/',
   })
 )

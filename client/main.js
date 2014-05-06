@@ -1,9 +1,9 @@
 if (Meteor.isClient) {
-  Template.hello.greeting = function () {
-    return "Welcome to outscored.";
+  Template.home.greeting = function () {
+    return "Welcome to Outscored.";
   };
 
-  Template.hello.events({
+  Template.home.events({
     'click input': function () {
       // template data, if any, is available in 'this'
       if (typeof console !== 'undefined')
