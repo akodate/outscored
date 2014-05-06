@@ -7,49 +7,81 @@ html {
   background-position: 0px -50px;
 }
 
-body {
-  border-radius: 10px;
+.sheet {
   font-family: 'La Belle Aurore', cursive;
-  background: transparent;
-  border: transparent;
-  position: absolute; left: 65px; top: 22px;
-  width: 90%;
+  background: none;
+  border: none;
+  position: absolute; left: 115px; top: 45px;
+  height: 100%;
 }
 
 .header {
-  background: transparent;
-  border: transparent;
+  background: none;
+  border: none;
 }
 
 .navbar-brand {
   font-family: 'Homemade Apple';
   padding-left: 45px;
-  font-size: 3.5em;
+  font-size: 50px;
 }
 
 .login {
-  font-size: 2em;
+  font-family: 'La Belle Aurore';
+  font-size: 35px;
   margin-top: 10px;
 }
 
+.login-button {
+  font-size: 25px;
+}
+
 .search-group {
-  margin: 100px 0em 0em 60px;
+  margin: 100px 0px 0px 60px;
 }
 
 .search-heading {
-  font-family: 'Courgette';
-  font-size: 2.2em;
+  font-family: 'La Belle Aurore';
+  font-size: 50px;
+}
+
+.search-arrow {
+  position: relative;
+  top: -20px;
+  left: -10px;
+  font-family: 'Homemade Apple';
+  font-size: 80px;
+  display: inline;
 }
 
 .search-box {
-  background: transparent;
-  border: transparent;
+  position: relative;
+  top: -30px;
+  display: inline;
   background: none;
-/*  font-family: 'Belgrano';*/
-  opacity: .9;
-  font-size: 1.4em;
-  width: 40em;
-  height: 2.8em;
+  border: none;
+  font-family: 'La Belle Aurore';
+  color: red;
+  opacity: .4;
+  font-size: 35px;
+  width: 480px;
+  height: 50px;
+}
+
+.search-box::-webkit-input-placeholder {
+    color: red;
+}
+.search-box:-moz-placeholder {
+    /* FF 4-18 */
+    color: red;
+}
+.search-box::-moz-placeholder {
+    /* FF 19+ */
+    color: red;
+}
+.search-box:-ms-input-placeholder {
+    /* IE 10+ */
+    color: red;
 }
 
 .search-box:focus {
