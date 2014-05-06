@@ -1,3 +1,18 @@
 body {
   font-family: 'Fugaz One', cursive;
 }
+
+.search-group {
+  margin: 3em 0em 0em 5em
+}
+
+.search-heading {
+  font-size: 2.2em;
+}
+
+.search-box {
+  font-family: 'Belgrano';
+  font-size: 1.4em;
+  width: 40em;
+  height: 2.8em;
+}

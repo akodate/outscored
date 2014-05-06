@@ -1,12 +1,12 @@
 <template name="layout">
-  <link href='http://fonts.googleapis.com/css?family=Belgrano|Fugaz+One|Racing+Sans+One|Audiowide' rel='stylesheet' type='text/css'>
+  <link href='http://fonts.googleapis.com/css?family=Belgrano|Fugaz+One|Audiowide' rel='stylesheet' type='text/css'>
   <div class="container">
-    {{> header}}
-<!--     {{> meteorErrors}} -->
     <body>
-      <div id="main" class="row-fluid">
+      {{> header}}
+<!--     {{> meteorErrors}} -->
+      <main id="main" role="main" class="row-fluid">
         {{> yield}}
-      </div>
+      </main>
     </body>
   </div>
 </template>
