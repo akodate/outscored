@@ -10,3 +10,5 @@ bootstrap-3
 accounts-ui-bootstrap-3
 coffeescript
 iron-router
+accounts-facebook
+accounts-google
