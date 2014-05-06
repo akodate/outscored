@@ -12,7 +12,7 @@ html {
   background: none;
   border: none;
   position: absolute; left: 115px; top: 45px;
-  height: 100%;
+  height: 90%;
 }
 
 .header {
@@ -65,7 +65,7 @@ html {
   opacity: .4;
   font-size: 35px;
   width: 480px;
-  height: 50px;
+  height: 55px;
 }
 
 .search-box::-webkit-input-placeholder {
