@@ -1,4 +1,3 @@
-require 'rubygems'
 require 'nokogiri'
 require 'open-uri'
 require 'json'
@@ -9,7 +8,7 @@ DATA_DIR = "assets"
 Dir.mkdir(DATA_DIR) unless File.exists?(DATA_DIR)
 
 # SET DOMAIN URL AND TARGET URL
-BASE_URL = "http://www.testprepreview.com"
+BASE_URL = "http://www.testprepreview.com/"
 
 # HEADERS FOR REQUESTS
 HEADERS_HASH = {"User-Agent" => "Ruby/#{RUBY_VERSION}"}
@@ -21,9 +20,9 @@ REGEX = /.*/
 main_link = Nokogiri::HTML(open(BASE_URL)) # OPENS TARGET PAGE
 test_links = main_link.css('body > table > tr > td:nth-child(1) > div > ul:nth-child(1) > li > a') # CSS SELECTOR FOR STREET LISTS
 
-puts(main_link)
-puts(test_links)
 counter = 0
+
+
 
 test_links.each do |a|
 
@@ -42,12 +41,11 @@ test_links.each do |a|
 
   begin
     test_html = Nokogiri::HTML(open(test_link)) # OPENS TARGET PAGE
-    binding.pry
   # RESCUE EXCEPTION
   rescue => e
     puts "Error: #{e}"
     sleep 5
-  # RETURN REGEX MATCH FROM PAGE
+  # WRITE TO FILE
   else
     File.open(html_fname, 'w'){|file| file.write(test_html)}
     puts "\t...Success, saved NEW TEST PAGE to #{html_fname}"

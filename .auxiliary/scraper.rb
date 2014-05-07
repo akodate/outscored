@@ -39,9 +39,20 @@ test_links.each do |a|
   Dir.mkdir(test_dir) unless File.exists?(test_dir)
   html_fname = "#{test_dir}/#{File.basename(test_name)}.html"
 
-  test_html = Nokogiri::HTML(open(test_link)) # OPENS TARGET PAGE
-  File.open(html_fname, 'w'){|file| file.write(test_html)}
-  puts "\t...Success, saved NEW TEST PAGE to #{html_fname}"
+  begin
+    test_html = Nokogiri::HTML(open(test_link)) # OPENS TARGET PAGE
+  # RESCUE EXCEPTION
+  rescue => e
+    puts "Error: #{e}"
+    sleep 5
+  # WRITE TO FILE
+  else
+    File.open(html_fname, 'w'){|file| file.write(test_html)}
+    puts "\t...Success, saved NEW TEST PAGE to #{html_fname}"
+  # SLEEP A BIT SO THE SITE DOESN'T GET HAMMERED TOO HARD
+  ensure
+    sleep 1.0 + rand
+  end
 
   section_links = test_html.css('body > table > tr > td:nth-child(2) > table > tbody > tr:nth-child(2) > td:nth-child(1) > ul > li:nth-child(1) > a')
 
