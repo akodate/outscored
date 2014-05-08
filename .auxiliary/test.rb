@@ -20,24 +20,16 @@ REGEX = /.*/
 main_link = Nokogiri::HTML(open(BASE_URL)) # OPENS TARGET PAGE
 test_links = main_link.css('body > table > tr > td:nth-child(1) > div > ul:nth-child(1) > li > a') # CSS SELECTOR FOR STREET LISTS
 
-counter = 0
 
 
-
-test_links.each do |a|
-
-  counter += 1
-  puts(counter)
-  if counter > 2
-    return
-  end
+test_links.take(2).each_with_index do |a, test_count|
 
   test_name = a.text
   test_link = a.attributes['href'].value
 
   test_dir = "#{DATA_DIR}/" + test_name
   Dir.mkdir(test_dir) unless File.exists?(test_dir)
-  html_fname = "#{test_dir}/#{File.basename(test_name)}.html"
+  test_fname = "#{test_dir}/#{File.basename(test_name)}.html"
 
   begin
     test_html = Nokogiri::HTML(open(test_link)) # OPENS TARGET PAGE
@@ -47,8 +39,8 @@ test_links.each do |a|
     sleep 5
   # WRITE TO FILE
   else
-    File.open(html_fname, 'w'){|file| file.write(test_html)}
-    puts "\t...Success, saved NEW TEST PAGE to #{html_fname}"
+    File.open(test_fname, 'w'){|file| file.write(test_html)}
+    puts "\t...Success, saved TEST #{test_count}: '#{test_name}' to (#{test_fname})"
   # SLEEP A BIT SO THE SITE DOESN'T GET HAMMERED TOO HARD
   ensure
     sleep 1.0 + rand
