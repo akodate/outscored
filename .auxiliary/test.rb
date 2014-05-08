@@ -1,3 +1,4 @@
+require 'active_support/all'
 require 'nokogiri'
 require 'open-uri'
 require 'json'

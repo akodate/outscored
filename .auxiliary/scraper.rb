@@ -1,7 +1,8 @@
-require 'nokogiri'
-require 'open-uri'
 require 'json'
+require 'open-uri'
 require 'pry'
+require 'nokogiri'
+require 'active_support/all'
 
 # SET DATA DIRECTORY AND CREATE IF NONEXISTENT
 DATA_DIR = "assets"
@@ -15,27 +16,40 @@ HEADERS_HASH = {"User-Agent" => "Ruby/#{RUBY_VERSION}"}
 
 # REGEXES
 CONTENT_REGEX = /((?<=addthis)(?:.*?)(?=enoch|<iframe))/im
+SELF_ASSESSMENT_LINKS_REGEX = /(?<=self.assessment).*/im
+ANSWER_SECTION_REGEX = /<h\d>.{,35}?(?:Answer).*?<\/h\d>.+/im
+
 QUESTION_REGEX = /((?:<p.{1,20}?)(?:<em>)?(?:<strong>)?.?.?\d{1,3}\.\s+.*?(?:\/p>))/m
 CHOICE_REGEX_OL = /((?:(?:<ol.{1,15}?)(?:<li>.*?<\/li>.{1,15}?))*.?<\/ol>)/m
 CHOICE_REGEX_P = /((?:<p>\s?\s?[a]\.).*?(?:[b-z]\.)*?<\/p>)/im
-ANSWER_SECTION_REGEX = /<h\d>.{,35}?(?:Answer).*?<\/h\d>.+/im
 ANSWER_REGEX = //
 EXPLANATION_REGEX = /(<p>(?:<strong>)?(?:<em>)?\d{1,3}\.?:?\s?\s?.*?<\/p>)/im
 
 class Question
+  def initialize (question, choices, answer, explanation)
+    @question = question
+    @choices = choices
+    @answer = answer
+    @explanation = explanation
+  end
+
   attr_accessor :question, :choices, :answer, :explanation
 end
 
+visited_urls = []
 main_link = Nokogiri::HTML(open(BASE_URL)) # OPENS TARGET PAGE
 test_links = main_link.css('body > table > tr > td:nth-child(1) > div > ul:nth-child(1) > li > a') # CSS SELECTOR FOR STREET LISTS
 
 def detect_test(page_html)
-    if p_array = page_html.css('body > table > tr > td:nth-child(2) > table > tr:nth-child(2) > td:nth-child(1) > p')
-      detect_questions(p_array, page_html)
-    end
+  if p_array = page_html.css('body > table > tr > td:nth-child(2) > table > tr:nth-child(2) > td:nth-child(1) > p')
+    return detect_questions(p_array, page_html)
+  else
+    return nil
   end
+end
 
 def detect_questions(p_array, page_html)
+  json_array = []
   question_array = []
   choices_array = []
   explanation_array = []
@@ -59,7 +73,11 @@ def detect_questions(p_array, page_html)
       puts(p_count.to_s + " EXPLANATION: " + explanation[0])
     end
   end
-  binding.pry
+  question_array.length.times do | index |
+    binding.pry
+    json_array[index] = Question.new( question_array[index], choices_array[index], explanation_array[index], explanation_array[index] )
+  end
+  return json_array
 end
 
 
@@ -74,6 +92,7 @@ test_links.take(12).each_with_index do |a, test_count|
   test_dir = "#{DATA_DIR}/" + test_name
   Dir.mkdir(test_dir) unless File.exists?(test_dir)
   test_fname = "#{test_dir}/#{File.basename(test_name)}.html"
+  test_json = "#{test_dir}/#{File.basename(test_name)}.json"
 
   begin
     test_html = Nokogiri::HTML(open(test_link)) # OPENS TARGET PAGE
@@ -90,7 +109,12 @@ test_links.take(12).each_with_index do |a, test_count|
     sleep 1.0 + rand
   end
 
-  detect_test(test_html)
+  json_array = detect_test(test_html)
+  if json_array
+    File.open(test_json, 'w'){|file| file.write(json_array.to_json)}
+    puts "\t...Success, saved NEW TEST JSON to #{test_json}"
+  end
+  visited_urls.push(test_link)
 
   return
 
@@ -115,7 +139,7 @@ test_links.take(12).each_with_index do |a, test_count|
     test_dir = "#{DATA_DIR}/" + test_name + "/" + section_name
     Dir.mkdir(test_dir) unless File.exists?(test_dir)
     section_fname = "#{test_dir}/#{File.basename(section_name)}.html"
-    json_fname = "#{test_dir}/#{File.basename(section_name)}.json"
+    section_json = "#{test_dir}/#{File.basename(section_name)}.json"
 
     begin
       section_html = Nokogiri::HTML(open(section_link)) # OPENS TARGET PAGE
@@ -148,7 +172,6 @@ test_links.take(12).each_with_index do |a, test_count|
   end
 
 end
-
 
 
     # lists.each do |list|
