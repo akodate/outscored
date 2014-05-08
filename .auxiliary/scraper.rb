@@ -18,6 +18,7 @@ HEADERS_HASH = {"User-Agent" => "Ruby/#{RUBY_VERSION}"}
 CONTENT_REGEX = /((?<=addthis)(?:.*?)(?=enoch|<iframe))/im
 SELF_ASSESSMENT_LINKS_REGEX = /(?<=self.assessment).*/im
 ANSWER_SECTION_REGEX = /<h\d>.{,35}?(?:Answer).*?<\/h\d>.+/im
+BASE_URL_REGEX = /((?<=a\shref=")http:\/\/www.testprepreview.com\/.*?(?="))/
 
 QUESTION_REGEX = /((?:<p.{1,20}?)(?:<em>)?(?:<strong>)?.?.?\d{1,3}\.\s+.*?(?:\/p>))/m
 CHOICE_REGEX_OL = /((?:(?:<ol.{1,15}?)(?:<li>.*?<\/li>.{1,15}?))*.?<\/ol>)/m
@@ -36,9 +37,10 @@ class Question
   attr_accessor :question, :choices, :answer, :explanation
 end
 
+useful_urls = {}
 visited_urls = []
 main_link = Nokogiri::HTML(open(BASE_URL)) # OPENS TARGET PAGE
-test_links = main_link.css('body > table > tr > td:nth-child(1) > div > ul:nth-child(1) > li > a') # CSS SELECTOR FOR STREET LISTS
+test_links = main_link.css('body > table > tr > td:nth-child(1) > div > ul:nth-child(1) > li > a')
 
 def detect_test(page_html)
   if p_array = page_html.css('body > table > tr > td:nth-child(2) > table > tr:nth-child(2) > td:nth-child(1) > p')
@@ -62,7 +64,7 @@ def detect_questions(p_array, page_html)
     if choices = CHOICE_REGEX_P.match(p.to_s)
       choices_array.push(choices[0])
       puts(p_count.to_s + " P CHOICES: " + choices[0])
-    elsif p.next_element.name == 'ol' && p.next_element.children.length > 2
+    elsif p.next_element && p.next_element.name == 'ol' && p.next_element.children.length > 2
       choices = CHOICE_REGEX_OL.match(p.next_element.to_s)
       choices_array.push(choices[0])
       puts(p_count.to_s + " OL CHOICES: " + choices[0])
@@ -74,17 +76,70 @@ def detect_questions(p_array, page_html)
     end
   end
   question_array.length.times do | index |
-    binding.pry
     json_array[index] = Question.new( question_array[index], choices_array[index], explanation_array[index], explanation_array[index] )
   end
   return json_array
 end
 
+def detect_links(page_html, test_name, useful_urls, visited_urls)
+  if a_array = page_html.css('body > table > tr > td:nth-child(2) > table > tr:nth-child(2) > td:nth-child(1) a')
+
+    a_array.each do | a |
+      binding.pry
+      if CONTENT_REGEX.match(a.to_s) && BASE_URL_REGEX.match(a.to_s)
+        section_name = a.text
+        section_link = a.attributes['href'].value
+        binding.pry
+        if !visited_urls.include?(section_link)
+
+          begin
+            section_html = Nokogiri::HTML(open(section_link)) # OPENS TARGET PAGE
+          # RESCUE EXCEPTION
+          rescue => e
+            puts "Error: #{e}"
+            sleep 5
+          # WRITE TO FILE
+          else
+          # SLEEP A BIT SO THE SITE DOESN'T GET HAMMERED TOO HARD
+          ensure
+            sleep 1.0 + rand
+          end
+          json_array = detect_test(section_html)
+
+          if json_array
+
+            section_dir = "#{DATA_DIR}/" + test_name + "/" + section_name
+            Dir.mkdir(section_dir) unless File.exists?(test_dir)
+            section_fname = "#{test_dir}/#{File.basename(section_name)}.html"
+            section_json = "#{test_dir}/#{File.basename(section_name)}.json"
+
+            File.open(section_fname, 'w'){|file| file.write(section_html)}
+            puts "     -Saved SECTION #{section_count}: '#{section_name}' to (...#{section_fname[-20, 20]})"
+
+            File.open(section_json, 'w'){|file| file.write(json_array.to_json)}
+            puts "     -Saved SECTION JSON to #{test_json}"
+
+            useful_urls = {section_link => {'HTML' => section_html, 'JSON' => json_array}}
+
+          elsif useful_urls[section_link]
+            puts "          Need to rewrite #{section_link}"
+          end
+
+        else
+          puts('#{page_link} was visited before and was useless.')
+        end
+      end
+
+    end
+
+  end
+end
 
 
-test_links.take(12).each_with_index do |a, test_count|
 
-  next if test_count < 10
+test_links.take(5).each_with_index do |a, test_count|
+
+  # next if test_count < 10
 
   test_name = a.text
   test_link = a.attributes['href'].value
@@ -116,7 +171,9 @@ test_links.take(12).each_with_index do |a, test_count|
   end
   visited_urls.push(test_link)
 
-  return
+  detect_links(test_html, test_name, useful_urls, visited_urls)
+
+  binding.pry
 
   # DETECT IF TEST IS ON PAGE
     # SAVE TO JSON IF IT IS ('test_name Practice Questions.json')
@@ -131,45 +188,45 @@ test_links.take(12).each_with_index do |a, test_count|
       # IF SO
         # IF URL ENTRY HAS JSON, SAVE PAGE FROM VISITED LINKS ARRAY
 
-  section_links.take(2).each_with_index do |aa, section_count|
+  # section_links.take(3).each_with_index do |aa, section_count|
 
-    section_name = aa.text
-    section_link = BASE_URL + aa.attributes['href'].value
+  #   section_name = aa.text
+  #   section_link = BASE_URL + aa.attributes['href'].value
 
-    test_dir = "#{DATA_DIR}/" + test_name + "/" + section_name
-    Dir.mkdir(test_dir) unless File.exists?(test_dir)
-    section_fname = "#{test_dir}/#{File.basename(section_name)}.html"
-    section_json = "#{test_dir}/#{File.basename(section_name)}.json"
+  #   test_dir = "#{DATA_DIR}/" + test_name + "/" + section_name
+  #   Dir.mkdir(test_dir) unless File.exists?(test_dir)
+  #   section_fname = "#{test_dir}/#{File.basename(section_name)}.html"
+  #   section_json = "#{test_dir}/#{File.basename(section_name)}.json"
 
-    begin
-      section_html = Nokogiri::HTML(open(section_link)) # OPENS TARGET PAGE
-    # RESCUE EXCEPTION
-    rescue => e
-      puts "Error: #{e}"
-      sleep 5
-    # WRITE TO FILE
-    else
-      File.open(section_fname, 'w'){|file| file.write(section_html)}
-      puts "     -Saved SECTION #{section_count}: '#{section_name}' to (...#{section_fname[-20, 20]})"
-    # SLEEP A BIT SO THE SITE DOESN'T GET HAMMERED TOO HARD
-    ensure
-      sleep 1.0 + rand
-    end
+  #   begin
+  #     section_html = Nokogiri::HTML(open(section_link)) # OPENS TARGET PAGE
+  #   # RESCUE EXCEPTION
+  #   rescue => e
+  #     puts "Error: #{e}"
+  #     sleep 5
+  #   # WRITE TO FILE
+  #   else
+  #     File.open(section_fname, 'w'){|file| file.write(section_html)}
+  #     puts "     -Saved SECTION #{section_count}: '#{section_name}' to (...#{section_fname[-20, 20]})"
+  #   # SLEEP A BIT SO THE SITE DOESN'T GET HAMMERED TOO HARD
+  #   ensure
+  #     sleep 1.0 + rand
+  #   end
 
-    questions = section_html.css('body > table > tr > td:nth-child(2) > table > tr:nth-child(2) > td:nth-child(1) > p > strong')
+  #   questions = section_html.css('body > table > tr > td:nth-child(2) > table > tr:nth-child(2) > td:nth-child(1) > p > strong')
 
-    question_array = [] # CREATES ARRAY FOR QUESTIONS
+  #   question_array = [] # CREATES ARRAY FOR QUESTIONS
 
-    binding.pry
+  #   binding.pry
 
-    questions.each_with_index do |p, question_count|
+  #   questions.each_with_index do |p, question_count|
 
-      puts "Item: #{question_count}"
-      puts p
+  #     puts "Item: #{question_count}"
+  #     puts p
 
-    end
+  #   end
 
-  end
+  # end
 
 end
 
