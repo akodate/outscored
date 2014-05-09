@@ -4,7 +4,8 @@
     "basePackages": {
       "iron-router": {},
       "bootstrap-3": {},
-      "accounts-ui-bootstrap-3-blaze": {}
+      "accounts-ui-bootstrap-3-blaze": {},
+      "glob": {}
     },
     "packages": {
       "iron-router": {
@@ -21,6 +22,11 @@
         "git": "https://github.com/rajit/meteor-accounts-ui-bootstrap-3.git",
         "tag": "v0.3.7",
         "commit": "a40b15f4b6213040accec10df97a7793e3a25225"
+      },
+      "glob": {
+        "git": "https://github.com/sylvaingi/meteor-glob.git",
+        "tag": "v0.1.2",
+        "commit": "a6a8142d9230aa5f85b1ebd575aa3dc7f91c5906"
       },
       "blaze-layout": {
         "git": "https://github.com/EventedMind/blaze-layout.git",
