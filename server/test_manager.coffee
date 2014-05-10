@@ -24,27 +24,39 @@ checkType = (fileTree) ->
       switch index
         when 0 # Tests
           collection = Tests
-          return regex.test(file)
+          isTest(file, fileTree, regex)
         when 1 # Questions
           collection = Questions
-          if regex.test(file)
-            return isValidQuestion(file)
+          isQuestion(file, fileTree, regex)
         when 2 # Sections
           collection = Sections
-          # Is not a test directory?
-          unless TYPE_REGEX_ARRAY[0].test(file)
-            # Has file inside?
-            sectionsRegex = (new RegExp(file + "\\/[^\\/]+\\."))
-            return sectionsRegex.test(fileTree)
+          isSection(file, fileTree, regex)
         when 3 # Midsections
           collection = MidSections
-          # Has directory inside but no file?
-          midSectionsRegex = (new RegExp(file + "\\/[^\\.]+\z"))
-          return midSectionsRegex.test(fileTree)
+          isMidSection(file, fileTree, regex)
     )
     console.log collection._name
     console.log(fileArray.length)
   )
+
+isTest = (file, fileTree, regex) ->
+  return regex.test(file)
+
+isQuestion = (file, fileTree, regex) ->
+  if regex.test(file)
+    return isValidQuestion(file)
+
+isSection = (file, fileTree, regex) ->
+  # Unless test directory
+  unless TYPE_REGEX_ARRAY[0].test(file)
+    # Has file inside?
+    sectionsRegex = (new RegExp(file + "\\/[^\\/]+\\."))
+    return sectionsRegex.test(fileTree)
+
+isMidSection = (file, fileTree, regex) ->
+  # Has directory inside but no file?
+  midSectionsRegex = (new RegExp(file + "\\/[^\\.]+\z"))
+  return midSectionsRegex.test(fileTree)
 
 # Checks if question file is valid
 isValidQuestion = (file) ->
