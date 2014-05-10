@@ -14,3 +14,6 @@
 # Returns JSON object
 @parseJSONFile = (file) ->
   return JSON.parse(Assets.getText(file))
+
+@findDoc = (collection, fields) ->
+  collection.findOne(fields)

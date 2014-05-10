@@ -28,5 +28,15 @@
     # Save placeholder
   # If has parent test
     # Point to parent test, make parent test point to it
-isUniqueQuestion = (questionFile) ->
-  # Tests.findOne(questionFile)
+
+# @processQuestions = (file) ->
+#   for question in getQuestionArray(file)
+#     if questionExists(question)
+#       @insertedCount += 1
+#       insertQuestion(question)
+#       savePlaceholder(question, collection)
+#     else savePlaceholder
+#       @existingCount += 1
+
+# @questionExists
+#   findQuestionByFields

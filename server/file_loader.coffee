@@ -37,30 +37,26 @@ checkType = (fileTree) ->
 
 # Checks if file (or directory) is unique
 isUnique = (typeArray, collection) ->
-  insertedCount = 0
-  existingCount = 0
+  @insertedCount = 0
+  @existingCount = 0
   for file in typeArray
     switch collection
       when Tests
-        if isUniqueTest(file)
-          insertedCount += 1
-          insertTest(name: file)
+        if processTest(file, collection)
+          @insertedCount += 1
         else
-          existingCount += 1
+          @existingCount += 1
       # when Questions
-      #   for question in getQuestionArray(file)
-      #     if isUniqueQuestion(question)
-      #       insertQuestion(question)
-      #     else
-      #       return
-      when Sections
-        if isUniqueSection(file)
-          return
-      when MidSections
-        if isUniqueMidSection(file)
-          return
-  console.log collection._name.capitalize() + ' inserted: ' + insertedCount
+      #   processQuestions(file)
+
+      # when Sections
+      #   if sectionExists(file)
+      #     return
+      # when MidSections
+      #   if midSectionExists(file)
+      #     return
   console.log collection._name.capitalize() + ' found: ' + existingCount
+  console.log collection._name.capitalize() + ' inserted: ' + insertedCount
 
 # SECTIONS
 # Trait: Has / and question file
