@@ -1,4 +1,5 @@
 TYPE_REGEX_ARRAY = [/^[^\/]+$/i, /^.*\.+.*$/i, /.*/, /.*/]
+collection = Tests
 
 # testData = JSON.parse(Assets.getText('ACT Practice Test/Advanced Algebra/Advanced Algebra.json'))
 # console.log(JSON.stringify(testData).substr(0,100))
@@ -13,37 +14,64 @@ testFileTree = new Glob('**/**/*', {debug: false, cwd: '/Users/alex/Projects/out
 
 console.log(testFileTree.length)
 
-# METHODS:
-
-# CHECK TYPE SEQUENTIALLY (fileTree)
+# Returns array of file paths of each type sequentially
 checkType = (fileTree) ->
   TYPE_REGEX_ARRAY.forEach((regex, index) ->
     console.log('COME THIS FAR')
     fileArray = fileTree.filter((file) ->
-      if index == 2
-        unless TYPE_REGEX_ARRAY[0].test(file)
-          sectionsRegex = (new RegExp(file + "\\/[^\\/]+\\."))
-          return sectionsRegex.test(fileTree)
-      else if index == 3
-        midSectionsRegex = (new RegExp(file + "\\/[^\\.]+\z"))
-        return midSectionsRegex.test(fileTree)
-      else
-        return regex.test(file)
+      switch index
+        when 0 # Tests
+          collection = Tests
+          return regex.test(file)
+        when 1 # Questions
+          collection = Questions
+          if regex.test(file)
+            return isValidQuestion(file)
+        when 2 # Sections
+          collection = Sections
+          # Is not a test directory?
+          unless TYPE_REGEX_ARRAY[0].test(file)
+            # Has file inside?
+            sectionsRegex = (new RegExp(file + "\\/[^\\/]+\\."))
+            return sectionsRegex.test(fileTree)
+        when 3 # Midsections
+          collection = MidSections
+          # Has directory inside but no file?
+          midSectionsRegex = (new RegExp(file + "\\/[^\\.]+\z"))
+          return midSectionsRegex.test(fileTree)
     )
+    console.log collection._name
     console.log(fileArray.length)
   )
+
+# Checks if question file is valid
+isValidQuestion = (file) ->
+   # Is JSON?
+  if /^.*\.json$/i.test(file)
+    questions = JSON.parse(Assets.getText(file))
+    question = questions[0]
+    # Has all fields?
+    if question.question && question.choices && question.answer
+      console.log 'Valid file: ' + file
+      return true
+    else
+      return false
+  else
+    return false
+
+# Checks if file is unique
 
 checkType(testFileTree)
 console.log('Checked')
 
 
-  # IS UNIQUE (ARRAY, CLASS)
-    # FIX TESTS WITH MISSING INFO
+  # IS VALID (ARRAY, COLLECTION)
+    # IS UNIQUE (ARRAY, COLLECTION)
+      # SAVE ORIGINAL (OBJECT, CLASS)
+      # SAVE PLACEHOLDER (OBJECT, CLASS)
+  # MAKE THIS POINT TO X (OBJECT, OTHEROBJECTS, CLASS)
+  # MAKE X POINT TO THIS (OBJECT, OTHEROBJECTS, CLASS)
   # HAS PARENT TEST (OBJECT)
-    # SAVE ORIGINAL (OBJECT, CLASS)
-    # SAVE PLACEHOLDER (OBJECT, CLASS)
-    # MAKE THIS POINT TO X (OBJECT, OTHEROBJECTS, CLASS)
-    # MAKE X POINT TO THIS (OBJECT, OTHEROBJECTS, CLASS)
 
 
 # TESTS
