@@ -1,6 +1,9 @@
-TYPE_REGEX_ARRAY = [/^[^\/]+$/i, /^.*\.+.*$/i, /.*/, /.*/] #　No /, has ., *, *
 JSON_REGEX = /^.*\.json$/i
-
+TEST_REGEX = /^[^\/]+$/i # No /
+QUESTION_REGEX = /^.*\.+.*$/i # has .
+SECTION_REGEX = /.*/ # Placeholder, dynamically generated
+MIDSECTION_REGEX = /.*/ # Placeholder, dynamically generated
+TYPE_REGEX_ARRAY = [TEST_REGEX, QUESTION_REGEX, SECTION_REGEX, MIDSECTION_REGEX]
 collection = Tests
 
 # testData = JSON.parse(Assets.getText('ACT Practice Test/Advanced Algebra/Advanced Algebra.json'))
@@ -20,7 +23,7 @@ console.log(testFileTree.length)
 checkType = (fileTree) ->
   TYPE_REGEX_ARRAY.forEach((regex, index) ->
     console.log('COME THIS FAR')
-    fileArray = fileTree.filter((file) ->
+    typeArray = fileTree.filter((file) ->
       switch index
         when 0 # Tests
           collection = Tests
@@ -36,27 +39,29 @@ checkType = (fileTree) ->
           isMidSection(file, fileTree, regex)
     )
     console.log collection._name
-    console.log(fileArray.length)
+    console.log(typeArray.length)
+    isUnique(typeArray, collection)
   )
 
-isTest = (file, fileTree, regex) ->
-  return regex.test(file)
+isTest = (file, fileTree) ->
+  return TEST_REGEX.test(file)
 
 isQuestion = (file, fileTree, regex) ->
-  if regex.test(file)
+  if QUESTION_REGEX.test(file)
     return isValidQuestion(file)
 
 isSection = (file, fileTree, regex) ->
   # Unless test directory
-  unless TYPE_REGEX_ARRAY[0].test(file)
+  unless isTest(file)
     # Has file inside?
     sectionsRegex = (new RegExp(file + "\\/[^\\/]+\\."))
     return sectionsRegex.test(fileTree)
 
 isMidSection = (file, fileTree, regex) ->
   # Has directory inside but no file?
-  midSectionsRegex = (new RegExp(file + "\\/[^\\.]+\z"))
-  return midSectionsRegex.test(fileTree)
+  unless isTest(file)
+    midSectionsRegex = (new RegExp(file + "\\/[^\\.]+(?=,)"))
+    return midSectionsRegex.test(fileTree)
 
 # Checks if question file is valid
 isValidQuestion = (file) ->
@@ -66,7 +71,6 @@ isValidQuestion = (file) ->
     question = questions[0]
     # Has necessary question fields?
     if question.question && question.choices && question.answer
-      console.log 'Valid file: ' + file
       return true
     else
       return false
@@ -78,8 +82,18 @@ isJSON = (file) ->
   if JSON_REGEX.test(file)
     questions = JSON.parse(Assets.getText(file))
 
-# Checks if file is unique
-# isUnique = (fileArray, collection)
+# Checks if file (or directory) is unique
+isUnique = (typeArray, collection) ->
+  # for file in typeArray
+  #   switch collection
+  #     when Tests
+  #       isUniqueTest(typeArray, collection)
+  #     when Questions
+  #       isUniqueQuestion(typeArray, collection)
+  #     when Sections
+  #       isUniqueSection(typeArray, collection)
+  #     when MidSections
+  #       isUniqueMidSection(typeArray, collection)
 
 checkType(testFileTree)
 console.log('Checked')
