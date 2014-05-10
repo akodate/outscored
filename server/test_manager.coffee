@@ -84,16 +84,57 @@ isJSON = (file) ->
 
 # Checks if file (or directory) is unique
 isUnique = (typeArray, collection) ->
-  # for file in typeArray
-  #   switch collection
-  #     when Tests
-  #       isUniqueTest(typeArray, collection)
-  #     when Questions
-  #       isUniqueQuestion(typeArray, collection)
-  #     when Sections
-  #       isUniqueSection(typeArray, collection)
-  #     when MidSections
-  #       isUniqueMidSection(typeArray, collection)
+  for file in typeArray
+    switch collection
+      when Tests
+        isUniqueTest(typeArray)
+      when Questions
+        isUniqueQuestion(typeArray)
+      when Sections
+        isUniqueSection(typeArray)
+      when MidSections
+        isUniqueMidSection(typeArray)
+
+# TESTS
+# Trait: No /
+  # If name is unique
+    # Save original
+  # Else do nothing
+isUniqueTest = (testDir) ->
+
+
+# QUESTIONS
+# Trait: Has .
+  # If fields are unique
+    # Save original, save placeholder
+  # Else
+    # Save placeholder
+  # If has parent test
+    # Point to parent test, make parent test point to it
+isUniqueQuestion = (questionFile) ->
+
+# SECTIONS
+# Trait: Has / and question file
+  # If no sections have same question set
+    # Save original, save placeholder, point to questions, make questions point to it
+  # Else
+    # Save placeholder, point to questions, make questions point to it
+  # If has parent test
+    # Point to parent test, make parent test point to it
+isUniqueSection = (sectionDir) ->
+
+# MIDSECTIONS
+# Trait: has / but no question file
+  # If no midsections have the same section/midsection names
+    # Save original, save placeholder, point to sections/midsections, make sections/midsections point to it
+  # Else
+    # Save placeholder, point to sections/midsections
+  # If has parent test
+      # Point to parent test, make parent test point to it
+isUniqueMidSection = (midSectionDir) ->
+
+
+
 
 checkType(testFileTree)
 console.log('Checked')
@@ -106,38 +147,3 @@ console.log('Checked')
   # MAKE THIS POINT TO X (OBJECT, OTHEROBJECTS, CLASS)
   # MAKE X POINT TO THIS (OBJECT, OTHEROBJECTS, CLASS)
   # HAS PARENT TEST (OBJECT)
-
-
-# TESTS
-# Trait: No /
-  # If name is unique
-    # Save original
-  # Else do nothing
-
-# QUESTIONS
-# Trait: Has .
-  # If fields are unique
-    # Save original, save placeholder
-  # Else
-    # Save placeholder
-  # If has parent test
-    # Point to parent test, make parent test point to it
-
-# SECTIONS
-# Trait: Has / and question file
-  # If no sections have same question set
-    # Save original, save placeholder, point to questions, make questions point to it
-  # Else
-    # Save placeholder, point to questions, make questions point to it
-  # If has parent test
-    # Point to parent test, make parent test point to it
-
-# MIDSECTIONS
-# Trait: has / but no question file
-  # If no midsections have the same section/midsection names
-    # Save original, save placeholder, point to sections/midsections, make sections/midsections point to it
-  # Else
-    # Save placeholder, point to sections/midsections
-  # If has parent test
-      # Point to parent test, make parent test point to it
-
