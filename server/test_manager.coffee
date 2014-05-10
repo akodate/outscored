@@ -3,15 +3,15 @@ TYPE_REGEX_ARRAY = [/^[^\/]+$/i, /^.*\.+.*$/i, /.*/, /.*/]
 # testData = JSON.parse(Assets.getText('ACT Practice Test/Advanced Algebra/Advanced Algebra.json'))
 # console.log(JSON.stringify(testData).substr(0,100))
 
+# if Tests.findOne(testData)
+#   console.log('Already exists')
+# else
+#   console.log('Inserted' + Tests.insert(testData))
+
 
 testFileTree = new Glob('**/**/*', {debug: false, cwd: '/Users/alex/Projects/outscored/private'}, (err, matches) -> )
 
 console.log(testFileTree.length)
-
-if Tests.findOne(testData)
-  console.log('Already exists')
-else
-  console.log('Inserted' + Tests.insert(testData))
 
 # METHODS:
 
