@@ -6,3 +6,7 @@
 
 @isUniqueTest = (testDir) ->
   !findTestByName(testDir)
+
+@insertTest = (fields) ->
+  Tests.insert(fields)
+  console.log "Inserted test: " + fields

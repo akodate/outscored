@@ -16,7 +16,6 @@ console.log(testFileTree.length + ' Files')
 # Returns array of file paths for Tests, Questions, Sections, and Midsections sequentially
 checkType = (fileTree) ->
   COLLECTION_TYPES.forEach((collection) ->
-    console.log('COME THIS FAR')
     typeArray = fileTree.filter((file) ->
       switch collection
         when Tests
@@ -38,35 +37,30 @@ checkType = (fileTree) ->
 
 # Checks if file (or directory) is unique
 isUnique = (typeArray, collection) ->
+  insertedCount = 0
+  existingCount = 0
   for file in typeArray
     switch collection
       when Tests
         if isUniqueTest(file)
-          Tests.insert(name: testDir)
-      when Questions
-        isUniqueQuestion(file)
+          insertedCount += 1
+          insertTest(name: file)
+        else
+          existingCount += 1
+      # when Questions
+      #   for question in getQuestionArray(file)
+      #     if isUniqueQuestion(question)
+      #       insertQuestion(question)
+      #     else
+      #       return
       when Sections
-        isUniqueSection(file)
+        if isUniqueSection(file)
+          return
       when MidSections
-        isUniqueMidSection(file)
-
-# TESTS
-# Trait: No /
-  # If name is unique
-    # Save original
-  # Else do nothing
-
-
-# QUESTIONS
-# Trait: Has .
-  # If fields are unique
-    # Save original, save placeholder
-  # Else
-    # Save placeholder
-  # If has parent test
-    # Point to parent test, make parent test point to it
-isUniqueQuestion = (questionFile) ->
-  # Tests.findOne(questionFile)
+        if isUniqueMidSection(file)
+          return
+  console.log collection._name.capitalize() + ' inserted: ' + insertedCount
+  console.log collection._name.capitalize() + ' found: ' + existingCount
 
 # SECTIONS
 # Trait: Has / and question file
