@@ -1,4 +1,6 @@
-TYPE_REGEX_ARRAY = [/^[^\/]+$/i, /^.*\.+.*$/i, /.*/, /.*/]
+TYPE_REGEX_ARRAY = [/^[^\/]+$/i, /^.*\.+.*$/i, /.*/, /.*/] #　No /, has ., *, *
+JSON_REGEX = /^.*\.json$/i
+
 collection = Tests
 
 # testData = JSON.parse(Assets.getText('ACT Practice Test/Advanced Algebra/Advanced Algebra.json'))
@@ -14,7 +16,7 @@ testFileTree = new Glob('**/**/*', {debug: false, cwd: '/Users/alex/Projects/out
 
 console.log(testFileTree.length)
 
-# Returns array of file paths of each type sequentially
+# Returns array of file paths for Tests, Questions, Sections, and Midsections sequentially
 checkType = (fileTree) ->
   TYPE_REGEX_ARRAY.forEach((regex, index) ->
     console.log('COME THIS FAR')
@@ -46,11 +48,11 @@ checkType = (fileTree) ->
 
 # Checks if question file is valid
 isValidQuestion = (file) ->
-   # Is JSON?
-  if /^.*\.json$/i.test(file)
-    questions = JSON.parse(Assets.getText(file))
+  # If JSON returns file to JSON
+  questions = isJSON(file)
+  if questions
     question = questions[0]
-    # Has all fields?
+    # Has necessary question fields?
     if question.question && question.choices && question.answer
       console.log 'Valid file: ' + file
       return true
@@ -59,7 +61,13 @@ isValidQuestion = (file) ->
   else
     return false
 
+# Is JSON? Returns JSON object
+isJSON = (file) ->
+  if JSON_REGEX.test(file)
+    questions = JSON.parse(Assets.getText(file))
+
 # Checks if file is unique
+# isUnique = (fileArray, collection)
 
 checkType(testFileTree)
 console.log('Checked')
