@@ -16,10 +16,6 @@
   else
     return false
 
-@insertQuestion = (fields) ->
-  Questions.insert(fields)
-  console.log "Inserted question: " + fields
-
 # QUESTIONS
 # Trait: Has .
   # If fields are unique
@@ -29,14 +25,13 @@
   # If has parent test
     # Point to parent test, make parent test point to it
 
-# @processQuestions = (file) ->
-#   for question in getQuestionArray(file)
-#     if questionExists(question)
-#       @insertedCount += 1
-#       insertQuestion(question)
-#       savePlaceholder(question, collection)
-#     else savePlaceholder
-#       @existingCount += 1
+@processQuestions = (file, collection) ->
+  for question in parseJSONFile(file)
+    originalID = findDoc(collection, question)
+    if originalID
+      existingCount += 1
+    else
+      insertedCount += 1
+      originalID = insertDoc(collection, question)
+    findPlaceholder(collection, question, file, originalID)
 
-# @questionExists
-#   findQuestionByFields

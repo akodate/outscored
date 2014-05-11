@@ -39,6 +39,8 @@ checkType = (fileTree) ->
 isUnique = (typeArray, collection) ->
   @insertedCount = 0
   @existingCount = 0
+  @insertedPlaceholders = 0
+  @existingPlaceholders = 0
   for file in typeArray
     switch collection
       when Tests
@@ -46,8 +48,8 @@ isUnique = (typeArray, collection) ->
           @insertedCount += 1
         else
           @existingCount += 1
-      # when Questions
-      #   processQuestions(file)
+      when Questions
+        processQuestions(file, collection)
 
       # when Sections
       #   if sectionExists(file)
