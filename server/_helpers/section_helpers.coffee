@@ -2,7 +2,7 @@
   # Unless test directory
   unless isTest(file)
     # Has file inside?
-    sectionsRegex = (new RegExp(file + "\\/[^\\/]+\\."))
+    sectionsRegex = new RegExp(file + "\\/[^\\/]+\\.")
     return sectionsRegex.test(fileTree)
 
 @insertSection = (fields) ->

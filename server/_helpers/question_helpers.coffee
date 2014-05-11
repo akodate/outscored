@@ -1,6 +1,6 @@
 @isQuestion = (file, fileTree) ->
   if QUESTION_REGEX.test(file)
-    return isValidQuestion(file)
+    return @isValidQuestion(file)
 
 # Checks if question file is valid
 @isValidQuestion = (file) ->
@@ -16,22 +16,16 @@
   else
     return false
 
-# QUESTIONS
-# Trait: Has .
-  # If fields are unique
-    # Save original, save placeholder
-  # Else
-    # Save placeholder
-  # If has parent test
-    # Point to parent test, make parent test point to it
-
 @processQuestions = (file, collection) ->
   for question in parseJSONFile(file)
-    originalID = findDoc(collection, question)
-    if originalID
-      existingCount += 1
-    else
-      insertedCount += 1
+    originalID = findDocID(collection, question)
+    if originalID # Original already exists
+      existingCount()
+    else # Create original
+      insertedCount()
       originalID = insertDoc(collection, question)
-    findPlaceholder(collection, question, file, originalID)
+    # Unless test already points to that original (meaning placeholder exists)
+    unless findPlaceholder(collection, file, originalID)
+      # Point test to original and add placeholder
+      insertPlaceholder(collection, file, originalID)
 
