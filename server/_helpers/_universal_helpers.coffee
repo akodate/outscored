@@ -130,7 +130,7 @@ existingPlaceholders = 0
         }
         sectionQuestionIDs = @findDocIDs(TestQuestions, sectionQuestionFields)
         # Point section to questions and questions to section
-        unless sectionQuestionIDs = []
+        unless sectionQuestionIDs.length == 0
           @updateDocArray(TestSections, placeholderID, 'children', sectionQuestionIDs)
           @updateDocs(TestQuestions, {_id: {$in: sectionQuestionIDs}}, {$set: {parent: placeholderID}})
       else
