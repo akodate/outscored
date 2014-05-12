@@ -1,18 +1,27 @@
 @isMidSection = (file, fileTree) ->
-  # Has directory inside but no file?
   unless isTest(file)
-    midSectionsRegex = new RegExp(file + "\\/[^\\.]+(?=,)")
+    # Has a directory under it (/ but no .)
+    midSectionsRegex = new RegExp("^" + file + "\\/[^\\.]+?$")
     return midSectionsRegex.test(fileTree)
 
 
+@processMidsections = (file, fileTree) ->
+  # If TestMidSection with same filepath exists
+  if findDocID(TestMidsections, filePath: file)
+    existingCount()
+  else
+    # Get array of same test TestSection/TestMidsection children IDs one level down
+    # Find directories one level under this (no . or /)
+    midSectionFileRegex = new RegExp("^" + file + "\\/[^\\.\\/]+$")
+    # Get TestSections/TestMidSections with those filepaths
+    childDirFields = {
+      _id: {$in: testQuestionIDs },
+      filePath: {$regex: sectionFileRegex}
+    }
 
 
-# MIDSECTIONS
-# Trait: has / but no question file
-  # If no midsections have the same section/midsection names
-    # Save original, save placeholder, point to sections/midsections, make sections/midsections point to it
-  # Else
-    # Save placeholder, point to sections/midsections
-  # If has parent test
-      # Point to parent test, make parent test point to it
-  # Tests.findOne(midSectionDir)
+  # Get array of same test TestSection/TestMidsection children IDs one level down
+  # Create new TestMidSection with filePath: file, inTest: parentTestID, children from that array
+  # Make it parent of children in that array
+  # @setIfTestParent(placeholderCollection, parentTestDir, parentTestID, placeholderID, file)
+  # Give it an order

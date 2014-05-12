@@ -8,14 +8,11 @@
 @findSameSection = (sectionQuestionIDs) ->
   originalID = findDocID(Sections, hasQuestions: sectionQuestionIDs)
 
-# GET QUESTION FILE(S) FOR SECTION
-# GET ALL VALID INDIVIDUAL QUESTIONS FROM THE FILES
-# IS THERE A SECTION WITH THOSE QUESTIONS ALREADY
 @findSectionQuestionIDs = (file, fileTree) ->
   sectionQuestionIDs = []
   # Get all question files in section
-  sectionsRegex = new RegExp("^" + file + "\\/[^\\/]+\\.")
-  questionFiles = fileTree.filter (file) -> sectionsRegex.test(file)
+  sectionFileRegex = new RegExp("^" + file + "\\/[^\\/]+\\.")
+  questionFiles = fileTree.filter (file) -> sectionFileRegex.test(file)
   # Filter out non-JSON files
   for questionFile in questionFiles
     if isQuestionFile(questionFile)

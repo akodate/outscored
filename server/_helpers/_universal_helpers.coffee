@@ -1,12 +1,11 @@
-@JSON_REGEX = /^.*\.json$/ # Ends with '.json'
 @TEST_REGEX = /^[^\/]+$/ # No /
 @QUESTION_REGEX = /^.*\.+.*$/ # has .
-@SECTION_REGEX = /.*/ # Placeholder, dynamically generated
+@SECTION_REGEX = /^file\/[^\/]+\./ # Placeholder, dynamically generated
 @MIDSECTION_REGEX = /.*/ # Placeholder, dynamically generated
-@IS_PARENT_TEST_REGEX = /^[^\/]+\/[^\/]+$/ # One slash on the whole line
 @PARENT_TEST_REGEX = /^[^\/]+/ # Up until first /
 @PARENT_REGEX = /.*(?=\/)/
-@CHILD_REGEX = /^file\/[^\/]+\./ # Placeholder, dynamically generated
+
+@JSON_REGEX = /^.*\.json$/ # Ends with '.json'
 
 insertedCount = 0
 existingCount = 0
@@ -124,12 +123,16 @@ existingPlaceholders = 0
       testQuestionIDs = filteredParentTest.hasTestQuestions
       if testQuestionIDs
         # Get IDs of questions that are children of this test and section
-        childRegex = new RegExp("^" + file + "\\/[^\\/]+\\.")
-        sectionQuestionFields = ({_id: {$in: testQuestionIDs }, filePath: {$regex: childRegex} })
+        sectionFileRegex = new RegExp("^" + file + "\\/[^\\/]+\\.")
+        sectionQuestionFields = {
+          _id: {$in: testQuestionIDs },
+          filePath: {$regex: sectionFileRegex}
+        }
         sectionQuestionIDs = @findDocIDs(TestQuestions, sectionQuestionFields)
         # Point section to questions and questions to section
-        @updateDocArray(TestSections, placeholderID, 'children', sectionQuestionIDs)
-        @updateDocs(TestQuestions, {_id: {$in: sectionQuestionIDs}}, {$set: {parent: placeholderID}})
+        unless sectionQuestionIDs = []
+          @updateDocArray(TestSections, placeholderID, 'children', sectionQuestionIDs)
+          @updateDocs(TestQuestions, {_id: {$in: sectionQuestionIDs}}, {$set: {parent: placeholderID}})
       else
         console.log parentTestDir + " seems to have no test questions..."
 
@@ -163,7 +166,6 @@ existingPlaceholders = 0
   add[field] = {$each: array}
   updNum = collection.upsert(id, {$addToSet: add})
   console.log "Updated ID:" + id + " in " + collection._name.capitalize() + " by adding an array of length " + array.length + " to field: " + field
-  console.log field
   if updNum == 0
     throw 'Failed'
   return updNum

@@ -20,11 +20,11 @@ checkType = (fileTree) ->
           isMidSection(file, fileTree)
     )
     console.log typeArray.length + ' ' + collection._name.capitalize()
-    isUnique(typeArray, collection, fileTree)
+    processType(typeArray, collection, fileTree)
   )
 
 # Checks if file (or directory) is unique
-isUnique = (typeArray, collection, fileTree) ->
+processType = (typeArray, collection, fileTree) ->
   countReset()
   for file in typeArray
     switch collection
