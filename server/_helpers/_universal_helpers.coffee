@@ -6,7 +6,7 @@
 @IS_PARENT_TEST_REGEX = /^[^\/]+\/[^\/]+$/ # One slash on the whole line
 @PARENT_TEST_REGEX = /^[^\/]+/ # Up until first /
 @PARENT_REGEX = /.*(?=\/)/
-@CHILD_REGEX = /^file[^\/]+/ # Placeholder, dynamically generated
+@CHILD_REGEX = /^file\/[^\/]+\./ # Placeholder, dynamically generated
 
 insertedCount = 0
 existingCount = 0
@@ -47,10 +47,11 @@ existingPlaceholders = 0
 # Find any set of documents' IDs
 @findDocIDs = (collection, fields) ->
   ids = []
-  docs = collection.find(fields, {_id: 1})
+  docs = collection.find(fields, {_id: 1}).fetch()
+  console.log("Looked up " + JSON.stringify(fields).split(',').length + "IDs, got: " + docs.length + " results")
   if docs
     for doc in docs
-      ids.push[doc._id]
+      ids.push(doc._id)
     return ids
 
 # Find placeholder
@@ -96,6 +97,7 @@ existingPlaceholders = 0
 
 # Inserts new placeholder
 @insertPlaceholder = (collection, file, originalID) ->
+  # Point original to test
   parentTestID = @setInTest(collection, originalID, file)
   # Create placeholder, point it to original, point it to test, save filepath
   fields = {original: originalID, inTest: parentTestID, filePath: file}
@@ -103,32 +105,33 @@ existingPlaceholders = 0
   placeholderID = @insertDoc(placeholderCollection, fields)
   @insertedPlaceholders()
   # Point test to original and placeholder
-  testField1 = {}
-  testField2 = {}
-  testField1['has' + collection._name.capitalize()] = originalID
-  testField2['has' + placeholderCollection._name.capitalize()] = placeholderID
-  @updateDocArraySingle(Tests, parentTestID, testField1)
-  @updateDocArraySingle(Tests, parentTestID, testField2)
-  # Point original to test
-  @setInTest(collection, originalID, file)
+  testFields = {}
+  testFields['has' + collection._name.capitalize()] = originalID
+  testFields['has' + placeholderCollection._name.capitalize()] = placeholderID
+  @updateDocArraySingle(Tests, parentTestID, testFields)
+  parentTestDir = @getParentTestDir(file)
 
   # Establish local placeholder relationships
   if collection == Questions
     # If parent directory IS test directory, establish parent/child relationship
-    if @getParentTestDir(file) == @getParentDir(file)
+    if parentTestDir == @getParentDir(file)
       @updateDocArraySingle(Tests, parentTestID, { children: placeholderID })
       @updateDoc(Questions, placeholderID, { parent: parentTestID })
+
   else if collection == Sections
     # Find all placeholder questions in this test
-    filteredParentTest = @findDoc({Tests, name: parentTestDir}, {hasTestQuestions: 1})
+    filteredParentTest = @findDoc(Tests, {name: parentTestDir}, {hasTestQuestions: 1})
     testQuestionIDs = filteredParentTest.hasTestQuestions
-    # Get IDs of questions that are children of this test and section
-    childRegex = new Regexp("^" + file + "[^\\/]+")
-    sectionQuestionFields = {inTest: filteredParentTest._id, filePath: childRegex}
-    sectionQuestionIDs = @findDocIDs(TestQuestions, sectionQuestionFields)
-    # Point section to questions and questions to section
-    @updateDocArray(TestSections, placeholderID, 'children', sectionQuestionIds)
-    @updateDocs(TestQuestions, {_id: {$in: sectionQuestionsIDs}}, {parent: placeholderID})
+    if testQuestionIDs
+      # Get IDs of questions that are children of this test and section
+      childRegex = new RegExp("^" + file + "\\/[^\\/]+\\.")
+      sectionQuestionFields = {_id: {$in: testQuestionIDs }, filePath: {$regex: "^" + file + "\\/[^\\/]+\\."} }
+      sectionQuestionIDs = @findDocIDs(TestQuestions, sectionQuestionFields)
+      # Point section to questions and questions to section
+      @updateDocArray(TestSections, placeholderID, 'children', sectionQuestionIDs)
+      @updateDocs(TestQuestions, {_id: {$in: sectionQuestionIDs}}, {$set: {parent: placeholderID}})
+    else
+      console.log parentTestDir + " seems to have no test questions..."
   else if collection == MidSections
     console.log "Not now...."
 
@@ -155,17 +158,19 @@ existingPlaceholders = 0
   return updNum
 
 @updateDocArray = (collection, id, field, array) ->
-  updNum = collection.upsert(id, {$addToSet: {field: {$each: array} } })
-  console.log "Updated ID:" + id + " in " + collection._name.capitalize() + " by adding this length array: \n" + array.length + "\nto the following field:"
+  add = {}
+  add[field] = {$each: array}
+  updNum = collection.upsert(id, {$addToSet: add })
+  console.log "Updated ID:" + id + " in " + collection._name.capitalize() + " by adding an array of length " + array.length + " to field: " + field
   console.log field
   if updNum == 0
     throw 'Failed'
   return updNum
 
 @updateDocs = (collection, selectors, fields) ->
-  updNum = collection.upsert(selectors, fields, {multi: true})
-  console.log "Updated " + collection._name.capitalize() + " using these selectors and fields: "
-  console.log selectors
+  result = collection.upsert(selectors, fields, {multi: true})
+  updNum = result['numberAffected']
+  console.log "Updated " + updNum + " " + collection._name.capitalize() + " with these fields: "
   console.log fields
   if updNum == 0
     throw 'Failed'

@@ -35,10 +35,8 @@ isUnique = (typeArray, collection) ->
           existingCount()
       when Questions
         processQuestions(file, collection)
-
-      # when Sections
-      #   if sectionExists(file)
-      #     return
+      when Sections
+        processSection(file, collection)
       # when MidSections
       #   if midSectionExists(file)
       #     return
