@@ -1,4 +1,4 @@
-@isTest = (file, fileTree) ->
+@isTest = (file) ->
   return TEST_REGEX.test(file)
 
 @processTest = (file, collection) ->

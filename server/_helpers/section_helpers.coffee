@@ -5,13 +5,36 @@
     sectionsRegex = new RegExp(file + "\\/[^\\/]+\\.")
     return sectionsRegex.test(fileTree)
 
-@processSection = (file, collection) ->
-  originalID = findDocID(collection, {filePath: file})
+@findSameSection = (sectionQuestionIDs) ->
+  originalID = findDocID(Sections, hasQuestions: sectionQuestionIDs)
+
+# GET QUESTION FILE(S) FOR SECTION
+# GET ALL VALID INDIVIDUAL QUESTIONS FROM THE FILES
+# IS THERE A SECTION WITH THOSE QUESTIONS ALREADY
+@findSectionQuestionIDs = (file, fileTree) ->
+  sectionQuestionIDs = []
+  # Get all question files in section
+  sectionsRegex = new RegExp("^" + file + "\\/[^\\/]+\\.")
+  questionFiles = fileTree.filter (file) -> sectionsRegex.test(file)
+  # Filter out non-JSON files
+  for questionFile in questionFiles
+    if isQuestionFile(questionFile)
+      questions = parseJSONFile(questionFile)
+      # Filter out invalid questions
+      for question in questions
+        if isValidQuestion(question)
+          sectionQuestionIDs.push(question)
+  return sectionQuestionIDs
+
+@processSection = (file, fileTree, collection) ->
+  # Is there a section with the same questions as this one?
+  sectionQuestionIDs = @findSectionQuestionIDs(file, fileTree)
+  originalID = @findSameSection(sectionQuestionIDs)
   if originalID # Original already exists
     existingCount()
   else # Create original
     insertedCount()
-    originalID = insertDoc(collection, {filePath: file})
+    originalID = insertDoc(collection, {hasQuestions: sectionQuestionIDs})
   # Unless test already points to that original (meaning placeholder exists)
   unless findPlaceholder(collection, file, originalID)
     # Point test to original and add placeholder

@@ -42,7 +42,7 @@ existingPlaceholders = 0
 
 # Find any set of documents
 @findDocs = (collection, fields, options = {}) ->
-  collection.find(fields, options)
+  collection.find(fields, options).fetch()
 
 # Find any set of documents' IDs
 @findDocIDs = (collection, fields) ->
@@ -64,6 +64,7 @@ existingPlaceholders = 0
     # Checks if identical question/section is already in parent test
     if originalID in hasCollection
       @existingPlaceholders()
+      console.log file + " is already in the parent test"
       return true
     else
       return false
@@ -98,7 +99,7 @@ existingPlaceholders = 0
 # Inserts new placeholder
 @insertPlaceholder = (collection, file, originalID) ->
   # Point original to test
-  parentTestID = @setInTest(collection, originalID, file)
+  parentTestID = @setInTests(collection, originalID, file)
   # Create placeholder, point it to original, point it to test, save filepath
   fields = {original: originalID, inTest: parentTestID, filePath: file}
   placeholderCollection = @setPlaceholderCollection(collection)
@@ -116,7 +117,7 @@ existingPlaceholders = 0
     # If parent directory IS test directory, establish parent/child relationship
     if parentTestDir == @getParentDir(file)
       @updateDocArraySingle(Tests, parentTestID, { children: placeholderID })
-      @updateDoc(Questions, placeholderID, { parent: parentTestID })
+      @updateDoc(TestQuestions, placeholderID, { parent: parentTestID })
 
   else if collection == Sections
     # Find all placeholder questions in this test
@@ -125,7 +126,7 @@ existingPlaceholders = 0
     if testQuestionIDs
       # Get IDs of questions that are children of this test and section
       childRegex = new RegExp("^" + file + "\\/[^\\/]+\\.")
-      sectionQuestionFields = {_id: {$in: testQuestionIDs }, filePath: {$regex: "^" + file + "\\/[^\\/]+\\."} }
+      sectionQuestionFields = ({_id: {$in: testQuestionIDs }, filePath: {$regex: childRegex} })
       sectionQuestionIDs = @findDocIDs(TestQuestions, sectionQuestionFields)
       # Point section to questions and questions to section
       @updateDocArray(TestSections, placeholderID, 'children', sectionQuestionIDs)
@@ -150,7 +151,7 @@ existingPlaceholders = 0
   return updNum
 
 @updateDocArraySingle = (collection, id, fields) ->
-  updNum = collection.upsert(id, {$addToSet: fields })
+  updNum = collection.upsert(id, {$addToSet: fields})
   console.log "Updated ID:" + id + " in " + collection._name.capitalize() + " by adding the following elements: "
   console.log fields
   if updNum == 0
@@ -160,7 +161,7 @@ existingPlaceholders = 0
 @updateDocArray = (collection, id, field, array) ->
   add = {}
   add[field] = {$each: array}
-  updNum = collection.upsert(id, {$addToSet: add })
+  updNum = collection.upsert(id, {$addToSet: add})
   console.log "Updated ID:" + id + " in " + collection._name.capitalize() + " by adding an array of length " + array.length + " to field: " + field
   console.log field
   if updNum == 0
@@ -189,12 +190,13 @@ existingPlaceholders = 0
     when MidSections
       TestMidSections
 
-@setInTest = (collection, ID, file) ->
+@setInTests = (collection, ID, file) ->
   parentTestDir = @getParentTestDir(file)
   parentTestID = @findDocID(Tests, {name: parentTestDir})
   if @updateDocArraySingle(collection, ID, {inTest: parentTestID})
     parentTestID
   else
+    console.log "DID NOT SUCCESSFULLY SET IN TESTS FOR " + file + " AT " + parentTestDir
     false
 
 @checkCount = ->

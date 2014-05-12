@@ -11,20 +11,20 @@ checkType = (fileTree) ->
     typeArray = fileTree.filter((file) ->
       switch collection
         when Tests
-          isTest(file, fileTree)
+          isTest(file)
         when Questions
-          isQuestion(file, fileTree)
+          isQuestionFile(file)
         when Sections
           isSection(file, fileTree)
         when MidSections
           isMidSection(file, fileTree)
     )
     console.log typeArray.length + ' ' + collection._name.capitalize()
-    isUnique(typeArray, collection)
+    isUnique(typeArray, collection, fileTree)
   )
 
 # Checks if file (or directory) is unique
-isUnique = (typeArray, collection) ->
+isUnique = (typeArray, collection, fileTree) ->
   countReset()
   for file in typeArray
     switch collection
@@ -34,16 +34,18 @@ isUnique = (typeArray, collection) ->
         else
           existingCount()
       when Questions
-        processQuestions(file, collection)
+        for question in parseJSONFile(file)
+          if isValidQuestion(question)
+            processQuestion(collection, question, file)
       when Sections
-        processSection(file, collection)
+        processSection(file, fileTree, collection)
       # when MidSections
       #   if midSectionExists(file)
       #     return
-  console.log collection._name.capitalize() + ' originals found: ' + (existingCount() - 1)
-  console.log collection._name.capitalize() + ' originals inserted: ' + (insertedCount() - 1)
-  console.log collection._name.capitalize() + ' placeholders found: ' + (existingPlaceholders() - 1)
-  console.log collection._name.capitalize() + ' placeholders inserted: ' + (insertedPlaceholders() - 1)
+  console.log collection._name.capitalize() + ' originals found ' + (existingCount() - 1) + 'times'
+  console.log collection._name.capitalize() + ' originals inserted ' + (insertedCount() - 1) + 'times'
+  console.log collection._name.capitalize() + ' placeholders found ' + (existingPlaceholders() - + 'times' 1)
+  console.log collection._name.capitalize() + ' placeholders inserted ' + (insertedPlaceholders( + 'times') - 1)
 
 # MIDSECTIONS
 # Trait: has / but no question file
