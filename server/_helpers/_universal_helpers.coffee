@@ -113,28 +113,28 @@ existingPlaceholders = 0
   parentTestDir = @getParentTestDir(file)
 
   # Establish local placeholder relationships
-  if collection == Questions
-    # If parent directory IS test directory, establish parent/child relationship
-    if parentTestDir == @getParentDir(file)
-      @updateDocArraySingle(Tests, parentTestID, { children: placeholderID })
-      @updateDoc(TestQuestions, placeholderID, { parent: parentTestID })
+  switch collection
+    when Questions
+      @setIfTestParent(placeholderCollection, parentTestDir, parentTestID, placeholderID, file)
 
-  else if collection == Sections
-    # Find all placeholder questions in this test
-    filteredParentTest = @findDoc(Tests, {name: parentTestDir}, {hasTestQuestions: 1})
-    testQuestionIDs = filteredParentTest.hasTestQuestions
-    if testQuestionIDs
-      # Get IDs of questions that are children of this test and section
-      childRegex = new RegExp("^" + file + "\\/[^\\/]+\\.")
-      sectionQuestionFields = ({_id: {$in: testQuestionIDs }, filePath: {$regex: childRegex} })
-      sectionQuestionIDs = @findDocIDs(TestQuestions, sectionQuestionFields)
-      # Point section to questions and questions to section
-      @updateDocArray(TestSections, placeholderID, 'children', sectionQuestionIDs)
-      @updateDocs(TestQuestions, {_id: {$in: sectionQuestionIDs}}, {$set: {parent: placeholderID}})
-    else
-      console.log parentTestDir + " seems to have no test questions..."
-  else if collection == MidSections
-    console.log "Not now...."
+    when Sections
+      @setIfTestParent(placeholderCollection, parentTestDir, parentTestID, placeholderID, file)
+      # Find all placeholder questions in this test
+      filteredParentTest = @findDoc(Tests, {name: parentTestDir}, {hasTestQuestions: 1})
+      testQuestionIDs = filteredParentTest.hasTestQuestions
+      if testQuestionIDs
+        # Get IDs of questions that are children of this test and section
+        childRegex = new RegExp("^" + file + "\\/[^\\/]+\\.")
+        sectionQuestionFields = ({_id: {$in: testQuestionIDs }, filePath: {$regex: childRegex} })
+        sectionQuestionIDs = @findDocIDs(TestQuestions, sectionQuestionFields)
+        # Point section to questions and questions to section
+        @updateDocArray(TestSections, placeholderID, 'children', sectionQuestionIDs)
+        @updateDocs(TestQuestions, {_id: {$in: sectionQuestionIDs}}, {$set: {parent: placeholderID}})
+      else
+        console.log parentTestDir + " seems to have no test questions..."
+
+    when MidSections
+      console.log "Not now...."
 
 
 
@@ -198,6 +198,12 @@ existingPlaceholders = 0
   else
     console.log "DID NOT SUCCESSFULLY SET IN TESTS FOR " + file + " AT " + parentTestDir
     false
+
+# If parent directory IS test directory, establish parent/child relationship
+@setIfTestParent = (placeholderCollection, parentTestDir, parentTestID, placeholderID, file) ->
+  if parentTestDir == @getParentDir(file)
+    @updateDocArraySingle(Tests, parentTestID, { children: placeholderID })
+    @updateDoc(placeholderCollection, placeholderID, { parent: parentTestID })
 
 @checkCount = ->
   count = insertedCount + existingCount + insertedPlaceholders + existingPlaceholders

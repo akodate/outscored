@@ -40,22 +40,12 @@ isUnique = (typeArray, collection, fileTree) ->
       when Sections
         processSection(file, fileTree, collection)
       # when MidSections
-      #   if midSectionExists(file)
-      #     return
+      #   processMidSection(file, fileTree, collection)
+
   console.log collection._name.capitalize() + ' originals found ' + (existingCount() - 1) + 'times'
   console.log collection._name.capitalize() + ' originals inserted ' + (insertedCount() - 1) + 'times'
-  console.log collection._name.capitalize() + ' placeholders found ' + (existingPlaceholders() - + 'times' 1)
+  console.log collection._name.capitalize() + ' placeholders found ' + (existingPlaceholders() -  1 + 'times')
   console.log collection._name.capitalize() + ' placeholders inserted ' + (insertedPlaceholders( + 'times') - 1)
-
-# MIDSECTIONS
-# Trait: has / but no question file
-  # If no midsections have the same section/midsection names
-    # Save original, save placeholder, point to sections/midsections, make sections/midsections point to it
-  # Else
-    # Save placeholder, point to sections/midsections
-  # If has parent test
-      # Point to parent test, make parent test point to it
-  # Tests.findOne(midSectionDir)
 
 checkType(testFileTree)
 console.log('Checked')
