@@ -229,7 +229,7 @@ end
 
 test_links.each_with_index do |a, test_count|
 
-  next if test_count < 75
+  # next if test_count < 75
 
   test_name = a.text
   test_link = a.attributes['href'].value

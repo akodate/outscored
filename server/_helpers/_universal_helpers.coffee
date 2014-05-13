@@ -41,17 +41,22 @@ existingPlaceholders = 0
 
 # Find any set of documents
 @findDocs = (collection, fields, options = {}) ->
-  collection.find(fields, options).fetch()
+  docs = collection.find(fields, options).fetch()
+  if docs.length == 0
+    false
 
 # Find any set of documents' IDs
 @findDocIDs = (collection, fields) ->
   ids = []
   docs = collection.find(fields, {_id: 1}).fetch()
-  console.log("Looked up " + JSON.stringify(fields).split(',').length + "IDs, got: " + docs.length + " results")
+  console.log("Looked up " + JSON.stringify(fields).split(',').length + " fields, got: " + docs.length + " results")
   if docs
     for doc in docs
       ids.push(doc._id)
-    return ids
+    if ids.length == 0
+      false
+    else
+      ids
 
 # Find placeholder
 @findPlaceholder = (collection, file, originalID) ->
@@ -130,9 +135,9 @@ existingPlaceholders = 0
         }
         sectionQuestionIDs = @findDocIDs(TestQuestions, sectionQuestionFields)
         # Point section to questions and questions to section
-        unless sectionQuestionIDs.length == 0
+        if sectionQuestionIDs
           @updateDocArray(TestSections, placeholderID, 'children', sectionQuestionIDs)
-          @updateDocs(TestQuestions, {_id: {$in: sectionQuestionIDs}}, {$set: {parent: placeholderID}})
+          @updateDocs(TestQuestions, {_id: {$in: sectionQuestionIDs}}, {parent: placeholderID})
       else
         console.log parentTestDir + " seems to have no test questions..."
 
@@ -146,37 +151,36 @@ existingPlaceholders = 0
 # ===== UPDATES =====
 
 @updateDoc = (collection, id, fields) ->
-  updNum = collection.upsert(id, {$set: fields})
+  updNum = collection.update(id, {$set: fields})
   console.log "Updated ID:" + id + " in " + collection._name.capitalize() + " with the following fields:"
   console.log fields
   if updNum == 0
-    throw 'Failed'
+    return false
   return updNum
 
 @updateDocArraySingle = (collection, id, fields) ->
-  updNum = collection.upsert(id, {$addToSet: fields})
+  updNum = collection.update(id, {$addToSet: fields})
   console.log "Updated ID:" + id + " in " + collection._name.capitalize() + " by adding the following elements: "
   console.log fields
   if updNum == 0
-    throw 'Failed'
+    return false
   return updNum
 
 @updateDocArray = (collection, id, field, array) ->
   add = {}
   add[field] = {$each: array}
-  updNum = collection.upsert(id, {$addToSet: add})
+  updNum = collection.update(id, {$addToSet: add})
   console.log "Updated ID:" + id + " in " + collection._name.capitalize() + " by adding an array of length " + array.length + " to field: " + field
   if updNum == 0
-    throw 'Failed'
+    return false
   return updNum
 
 @updateDocs = (collection, selectors, fields) ->
-  result = collection.upsert(selectors, fields, {multi: true})
-  updNum = result['numberAffected']
+  updNum = collection.update(selectors, {$set: fields}, {multi: true})
   console.log "Updated " + updNum + " " + collection._name.capitalize() + " with these fields: "
   console.log fields
   if updNum == 0
-    throw 'Failed'
+    return false
   return updNum
 
 
@@ -198,7 +202,7 @@ existingPlaceholders = 0
   if @updateDocArraySingle(collection, ID, {inTest: parentTestID})
     parentTestID
   else
-    console.log "DID NOT SUCCESSFULLY SET IN TESTS FOR " + file + " AT " + parentTestDir
+    console.log "Did not successfully @setInTests for " + file + " at " + parentTestDir
     false
 
 # If parent directory IS test directory, establish parent/child relationship
@@ -209,8 +213,8 @@ existingPlaceholders = 0
 
 @checkCount = ->
   count = insertedCount + existingCount + insertedPlaceholders + existingPlaceholders
-  if count % 50 == 0
-    console.log("========== Ran " + count + " times ==========")
+  if count % 50 == 0 && count >= 50
+    console.log("========== Ran around " + count + " times ==========")
   # if count > 1000
   #   throw 'Time to die.'
 

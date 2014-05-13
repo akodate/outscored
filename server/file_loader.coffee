@@ -39,8 +39,8 @@ processType = (typeArray, collection, fileTree) ->
             processQuestion(collection, question, file)
       when Sections
         processSection(file, fileTree, collection)
-      # when MidSections
-      #   processMidSection(file, fileTree, collection)
+      when MidSections
+        processMidSection(file, fileTree)
 
   console.log collection._name.capitalize() + ' originals found ' + (existingCount() - 1) + 'times'
   console.log collection._name.capitalize() + ' originals inserted ' + (insertedCount() - 1) + 'times'
@@ -48,4 +48,6 @@ processType = (typeArray, collection, fileTree) ->
   console.log collection._name.capitalize() + ' placeholders inserted ' + (insertedPlaceholders( + 'times') - 1)
 
 checkType(testFileTree)
+
+markBlankTests()
 console.log('Checked')

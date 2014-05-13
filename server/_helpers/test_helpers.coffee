@@ -6,3 +6,6 @@
     return false
   else
     insertDoc(collection, {name: file})
+
+@markBlankTests = () ->
+  updateDocs( Tests, {hasQuestions: {$exists: false}, blank: {$exists: false}},  {blank: true} )
