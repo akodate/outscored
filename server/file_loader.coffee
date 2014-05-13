@@ -47,7 +47,7 @@ processType = (typeArray, collection, fileTree) ->
   console.log collection._name.capitalize() + ' placeholders found ' + (existingPlaceholders() -  1 + 'times')
   console.log collection._name.capitalize() + ' placeholders inserted ' + (insertedPlaceholders( + 'times') - 1)
 
-checkType(testFileTree)
+# checkType(testFileTree)
 
 markBlankTests()
 console.log('Checked')
