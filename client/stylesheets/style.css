@@ -63,9 +63,10 @@ html {
   font-family: 'La Belle Aurore';
   color: red;
   opacity: .4;
-  font-size: 35px;
-  width: 480px;
-  height: 55px;
+  font-size: 50px;
+  width: 800px;
+  height: 100px;
+  line-height: 100px;
 }
 
 .search-box::-webkit-input-placeholder {
