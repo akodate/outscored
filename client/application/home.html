@@ -6,11 +6,22 @@
     {{#each results}}
       {{> result}}
     {{/each}}
+    <div class="search-results">
+      {{#each sections}}
+        {{> section}}
+      {{/each}}
+    </div>
   </div>
 </template>
 
 <template name="result">
   <div class="search-result animated fadeInLeft">
     {{name}}
+  </div>
+</template>
+
+<template name="section">
+  <div class="section-result animated fadeInUp">
+    - {{name}}
   </div>
 </template>

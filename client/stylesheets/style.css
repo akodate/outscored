@@ -74,7 +74,22 @@ html {
   top: -40px;
   font-size: 50px;
   line-height: 75px;
-  opacity: .8;
+  color: gray;
+}
+
+.search-results {
+  position: relative;
+  height: 350px;
+  top: -40px;
+  overflow: scroll;
+}
+
+.section-result {
+  position: relative;
+  left: 50px;
+  font-size: 40px;
+  line-height: 75px;
+  color: navy;
 }
 
 .search-box::-webkit-input-placeholder {
