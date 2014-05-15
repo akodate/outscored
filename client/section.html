@@ -1,0 +1,19 @@
+<template name='sectionPage'>
+  <div class='section-page'>
+    <h1>{{sectionName}}</h1>
+    <br><br>
+    {{#each questions}}
+      {{> question}}
+    {{/each}}
+    <p>THERE</p>
+  </div>
+</template>
+
+<template name='question'>
+  <div class='question'>
+    <p>{{{question}}}</p>
+    <p>{{{choices}}}</p>
+    <p>{{{answer}}}</p>
+    <br><br>
+  </div>
+</template>

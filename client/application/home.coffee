@@ -24,7 +24,10 @@ Template.home.rendered = () ->
   arrow[0].addEventListener('animationend', point)
 
 Template.home.events
+
   "keyup .search-box": (event, ui) ->
+    $('.search-arrow').animate
+      opacity: 0.25
     @search = event.target.value
     SectionResults.remove({})
     Results.update({}, {$set: {result: false}}, {multi: true})
@@ -35,13 +38,21 @@ Template.home.events
     Results.update({}, {$set: {result: false}}, {multi: true})
     Results.update({name: event.target.innerText}, {$set: {result: true}})
 
-    test = Results.findOne(result: true)
+    testResult = Results.findOne(result: true)
     SectionResults.remove({})
-    TestSections.find({_id: {$in: test.children}}).fetch()
-    TestSections.find({_id: {$in: test.children}}).forEach( (doc) ->
-      SectionResults.insert({doc, name: (/[^\/]+$/.exec(doc.filePath))})
+    TestSections.find({_id: {$in: testResult.children}}).fetch()
+    TestSections.find({_id: {$in: testResult.children}}).forEach( (doc) ->
+      doc.name = (/[^\/]+$/.exec(doc.filePath))
+      SectionResults.insert(doc)
       console.log "Executing...."
     )
+    $('.search-box').focus()
+  "click .section-result": (event, ui) ->
+    console.log event.target.innerText
+    sectionResult = SectionResults.findOne({name: event.target.innerText})
+    console.log sectionResult.name
+    console.log sectionResult.original
+    Router.go('sectionPage', {testSecID: sectionResult._id, secID: sectionResult.original})
 
 Template.home.helpers
   results: ->
