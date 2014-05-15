@@ -3,6 +3,7 @@
     "iron-router": {},
     "bootstrap-3": {},
     "accounts-ui-bootstrap-3-blaze": {},
-    "glob": {}
+    "glob": {},
+    "iron-router-progress": {}
   }
 }

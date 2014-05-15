@@ -4,7 +4,6 @@
 # but you can also edit it by hand.
 
 standard-app-packages
-autopublish
 insecure
 coffeescript
 iron-router
@@ -13,3 +12,4 @@ accounts-google
 bootstrap-3
 accounts-ui-bootstrap-3-blaze
 glob
+iron-router-progress

@@ -69,6 +69,14 @@ html {
   line-height: 100px;
 }
 
+.search-result {
+  position: relative;
+  top: -40px;
+  font-size: 50px;
+  line-height: 75px;
+  opacity: .8;
+}
+
 .search-box::-webkit-input-placeholder {
     color: red;
 }
