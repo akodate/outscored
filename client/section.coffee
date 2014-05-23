@@ -8,7 +8,8 @@ Template.sectionPage.helpers
       originals.push(doc.original)
     )
     for original, i in originals
-      QuestionResults.insert(Questions.findOne(_id: original))
+      thisID = QuestionResults.insert(Questions.findOne(_id: original))
+      QuestionResults.update(thisID, {$set: {order: (i + 1)}})
     return QuestionResults.find()
 
   sectionName: ->
