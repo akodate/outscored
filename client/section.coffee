@@ -1,11 +1,16 @@
 Template.sectionPage.helpers
   questions: ->
     originals = []
-    TestQuestions.find().forEach( (doc) ->
+    TestQuestions.find({}, {sort: {order: 1}}).forEach( (doc) ->
+      console.log "Order: " + doc.order
       originals.push(doc.original)
     )
     console.log originals
-    return Questions.find({_id: {$in: originals}}, {sort: {question: 1}})
+    for original, i in originals
+      console.log originals[i]
+      originals[i] = Questions.findOne(_id: original)
+      console.log originals[i]
+    return originals
 
   sectionName: ->
     return TestSections.findOne().filePath
