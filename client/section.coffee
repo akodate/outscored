@@ -1,3 +1,5 @@
+@QuestionResults = new Meteor.Collection(null)
+
 Template.sectionPage.helpers
   questions: ->
     originals = []
@@ -5,12 +7,9 @@ Template.sectionPage.helpers
       console.log "Order: " + doc.order
       originals.push(doc.original)
     )
-    console.log originals
     for original, i in originals
-      console.log originals[i]
-      originals[i] = Questions.findOne(_id: original)
-      console.log originals[i]
-    return originals
+      QuestionResults.insert(Questions.findOne(_id: original))
+    return QuestionResults.find()
 
   sectionName: ->
     return TestSections.findOne().filePath
