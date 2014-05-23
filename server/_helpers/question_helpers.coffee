@@ -11,7 +11,7 @@
   else
     return false
 
-@processQuestion = (collection, question, file) ->
+@processQuestion = (collection, question, file, questionNumber) ->
   originalID = findDocID(collection, question)
   if originalID # Original already exists
     existingCount()
@@ -21,5 +21,5 @@
   # Unless test already points to that original (meaning placeholder exists)
   unless findPlaceholder(collection, file, originalID)
     # Point test to original and add placeholder
-    insertPlaceholder(collection, file, originalID)
+    insertPlaceholder(collection, file, originalID, questionNumber)
 

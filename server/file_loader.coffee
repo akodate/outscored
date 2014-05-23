@@ -1,4 +1,4 @@
- if Tests.find().fetch().length != 76
+if Tests.find().fetch().length != 76
 
   COLLECTION_TYPES = [Tests, Questions, Sections, MidSections]
 
@@ -36,9 +36,11 @@
           else
             existingCount()
         when Questions
+          questionNumber = 0
           for question in parseJSONFile(file)
             if isValidQuestion(question)
-              processQuestion(collection, question, file)
+              questionNumber += 1
+              processQuestion(collection, question, file, questionNumber)
         when Sections
           processSection(file, fileTree, collection)
         when MidSections
@@ -46,8 +48,8 @@
 
     console.log collection._name.capitalize() + ' originals found ' + (existingCount() - 1) + 'times'
     console.log collection._name.capitalize() + ' originals inserted ' + (insertedCount() - 1) + 'times'
-    console.log collection._name.capitalize() + ' placeholders found ' + (existingPlaceholders() -  1 + 'times')
-    console.log collection._name.capitalize() + ' placeholders inserted ' + (insertedPlaceholders( + 'times') - 1)
+    console.log collection._name.capitalize() + ' placeholders found ' + (existingPlaceholders() -  1) + 'times'
+    console.log collection._name.capitalize() + ' placeholders inserted ' + (insertedPlaceholders() - 1) + 'times'
 
   checkType(testFileTree)
 

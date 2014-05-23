@@ -101,7 +101,7 @@ existingPlaceholders = 0
   return insID
 
 # Inserts new placeholder
-@insertPlaceholder = (collection, file, originalID) ->
+@insertPlaceholder = (collection, file, originalID, questionNumber) ->
   # Point original to test
   parentTestID = @setInTests(collection, originalID, file)
   # Create placeholder, point it to original, point it to test, save filepath
@@ -119,6 +119,7 @@ existingPlaceholders = 0
   # Establish local placeholder relationships
   switch collection
     when Questions
+      @updateDoc(placeholderCollection, placeholderID, {order: questionNumber})
       @setIfTestParent(placeholderCollection, parentTestDir, parentTestID, placeholderID, file)
 
     when Sections
