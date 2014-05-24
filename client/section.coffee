@@ -25,6 +25,7 @@ Template.sectionPage.events
 
 Template.sectionPage.helpers
   questions: ->
+    QuestionResults.remove({})
     # Get IDs of original questions from test questions
     originals = []
     TestQuestions.find({}, {sort: {order: 1}}).forEach (doc) ->

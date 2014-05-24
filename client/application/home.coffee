@@ -3,10 +3,11 @@
 
 Template.home.rendered = () ->
 
+  SectionResults.remove({})
+
   unless @rendered == true
     Tests.find().forEach( (doc) ->
       Results.insert(doc)
-      console.log "Doing this??"
       @rendered = true
     )
 
