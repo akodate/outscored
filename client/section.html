@@ -1,7 +1,10 @@
 <template name='sectionPage'>
   <div class='section-page'>
     <h1>{{sectionName}}</h1>
-    <br><br>
+    <ul class="pager">
+      <li class="previous previous-question"><a href="#">&larr; Previous</a></li>
+      <li class="next next-question"><a href="#">Next &rarr;</a></li>
+    </ul>
     {{#each questions}}
       {{> question}}
     {{/each}}
