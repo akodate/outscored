@@ -20,6 +20,7 @@
       # Filter out invalid questions
       for question in questions
         if isValidQuestion(question)
+          question = filterQuestion(question)
           questionID = findDocID(Questions, question)
           sectionQuestionIDs.push(questionID)
   if sectionQuestionIDs.length == 0

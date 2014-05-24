@@ -40,6 +40,7 @@ if Tests.find().fetch().length != 76
           for question in parseJSONFile(file)
             if isValidQuestion(question)
               questionNumber += 1
+              question = filterQuestion(question)
               processQuestion(collection, question, file, questionNumber)
         when Sections
           processSection(file, fileTree, collection)

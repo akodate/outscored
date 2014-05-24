@@ -1,3 +1,5 @@
+ANSWER_REGEX = /[A-Z]/
+
 @isQuestionFile = (file) ->
   if QUESTION_REGEX.test(file)
     if isJSONFile(file)
@@ -10,6 +12,13 @@
     return true
   else
     return false
+
+@filterQuestion = (question) ->
+  if ANSWER_REGEX.exec(question.answer)
+    question.answer = ANSWER_REGEX.exec(question.answer)[0]
+  else
+    question.answer = "COULD NOT READ ANSWER"
+  return question
 
 @processQuestion = (collection, question, file, questionNumber) ->
   originalID = findDocID(collection, question)
