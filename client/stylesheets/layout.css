@@ -1,0 +1,37 @@
+html {
+  background: url(/notebook-paper.jpg) no-repeat fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: 1280px 1077px;
+  background-position: 0px -50px;
+}
+
+.sheet {
+  font-family: 'La Belle Aurore', cursive;
+  background: none;
+  border: none;
+  position: absolute; left: 115px; top: 45px;
+  height: 90%;
+}
+
+.header {
+  background: none;
+  border: none;
+}
+
+.navbar-brand {
+  font-family: 'Homemade Apple';
+  padding-left: 45px;
+  font-size: 50px;
+}
+
+.login {
+  font-family: 'La Belle Aurore';
+  font-size: 35px;
+  margin-top: 10px;
+}
+
+.login-button {
+  font-size: 25px;
+}
