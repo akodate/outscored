@@ -59,6 +59,11 @@ Template.home.helpers
   results: ->
     console.log "LOG THIS"
     tests = Results.find({result: true}, {sort: {name: 1}, limit: 5}).fetch()
+    # Assign order to results
+    if tests.length > 0
+      for test, i in tests
+        tests[i].styleLeft = i * 20 + 40
+        tests[i].styleTop = i * 75 + 340
     return tests
   sections: ->
     console.log "Sections..."

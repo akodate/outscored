@@ -31,19 +31,27 @@
   line-height: 100px;
 }
 
-.search-result {
-  position: relative;
-  top: -40px;
-  font-size: 50px;
-  line-height: 75px;
-  color: gray;
-}
-
 .search-results {
   position: relative;
   height: 350px;
   top: -40px;
   overflow: scroll;
+}
+
+.search-result {
+  position: absolute;
+  background-color: white;
+/*  background: url(/construction-paper-600x400.jpg);*/
+  width: 800px;
+  bottom: 0px;
+  padding: 5px 25px 0px 25px;
+  font-size: 50px;
+  line-height: 75px;
+  font-size: 36px;
+  font-family: 'Belgrano';
+  color: black;
+  border: 1px solid gray;
+  box-shadow: -5px -5px 8px gray;
 }
 
 .section-result {
