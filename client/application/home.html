@@ -3,14 +3,14 @@
     <h1 class="search-heading">1. What do you want to improve?</h1>
     <p class="search-arrow animated slideInLeft">-&gt;</p>
     <input class="search-box" type="search" autofocus="true" placeholder="Search by test, subject, or job" />
-    {{#each results}}
-      {{> result}}
+  </div>
+  {{#each results}}
+    {{> result}}
+  {{/each}}
+  <div class="search-results">
+    {{#each sections}}
+      {{> section}}
     {{/each}}
-    <div class="search-results">
-      {{#each sections}}
-        {{> section}}
-      {{/each}}
-    </div>
   </div>
 </template>
 
@@ -21,7 +21,7 @@
 </template>
 
 <template name="section">
-  <div class="section-result animated fadeInUp">
+  <div class="section-result">
     {{name}}
   </div>
 </template>

@@ -62,7 +62,7 @@ Template.home.helpers
     # Assign order to results
     if tests.length > 0
       for test, i in tests
-        tests[i].styleLeft = i * 20 + 40
+        tests[i].styleLeft = i * 30 + 20
         tests[i].styleTop = i * 75 + 340
     return tests
   sections: ->

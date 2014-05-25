@@ -17,6 +17,10 @@ html {
   overflow: hidden;
 }
 
+#main {
+  height: 100%;
+}
+
 .header {
   background: none;
   border: none;
