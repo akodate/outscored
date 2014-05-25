@@ -3,6 +3,8 @@
 
 Template.home.rendered = () ->
 
+  $('.search-results').hide()
+  Results.remove({})
   SectionResults.remove({})
 
   unless @rendered == true
@@ -35,6 +37,7 @@ Template.home.events
     if @search
       Results.update({name: {$regex: @search, $options: "i" }}, {$set: {result: true}}, {multi: true})
   "click .search-result": (event, ui) ->
+    $('.search-results').show()
     console.log event.target.innerText
     Results.update({}, {$set: {result: false}}, {multi: true})
     Results.update({name: event.target.innerText}, {$set: {result: true}})
@@ -57,7 +60,6 @@ Template.home.events
 
 Template.home.helpers
   results: ->
-    console.log "LOG THIS"
     tests = Results.find({result: true}, {sort: {name: 1}, limit: 5}).fetch()
     # Assign order to results
     if tests.length > 0

@@ -46,6 +46,12 @@
   font-family: 'Belgrano';
   color: black;
   text-align: center;
+
+/*  -webkit-animation-duration: .2s;
+     -moz-animation-duration: .2s;
+      -MS-animation-duration: .2s;
+       -o-animation-duration: .2s;
+          animation-duration: .2s;*/
 }
 
 .search-results {
