@@ -64,8 +64,12 @@ Template.home.helpers
     # Assign order to results
     if tests.length > 0
       for test, i in tests
-        tests[i].styleLeft = i * 30 + 20
-        tests[i].styleTop = i * 75 + 340
+        if window.matchMedia("(max-height: 700px)").matches
+          tests[i].styleTop = i * 65 + 260
+          tests[i].styleLeft = i * 30 + 20
+        else
+          tests[i].styleLeft = i * 30 + 20
+          tests[i].styleTop = i * 75 + 340
     return tests
   sections: ->
     console.log "Sections..."

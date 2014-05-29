@@ -26,7 +26,7 @@
   color: red;
   opacity: .4;
   font-size: 50px;
-  width: 800px;
+  width: 650px;
   height: 100px;
   line-height: 100px;
 }
@@ -35,12 +35,10 @@
   position: absolute;
   width: 800px;
   bottom: 0px;
-  padding: 5px 25px 0px 25px;
   background-color: white;
 /*  background: url(/construction-paper-600x400.jpg);*/
   border: 1px solid gray;
   box-shadow: -5px -5px 8px gray;
-  font-size: 50px;
   line-height: 75px;
   font-size: 36px;
   font-family: 'Belgrano';
@@ -91,4 +89,10 @@
 
 .search-box:focus {
   outline: none !important;
+}
+
+@media (max-width: 1024px) {
+  .search-group {
+    margin: 0px 60px;
+  }
 }
