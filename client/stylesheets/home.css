@@ -189,7 +189,7 @@
   }
 }
 
-/*Expecting phone portrait - min width of 480px*/
+/*Expecting phone portrait - min height of 480px*/
 @media (max-width: 370px) {
 
 }
