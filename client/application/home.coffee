@@ -59,12 +59,16 @@ Template.home.events
     Router.go('sectionPage', {testSecID: sectionResult._id, secID: sectionResult.original})
 
 Template.home.helpers
+
   results: ->
     tests = Results.find({result: true}, {sort: {name: 1}, limit: 5}).fetch()
     # Assign order to results
     if tests.length > 0
       for test, i in tests
-        if window.matchMedia("(max-width: 750px)").matches || window.matchMedia("(max-height: 599px)").matches
+        if window.matchMedia("(max-width: 529px)").matches # Expecting min-width of 480px
+          tests[i].styleTop = i * 30 + 170
+          tests[i].styleLeft = i * 15 + 10
+        else if window.matchMedia("(max-width: 750px)").matches || window.matchMedia("(max-height: 599px)").matches
           tests[i].styleTop = i * 50 + 230
           tests[i].styleLeft = i * 15 + 10
         else if window.matchMedia("(max-height: 700px)").matches && window.matchMedia("(min-width: 1001px)").matches
@@ -77,6 +81,7 @@ Template.home.helpers
           tests[i].styleLeft = i * 30 + 20
           tests[i].styleTop = i * 75 + 340
     return tests
+
   sections: ->
     console.log "Sections..."
     sections = SectionResults.find({}, {sort: {name: 1}}).fetch()
