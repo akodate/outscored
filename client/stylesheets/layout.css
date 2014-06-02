@@ -15,6 +15,7 @@ html {
   padding-top: 45px;
   bottom: 0px;
   overflow: hidden;
+  width: 100%;
 }
 
 #main {
@@ -24,6 +25,7 @@ html {
 .header {
   background: none;
   border: none;
+  max-height: 62px;
 }
 
 .navbar-header {
@@ -54,6 +56,12 @@ html {
   font-size: 25px;
 }
 
+@media (min-width: 1051px) {
+  .sheet {
+    max-width: 1150px;
+  }
+}
+
 @media (max-width: 1050px) {
   html {
     background-position: -115px -50px;
@@ -82,5 +90,11 @@ html {
 
   .login-button {
     font-size: 25px;
+  }
+}
+
+@media (max-width: 750px), (max-height: 599px) {
+  html {
+    background-size: 120% 769px;
   }
 }

@@ -132,3 +132,47 @@
     line-height: 50px;
   }
 }
+
+@media (max-width: 750px), (max-height: 599px) {
+  .search-group {
+    margin: 65px 0px 0px 10px;
+  }
+  .search-heading {
+    font-size: 25px;
+  }
+  .search-arrow {
+    top: -5px;
+    left: -5px;
+    font-size: 40px;
+  }
+  .search-box {
+    top: -10px;
+    font-size: 25px;
+    height: 80px;
+    line-height: 80px;
+  }
+  .search-result {
+    width: 450px;
+    line-height: 50px;
+    font-size: 28px;
+  }
+  .search-results {
+    width: 450px;
+    height: 390px;
+    margin-top: 30px;
+    padding: 0px 50px;
+  }
+  .section-result {
+    width: 100%;
+    font-size: 20px;
+    line-height: 35px;
+  }
+}
+
+@media (max-width: 529px) {
+
+}
+
+@media (max-width: 370px) {
+
+}
