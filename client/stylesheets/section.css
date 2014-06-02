@@ -1,11 +1,12 @@
 .section-page {
+  max-height: 100%;
   font-size: 20px;
   font-family: 'Belgrano';
   background: url(/construction-paper-600x400.jpg);
-/*  background-color: white;*/
   border: 1px solid gray;
   box-shadow: -5px -5px 8px gray;
   padding: 45px;
+  overflow: scroll;
 }
 
 #next-link, #previous-link {
@@ -13,4 +14,48 @@
   background: none;
   color: black;
   font-size: 24px;
+}
+
+@media (max-width: 1000px) {
+  h1 {
+
+  }
+  .section-page {
+
+  }
+  #next-link, #previous-link {
+
+  }
+}
+
+@media (max-width: 750px), (max-height: 599px) {
+  h1 {
+    font-size: 30px;
+  }
+  .pager {
+    margin: 0px;
+  }
+  .section-page {
+    padding: 30px;
+    font-size: 18px;
+  }
+  #next-link, #previous-link {
+    font-size: 22px;
+  }
+}
+
+@media (max-width: 370px) {
+  h1 {
+    font-size: 24px;
+  }
+  .pager {
+    margin: 0px;
+  }
+  .section-page {
+    padding: 10px;
+    font-size: 14px;
+  }
+  #next-link, #previous-link {
+    font-size: 18px;
+  }
 }
