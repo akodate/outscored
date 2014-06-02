@@ -109,13 +109,21 @@ html {
     padding-left: 5px;
     font-size: 20px;
   }
+  .login {
+    margin-top: 17px;
+  }
   #login-dropdown-list {
     max-width: 160px;
+    text-align: right;
   }
   .open > a {
     background-color: transparent !important;
   }
+  a.dropdown-toggle {
+    padding: 0px !important;
+  }
   .dropdown-menu {
+    padding: 0px !important;
     max-width: 160px;
   }
 }

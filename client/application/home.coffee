@@ -58,14 +58,27 @@ Template.home.events
     console.log sectionResult.original
     Router.go('sectionPage', {testSecID: sectionResult._id, secID: sectionResult.original})
 
+
+
+
+
 Template.home.helpers
+
+  searchPlaceholder: ->
+    if window.matchMedia("(max-width: 370px)").matches
+      return "Search tests, subjects, etc."
+    else
+      return "Search by test, subject, or job"
 
   results: ->
     tests = Results.find({result: true}, {sort: {name: 1}, limit: 5}).fetch()
     # Assign order to results
     if tests.length > 0
       for test, i in tests
-        if window.matchMedia("(max-height: 400px)").matches # Expecting min-width of 480px
+        if window.matchMedia("(max-width: 370px)").matches
+          tests[i].styleTop = i * 40 + 230
+          tests[i].styleLeft = i * 15 + 5
+        else if window.matchMedia("(max-height: 400px)").matches # Expecting min-width of 480px
           tests[i].styleTop = i * 30 + 170
           tests[i].styleLeft = i * 15 + 10
         else if window.matchMedia("(max-width: 750px)").matches || window.matchMedia("(max-height: 599px)").matches

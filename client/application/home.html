@@ -1,8 +1,8 @@
 <template name="home">
   <div class="search-group">
-    <h1 class="search-heading">What do you want to improve?</h1>
+    <h1 class="search-heading">What to improve today?</h1>
     <p class="search-arrow animated slideInLeft">-&gt;</p>
-    <input class="search-box" type="search" autofocus="true" placeholder="Search by test, subject, or job" />
+    <input class="search-box" type="search" autofocus="true" placeholder="{{searchPlaceholder}}" />
   </div>
   {{#each results}}
     {{> result}}
