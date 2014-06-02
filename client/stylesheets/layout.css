@@ -26,10 +26,22 @@ html {
   border: none;
 }
 
+.navbar-header {
+  width: 100%;
+}
+
+.navbar {
+  margin-bottom: 0px;
+}
+
 .navbar-brand {
   font-family: 'Homemade Apple';
   padding-left: 45px;
   font-size: 50px;
+}
+
+.navbar-right {
+  float: right !important;
 }
 
 .login {
