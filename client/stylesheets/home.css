@@ -148,8 +148,6 @@
   .search-box {
     top: -10px;
     font-size: 25px;
-    height: 80px;
-    line-height: 80px;
   }
   .search-result {
     width: 450px;
@@ -158,12 +156,9 @@
   }
   .search-results {
     width: 450px;
-    height: 390px;
-    margin-top: 30px;
     padding: 0px 30px;
   }
   .section-result {
-    width: 100%;
     font-size: 20px;
     line-height: 35px;
   }
@@ -176,18 +171,6 @@
   }
   .search-heading {
     margin-top: 0px;
-    font-size: 25px;
-  }
-  .search-arrow {
-    top: -5px;
-    left: -5px;
-    font-size: 40px;
-  }
-  .search-box {
-    top: -10px;
-    font-size: 25px;
-    height: 80px;
-    line-height: 80px;
   }
   .search-result {
     width: 400px;
@@ -201,7 +184,6 @@
     padding: 0px 20px;
   }
   .section-result {
-    width: 100%;
     font-size: 16px;
     line-height: 24px;
   }
