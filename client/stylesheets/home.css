@@ -26,7 +26,7 @@
   color: red;
   opacity: .4;
   font-size: 50px;
-  width: 650px;
+  width: 90%;
   height: 100px;
   line-height: 100px;
 }
@@ -91,8 +91,44 @@
   outline: none !important;
 }
 
-@media (max-width: 1024px) {
+@media (max-height: 700px) and (min-width: 1001px) {
   .search-group {
     margin: 0px 60px;
+  }
+}
+
+@media (max-width: 1000px) {
+  .search-group {
+    margin: 55px 0px 0px 35px;
+  }
+  .search-heading {
+    font-size: 40px;
+  }
+  .search-arrow {
+    top: -20px;
+    left: -10px;
+    font-size: 60px;
+  }
+  .search-box {
+    top: -30px;
+    font-size: 40px;
+    height: 80px;
+    line-height: 80px;
+  }
+  .search-result {
+    width: 600px;
+    line-height: 75px;
+    font-size: 36px;
+  }
+  .search-results {
+    width: 600px;
+    height: 390px;
+    margin-top: 30px;
+    padding: 0px 50px;
+  }
+  .section-result {
+    width: 100%;
+    font-size: 30px;
+    line-height: 50px;
   }
 }

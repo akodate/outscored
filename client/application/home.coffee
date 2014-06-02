@@ -64,7 +64,10 @@ Template.home.helpers
     # Assign order to results
     if tests.length > 0
       for test, i in tests
-        if window.matchMedia("(max-height: 700px)").matches
+        if window.matchMedia("(max-height: 700px)").matches && window.matchMedia("(min-width: 1001px)").matches
+          tests[i].styleTop = i * 65 + 260
+          tests[i].styleLeft = i * 30 + 20
+        else if window.matchMedia("(max-width: 1000px)").matches || window.matchMedia("(max-height: 700px)").matches
           tests[i].styleTop = i * 65 + 260
           tests[i].styleLeft = i * 30 + 20
         else
