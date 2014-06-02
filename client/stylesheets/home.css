@@ -215,13 +215,14 @@
   }
   .search-results {
     width: 250px;
-    height: 280px;
-    margin-top: 30px;
-    padding: 0px 5px;
+    height: 210px;
+    margin-top: 10px;
+    padding: 0px 10px;
   }
   .section-result {
     width: 100%;
     font-size: 16px;
-    line-height: 24px;
+    line-height: 20px;
+    margin: 8px;
   }
 }
