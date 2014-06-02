@@ -16,18 +16,6 @@
   font-size: 24px;
 }
 
-@media (max-width: 1000px) {
-  h1 {
-
-  }
-  .section-page {
-
-  }
-  #next-link, #previous-link {
-
-  }
-}
-
 @media (max-width: 750px), (max-height: 599px) {
   h1 {
     font-size: 30px;
@@ -47,9 +35,6 @@
 @media (max-width: 370px) {
   h1 {
     font-size: 24px;
-  }
-  .pager {
-    margin: 0px;
   }
   .section-page {
     padding: 10px;

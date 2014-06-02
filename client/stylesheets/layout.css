@@ -95,6 +95,26 @@ html {
   html {
     background-size: 120% 769px;
   }
+  .login {
+    margin-top: 17px;
+  }
+  #login-dropdown-list {
+    max-width: 160px;
+    text-align: right;
+  }
+  .open > a {
+    background-color: transparent !important;
+  }
+  a.dropdown-toggle {
+    padding: 0px !important;
+  }
+  .dropdown-menu {
+    padding: 0px !important;
+    max-width: 160px;
+  }
+  #login-buttons-logout {
+    position: absolute;
+  }
 }
 
 /*Expecting phone portrait - min height of 480px*/
@@ -125,5 +145,8 @@ html {
   .dropdown-menu {
     padding: 0px !important;
     max-width: 160px;
+  }
+  #login-buttons-logout {
+    position: absolute;
   }
 }
