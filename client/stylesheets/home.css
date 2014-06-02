@@ -165,7 +165,7 @@
 }
 
 /*Expecting phone landscape - min width of 480px*/
-@media (max-width: 529px) {
+@media (max-height: 400px) {
   .search-group {
     margin: 15px 0px 0px 10px;
   }
@@ -189,6 +189,7 @@
   }
 }
 
+/*Expecting phone portrait - min width of 480px*/
 @media (max-width: 370px) {
 
 }

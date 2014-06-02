@@ -82,12 +82,10 @@ html {
     padding-left: 10px;
     font-size: 30px;
   }
-
   .login {
     font-size: 24px;
     margin-top: 5px;
   }
-
   .login-button {
     font-size: 25px;
   }
@@ -96,5 +94,18 @@ html {
 @media (max-width: 750px), (max-height: 599px) {
   html {
     background-size: 120% 769px;
+  }
+}
+
+@media (max-width: 370px) {
+  html {
+    background-size: 640px 769px;
+  }
+  .sheet {
+    padding: 18px 5px 5px 5px;
+  }
+  .navbar-brand {
+    padding-left: 5px;
+    font-size: 20px;
   }
 }
