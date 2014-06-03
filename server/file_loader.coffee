@@ -3,6 +3,7 @@ if Tests.find().fetch().length != 76
   COLLECTION_TYPES = [Tests, Questions, Sections, MidSections]
 
   testFileTree = new Glob('**/**/*', {debug: false, cwd: '/Users/alex/Projects/outscored/private'}, (err, matches) -> )
+  # testFileTree = new Glob('**/**/*', {debug: false, '../../../programs/server/assets/app'}, (err, matches) -> )
 
   console.log(testFileTree.length + ' Files')
 
@@ -56,3 +57,4 @@ if Tests.find().fetch().length != 76
 
   markBlankTests()
   console.log('Checked')
+  console.log process.env.PWD
