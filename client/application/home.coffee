@@ -66,9 +66,9 @@ Template.home.helpers
 
   searchPlaceholder: ->
     if window.matchMedia("(max-width: 370px)").matches
-      return "Search tests, subjects, etc."
+      return "Search here!"
     else
-      return "Search by test, subject, or job"
+      return "Search by test, subject, or job!"
 
   results: ->
     tests = Results.find({result: true}, {sort: {name: 1}, limit: 5}).fetch()
