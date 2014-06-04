@@ -76,7 +76,7 @@ Template.home.helpers
     if tests.length > 0
       for test, i in tests
         if window.matchMedia("(max-width: 370px)").matches
-          tests[i].styleTop = i * 40 + 230
+          tests[i].styleTop = i * 40 + 170
           tests[i].styleLeft = i * 15 + 5
         else if window.matchMedia("(max-height: 400px)").matches # Expecting min-width of 480px
           tests[i].styleTop = i * 30 + 170
