@@ -1,0 +1,281 @@
+/*LAYOUT*/
+
+@media (min-width: 1051px) {
+  .sheet {
+    max-width: 1150px;
+  }
+}
+
+@media (max-width: 1050px) {
+  html {
+    background-position: -115px -50px;
+  }
+  .sheet {
+    position: absolute; left: 0px; top: 0px;
+  }
+}
+
+@media (max-width: 1000px) {
+  html {
+    background-size: 110% 769px;
+  }
+  .sheet {
+    padding-top: 15px;
+  }
+  .navbar-brand {
+    padding-left: 10px;
+    font-size: 30px;
+  }
+  .login {
+    font-size: 24px;
+    margin-top: 5px;
+  }
+  .login-button, #login-buttons-logout {
+  font-size: 20px;
+  }
+}
+
+@media (max-width: 750px), (max-height: 599px) {
+  html {
+    background-size: 120% 769px;
+  }
+  .login {
+    margin-top: 17px;
+  }
+  #login-dropdown-list {
+    max-width: 160px;
+    text-align: right;
+  }
+  .open > a {
+    background-color: transparent !important;
+  }
+  a.dropdown-toggle {
+    padding: 0px !important;
+  }
+  .dropdown-menu {
+    padding: 0px !important;
+    max-width: 160px;
+  }
+  #login-buttons-logout {
+    position: absolute;
+  }
+}
+
+/*Expecting phone portrait - min height of 480px*/
+@media (max-width: 370px) {
+  html {
+    background-size: 640px 769px;
+  }
+  .sheet {
+    padding: 18px 5px 5px 5px;
+  }
+  .navbar-brand {
+    padding-left: 5px;
+    font-size: 20px;
+  }
+  .login {
+    margin-top: 17px;
+  }
+  #login-dropdown-list {
+    max-width: 160px;
+    text-align: right;
+  }
+  .open > a {
+    background-color: transparent !important;
+  }
+  a.dropdown-toggle {
+    padding: 0px !important;
+  }
+  .dropdown-menu {
+    padding: 0px !important;
+    max-width: 160px;
+  }
+  .login-button, #login-buttons-logout {
+    font-size: 20px;
+  }
+}
+
+
+
+
+
+
+
+
+
+/*HOME*/
+
+@media (max-height: 700px) and (min-width: 1001px) {
+  .search-group {
+    margin: 0px 60px;
+  }
+}
+
+@media (max-width: 1000px) {
+  .search-group {
+    margin: 55px 0px 0px 35px;
+  }
+  .search-heading {
+    font-size: 40px;
+  }
+  .search-arrow {
+    top: -20px;
+    left: -10px;
+    font-size: 60px;
+  }
+  .search-box {
+    top: -30px;
+    font-size: 40px;
+    height: 80px;
+    line-height: 80px;
+  }
+  .search-result {
+    width: 600px;
+    line-height: 75px;
+    font-size: 36px;
+  }
+  .search-results {
+    width: 600px;
+    height: 360px;
+    margin-top: 60px;
+    padding: 0px 50px;
+  }
+  .section-result {
+    width: 100%;
+    font-size: 30px;
+    line-height: 50px;
+  }
+}
+
+@media (max-width: 750px), (max-height: 599px) {
+  .search-group {
+    margin: 65px 0px 0px 10px;
+  }
+  .search-heading {
+    font-size: 25px;
+  }
+  .search-arrow {
+    top: -5px;
+    left: -5px;
+    font-size: 40px;
+  }
+  .search-box {
+    top: -10px;
+    font-size: 25px;
+  }
+  .search-result {
+    width: 450px;
+    line-height: 50px;
+    font-size: 28px;
+  }
+  .search-results {
+    width: 450px;
+    padding: 0px 30px;
+  }
+  .section-result {
+    font-size: 20px;
+    line-height: 35px;
+  }
+}
+
+/*Expecting phone landscape - min width of 480px*/
+@media (max-height: 400px) {
+  .search-group {
+    margin: 15px 0px 0px 10px;
+  }
+  .search-heading {
+    margin-top: 0px;
+  }
+  .search-result {
+    width: 400px;
+    line-height: 30px;
+    font-size: 18px;
+  }
+  .search-results {
+    width: 400px;
+    height: 110px;
+    margin-top: 0px;
+    padding: 0px 20px;
+  }
+  .section-result {
+    font-size: 16px;
+    line-height: 24px;
+  }
+}
+
+/*Expecting phone portrait - min height of 480px*/
+@media (max-width: 370px) {
+  .search-group {
+    margin: 70px 0px 0px 10px;
+  }
+  .search-heading {
+    margin-top: 0px;
+  }
+  .search-arrow {
+    top: -5px;
+    left: -5px;
+    font-size: 40px;
+  }
+  .search-box {
+    top: -10px;
+    font-size: 25px;
+    width: 265px;
+  }
+  .search-result {
+    padding: 0px 5px;
+    width: 250px;
+    line-height: 40px;
+    font-size: 20px;
+  }
+  .search-results {
+    width: 250px;
+    height: 210px;
+    margin-top: 10px;
+    padding: 0px 10px;
+  }
+  .section-result {
+    width: 100%;
+    font-size: 16px;
+    line-height: 20px;
+    margin: 8px;
+  }
+}
+
+
+
+
+
+
+
+
+
+/*SECTIONS*/
+
+@media (max-width: 750px), (max-height: 599px) {
+  h1 {
+    font-size: 30px;
+  }
+  .pager {
+    margin: 0px;
+  }
+  .section-page {
+    padding: 30px;
+    font-size: 18px;
+  }
+  #next-link, #previous-link {
+    font-size: 22px;
+  }
+}
+
+@media (max-width: 370px) {
+  h1 {
+    font-size: 24px;
+  }
+  .section-page {
+    padding: 10px;
+    font-size: 14px;
+  }
+  #next-link, #previous-link {
+    font-size: 18px;
+  }
+}
