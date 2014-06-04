@@ -52,6 +52,10 @@ html {
   margin-top: 10px;
 }
 
+.open > a {
+    background-color: transparent !important;
+}
+
 .login-button, #login-buttons-logout {
   font-size: 24px;
 }

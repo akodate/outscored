@@ -59,6 +59,12 @@
   #login-buttons-logout {
     position: absolute;
   }
+  .navbar-nav .open .dropdown-menu {
+    position: absolute;
+  }
+  #login-dropdown-list .dropdown-menu {
+    left: -50px;
+  }
 }
 
 /*Expecting phone portrait - min height of 480px*/
@@ -75,13 +81,12 @@
   }
   .login {
     margin-top: 17px;
+    margin-right: -30px;
+    font-size: 20px;
   }
   #login-dropdown-list {
     max-width: 160px;
     text-align: right;
-  }
-  .open > a {
-    background-color: transparent !important;
   }
   a.dropdown-toggle {
     padding: 0px !important;
@@ -89,6 +94,9 @@
   .dropdown-menu {
     padding: 0px !important;
     max-width: 160px;
+  }
+  #login-dropdown-list .dropdown-menu {
+    left: -80px;
   }
   .login-button, #login-buttons-logout {
     font-size: 20px;
@@ -181,7 +189,7 @@
 /*Expecting phone landscape - min width of 480px*/
 @media (max-height: 400px) {
   .search-group {
-    margin: 15px 0px 0px 10px;
+    margin: 20px 0px 0px 10px;
   }
   .search-heading {
     margin-top: 0px;
