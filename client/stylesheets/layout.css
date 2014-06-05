@@ -1,5 +1,5 @@
 html {
-  background-color: gray;
+  background-color: #111;
 }
 
 .sheet {
@@ -16,6 +16,7 @@ html {
 }
 
 .header {
+  background-color: #444;
 /*  max-height: 62px;*/
 }
 
@@ -27,7 +28,14 @@ html {
 /*  margin-bottom: 0px;*/
 }
 
+a.navbar-brand {
+/*  color: #E3DE4B !important;*/
+  color: white !important;
+}
+
 .navbar-brand {
+  position: absolute;
+  margin: 20px;
   font-family: 'Homemade Apple';
   font-size: 50px;
 }
@@ -39,7 +47,11 @@ html {
 .login {
   font-family: 'La Belle Aurore';
   font-size: 35px;
-  margin-top: 10px;
+  margin-top: 20px;
+}
+
+#login-dropdown-list > a {
+  color: white;
 }
 
 .open > a {
@@ -47,8 +59,6 @@ html {
 }
 
 .login-button, #login-buttons-logout {
-  font-size: 35px;
-  left: 80px;
-  float: left;
+  font-size: 24px;
 }
 

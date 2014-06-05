@@ -4,6 +4,7 @@
 .search-heading {
   font-family: 'La Belle Aurore';
   font-size: 50px;
+  color: white;
 }
 
 .search-arrow {
@@ -13,17 +14,21 @@
   font-family: 'Homemade Apple';
   font-size: 80px;
   display: inline;
+  color: #E3DE4B;
 }
 
 .search-box {
   position: relative;
   top: -30px;
   display: inline;
-/*  background: none;
-  border: none;*/
-  font-family: 'La Belle Aurore';
-  color: teal;
-  opacity: .4;
+  background: black;
+  border-radius: 10px;
+  border-color: #E3DE4B;
+  padding: 5px;
+  text-indent: 10px;
+  font-family: 'Homemade Apple';
+  color: white;
+/*  opacity: .4;*/
   font-size: 50px;
   width: 90%;
   height: 100px;
@@ -31,18 +36,18 @@
 }
 
 .search-result {
-  position: absolute;
+/*  position: absolute;
   width: 800px;
   bottom: 0px;
-  background-color: white;
+  background-color: white;*/
 /*  background: url(/construction-paper-600x400.jpg);*/
   border: 1px solid gray;
   box-shadow: -5px -5px 8px gray;
   line-height: 75px;
   font-size: 36px;
   font-family: 'Belgrano';
-  color: black;
-  text-align: center;
+  color: white;
+/*  text-align: center;*/
 
 /*  -webkit-animation-duration: .2s;
      -moz-animation-duration: .2s;
@@ -52,12 +57,12 @@
 }
 
 .search-results {
-  width: 800px;
+/*  width: 800px;
   height: 390px;
   margin-top: 30px;
   padding: 0px 50px;
   position: relative;
-  overflow: scroll;
+  overflow: scroll;*/
 }
 
 .section-result {
@@ -67,23 +72,23 @@
   font-family: 'Belgrano';
   color: black;
   line-height: 50px;
-  color: black;
+  color: white;
 }
 
 .search-box::-webkit-input-placeholder {
-    color: red;
+    color: white;
 }
 .search-box:-moz-placeholder {
     /* FF 4-18 */
-    color: red;
+    color: white;
 }
 .search-box::-moz-placeholder {
     /* FF 19+ */
-    color: red;
+    color: white;
 }
 .search-box:-ms-input-placeholder {
     /* IE 10+ */
-    color: red;
+    color: white;
 }
 
 .search-box:focus {
