@@ -1,6 +1,22 @@
 <template name="home">
   <div class="search-group">
     <h1 class="search-heading">What to improve today?</h1>
+
+    <div class="btn-group btn-group-sm">
+      <button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown">
+        <img src="us.gif">&nbsp;
+        <span class="caret"></span>
+        <span class="sr-only">Toggle Dropdown</span>
+      </button>
+      <ul class="dropdown-menu" role="menu">
+        <li><a href="#">AU <img src="au.gif"></a></li>
+        <li><a href="#">CA <img src="ca.gif"></a></li>
+        <li><a href="#">JP <img src="jp.gif"></a></li>
+        <li><a href="#">UK <img src="gb.gif"></a></li>
+        <li><a href="#">US <img src="us.gif"></a></li>
+      </ul>
+    </div>
+
     <p class="search-arrow animated slideInLeft">-&gt;</p>
     <input class="search-box" type="search" autofocus="true" placeholder="{{searchPlaceholder}}" />
   </div>

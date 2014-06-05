@@ -48,7 +48,7 @@
   a.dropdown-toggle {
     padding: 0px !important;
   }
-  .dropdown-menu {
+  #login-dropdown-list > .dropdown-menu {
     padding: 0px !important;
     max-width: 160px;
   }
@@ -94,7 +94,7 @@
   a.dropdown-toggle {
     padding: 0px !important;
   }
-  .dropdown-menu {
+  #login-dropdown-list > .dropdown-menu {
     padding: 0px !important;
     max-width: 160px;
   }

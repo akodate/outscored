@@ -7,6 +7,34 @@
   color: white;
 }
 
+.btn-group {
+  position: absolute;
+  top: 51px;
+  right: 0px;
+  font-family: 'Belgrano';
+}
+
+.btn-warning {
+  background-color: black;
+  border-color: black;
+}
+
+#main > div.search-group > div > ul {
+  min-width: 40px;
+  background-color: black;
+  border: 1px solid white;
+  padding: 7px 0px;
+}
+
+#main > div.search-group > div > ul > li > a {
+  padding: 2px 4px;
+  color: white;
+}
+
+#main > div.search-group > div > ul > li > a > img {
+  vertical-align: inherit;
+}
+
 .search-arrow {
   position: relative;
   top: -20px;
@@ -15,6 +43,7 @@
   font-size: 80px;
   display: inline;
   color: #E3DE4B;
+  white-space: nowrap;
 }
 
 .search-box {
