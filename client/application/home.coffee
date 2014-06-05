@@ -71,7 +71,7 @@ Template.home.helpers
       return "Search by test, subject, or job!"
 
   results: ->
-    tests = Results.find({result: true}, {sort: {name: 1}, limit: 5}).fetch()
+    tests = Results.find({result: true}, {sort: {name: 1}, limit: 100}).fetch()
     # Assign order to results
     return tests
 
