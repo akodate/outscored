@@ -1,31 +1,22 @@
 html {
-  background: url(/notebook-paper.jpg) no-repeat fixed;
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: 1280px 1077px;
-  background-position: 0px -50px;
+  background-color: gray;
 }
 
 .sheet {
   font-family: 'La Belle Aurore', cursive;
-  background: none;
-  border: none;
-  position: absolute; left: 115px; top: 0px;
-  padding-top: 45px;
-  bottom: 0px;
-  overflow: hidden;
+/*  bottom: 0px;
+  overflow: hidden;*/
+  padding: 0px 0px 0px 0px;
   width: 100%;
+  position: absolute;
 }
 
 #main {
-  height: 100%;
+/*  height: 100%;*/
 }
 
 .header {
-  background: none;
-  border: none;
-  max-height: 62px;
+/*  max-height: 62px;*/
 }
 
 .navbar-header {
@@ -33,12 +24,11 @@ html {
 }
 
 .navbar {
-  margin-bottom: 0px;
+/*  margin-bottom: 0px;*/
 }
 
 .navbar-brand {
   font-family: 'Homemade Apple';
-  padding-left: 45px;
   font-size: 50px;
 }
 
@@ -57,6 +47,8 @@ html {
 }
 
 .login-button, #login-buttons-logout {
-  font-size: 24px;
+  font-size: 35px;
+  left: 80px;
+  float: left;
 }
 

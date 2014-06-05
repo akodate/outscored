@@ -73,26 +73,6 @@ Template.home.helpers
   results: ->
     tests = Results.find({result: true}, {sort: {name: 1}, limit: 5}).fetch()
     # Assign order to results
-    if tests.length > 0
-      for test, i in tests
-        if window.matchMedia("(max-width: 370px)").matches
-          tests[i].styleTop = i * 40 + 170
-          tests[i].styleLeft = i * 15 + 5
-        else if window.matchMedia("(max-height: 400px)").matches # Expecting min-width of 480px
-          tests[i].styleTop = i * 30 + 170
-          tests[i].styleLeft = i * 15 + 10
-        else if window.matchMedia("(max-width: 750px)").matches || window.matchMedia("(max-height: 599px)").matches
-          tests[i].styleTop = i * 50 + 230
-          tests[i].styleLeft = i * 15 + 10
-        else if window.matchMedia("(max-height: 700px)").matches && window.matchMedia("(min-width: 1001px)").matches
-          tests[i].styleTop = i * 65 + 260
-          tests[i].styleLeft = i * 30 + 20
-        else if window.matchMedia("(max-width: 1000px)").matches || window.matchMedia("(max-height: 700px)").matches
-          tests[i].styleTop = i * 65 + 260
-          tests[i].styleLeft = i * 30 + 20
-        else
-          tests[i].styleLeft = i * 30 + 20
-          tests[i].styleTop = i * 75 + 340
     return tests
 
   sections: ->
