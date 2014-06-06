@@ -19,19 +19,19 @@
   border-color: black;
 }
 
-#main > div.search-group > div > ul {
+#localization {
   min-width: 40px;
   background-color: black;
   border: 1px solid white;
   padding: 7px 0px;
 }
 
-#main > div.search-group > div > ul > li > a {
+#localization > li > a {
   padding: 2px 4px;
   color: white;
 }
 
-#main > div.search-group > div > ul > li > a > img {
+#localization > li > a > img {
   vertical-align: inherit;
 }
 

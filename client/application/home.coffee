@@ -1,6 +1,8 @@
 @Results = new Meteor.Collection(null)
 @SectionResults = new Meteor.Collection(null)
 
+@region = ""
+
 Template.home.rendered = () ->
 
   $('.search-results').hide()
@@ -57,6 +59,9 @@ Template.home.events
     console.log sectionResult.name
     console.log sectionResult.original
     Router.go('sectionPage', {testSecID: sectionResult._id, secID: sectionResult.original})
+  "click #localization": (event, ui) ->
+    console.log event.target.innerText
+    region = event.target.innerText
 
 
 
