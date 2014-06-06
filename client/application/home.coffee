@@ -1,7 +1,6 @@
 @Results = new Meteor.Collection(null)
 @SectionResults = new Meteor.Collection(null)
-
-@region = ""
+@Localization = new Meteor.Collection(null)
 
 Template.home.rendered = () ->
 
@@ -10,6 +9,7 @@ Template.home.rendered = () ->
   SectionResults.remove({})
 
   unless @rendered == true
+    Localization.insert(region: 'US')
     Tests.find().forEach( (doc) ->
       Results.insert(doc)
       @rendered = true
@@ -60,20 +60,43 @@ Template.home.events
     console.log sectionResult.original
     Router.go('sectionPage', {testSecID: sectionResult._id, secID: sectionResult.original})
   "click #localization": (event, ui) ->
-    console.log event.target.innerText
-    region = event.target.innerText
-
+    if event.target.innerText == ''
+      regionSelect = event.target.parentElement.innerText[0..1]
+    else
+      regionSelect = event.target.innerText[0..1]
+    Localization.update({}, {$set: {region: regionSelect}}, {multi: true})
 
 
 
 
 Template.home.helpers
 
+  flag: ->
+    localization = Localization.findOne()
+    if localization
+      region = localization.region
+      return region.toLowerCase()
+
+  searchHeading: ->
+    localization = Localization.findOne()
+    if localization
+      region = localization.region
+      switch region
+        when 'JP' then '今日は何を学ぶ？'
+        else 'What to improve today?'
+
   searchPlaceholder: ->
-    if window.matchMedia("(max-width: 370px)").matches
-      return "Search here!"
-    else
-      return "Search by test, subject, or job!"
+    localization = Localization.findOne()
+    if localization
+      if window.matchMedia("(max-width: 370px)").matches
+        region = localization.region
+        switch region
+          when 'JP' then 'ここで検索！'
+          else 'Search here!'
+      else
+        switch region
+          when 'JP' then 'ここで検索！'
+          else 'Search by test, subject, or job!'
 
   results: ->
     tests = Results.find({result: true}, {sort: {name: 1}, limit: 100}).fetch()
