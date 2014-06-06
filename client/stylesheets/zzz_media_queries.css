@@ -55,10 +55,10 @@
   #login-buttons-logout {
     position: absolute;
   }
-  .navbar-nav .open .dropdown-menu {
+  .navbar-nav > .open > .dropdown-menu {
     position: absolute;
   }
-  #login-dropdown-list .dropdown-menu {
+  #login-dropdown-list > .dropdown-menu {
     left: -50px;
   }
   .login-button, #login-buttons-logout {
@@ -97,10 +97,6 @@
   #login-dropdown-list > .dropdown-menu {
     padding: 0px !important;
     max-width: 160px;
-    left: -90px;
-  }
-  .login-button, #login-buttons-logout {
-    font-size: 20px;
   }
 }
 

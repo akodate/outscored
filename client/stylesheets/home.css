@@ -27,7 +27,7 @@
 }
 
 #localization > li > a {
-  padding: 2px 4px;
+  padding: 5px 6px;
   color: white;
 }
 
@@ -97,11 +97,12 @@
 .section-result {
   position: relative;
   width: 100%;
+  padding: 5px;
   font-size: 30px;
   font-family: 'Belgrano';
-  color: black;
   line-height: 50px;
   color: white;
+  border: 1px solid gray;
 }
 
 .search-box::-webkit-input-placeholder {

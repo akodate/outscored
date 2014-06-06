@@ -11,6 +11,7 @@ Template.home.rendered = () ->
 
   unless @rendered == true
     Localization.insert(region: 'US')
+    internationalCSS('US')
     Tests.find().forEach( (doc) ->
       Results.insert(doc)
       @rendered = true
@@ -141,4 +142,4 @@ Template.home.helpers
       else
         loginDropdown.css("font-size", "20px")
         loginDropdown.css("font-family", "La Belle Aurore")
-        loginDropdownMenu.css("left", "-90px;")
+        loginDropdownMenu.css("left", "-93px")
