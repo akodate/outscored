@@ -21,7 +21,7 @@
 
 #localization {
   min-width: 40px;
-  background-color: black;
+  background-image: url(/blackboard.jpg);
   border: 1px solid white;
   padding: 7px 0px;
 }

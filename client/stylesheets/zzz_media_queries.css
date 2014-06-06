@@ -97,13 +97,10 @@
   #login-dropdown-list > .dropdown-menu {
     padding: 0px !important;
     max-width: 160px;
-  }
-  #login-dropdown-list .dropdown-menu {
-    left: -80px;
+    left: -90px;
   }
   .login-button, #login-buttons-logout {
     font-size: 20px;
-    left: -20px;
   }
 }
 

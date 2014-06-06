@@ -1,9 +1,9 @@
 html {
   background-image: url(/blackboard.jpg);
-/*  background-color: #111;*/
 }
 
 .sheet {
+/*  background-color: rgba(0, 0, 0, 1);*/
   font-family: 'La Belle Aurore', cursive;
 /*  bottom: 0px;
   overflow: hidden;*/
@@ -64,5 +64,22 @@ a.navbar-brand {
 
 .login-button, #login-buttons-logout {
   font-size: 24px;
+  border: 1px solid white;
+  padding: 7px;
 }
 
+/*Facebook button*/
+#login-dropdown-list > div > li:nth-child(1) > a > button {
+  background-color: #3b5998;
+}
+
+/*Google button*/
+#login-dropdown-list > div > li:nth-child(2) > a > button {
+  color: #ffffff;
+  background-color: #db4437;
+}
+
+/*Logout button*/
+#login-buttons-logout {
+  background-image: url(/blackboard.jpg);
+}

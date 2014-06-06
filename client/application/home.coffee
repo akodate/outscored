@@ -4,6 +4,7 @@
 
 Template.home.rendered = () ->
 
+  # Set-up
   $('.search-results').hide()
   Results.remove({})
   SectionResults.remove({})
@@ -15,6 +16,7 @@ Template.home.rendered = () ->
       @rendered = true
     )
 
+  # Search arrow animation
   arrow = $('.search-arrow')
 
   point = () ->
@@ -31,6 +33,7 @@ Template.home.rendered = () ->
 Template.home.events
 
   "keyup .search-box": (event, ui) ->
+    # Set search matches to 'result: true'
     $('.search-arrow').animate
       opacity: 0.25
     @search = event.target.value
@@ -38,12 +41,14 @@ Template.home.events
     Results.update({}, {$set: {result: false}}, {multi: true})
     if @search
       Results.update({name: {$regex: @search, $options: "i" }}, {$set: {result: true}}, {multi: true})
+
   "click .search-result": (event, ui) ->
+    # Set only clicked test to 'result: true'
     $('.search-results').show()
     console.log event.target.innerText
     Results.update({}, {$set: {result: false}}, {multi: true})
     Results.update({name: event.target.innerText}, {$set: {result: true}})
-
+    # Find children of clicked test and display them by their dir name
     testResult = Results.findOne(result: true)
     SectionResults.remove({})
     TestSections.find({_id: {$in: testResult.children}}).fetch()
@@ -53,17 +58,25 @@ Template.home.events
       console.log "Executing...."
     )
     $('.search-box').focus()
+
   "click .section-result": (event, ui) ->
+    # Find section by clicked title and go to section page
     console.log event.target.innerText
     sectionResult = SectionResults.findOne({name: event.target.innerText})
     console.log sectionResult.name
     console.log sectionResult.original
     Router.go('sectionPage', {testSecID: sectionResult._id, secID: sectionResult.original})
+
   "click #localization": (event, ui) ->
+    # Get 2-letter region from localization dropdown text
     if event.target.innerText == ''
       regionSelect = event.target.parentElement.innerText[0..1]
     else
       regionSelect = event.target.innerText[0..1]
+    # Set language-specific CSS styles
+    if regionSelect
+      internationalCSS(regionSelect)
+    # Update localization region
     Localization.update({}, {$set: {region: regionSelect}}, {multi: true})
 
 
@@ -71,20 +84,23 @@ Template.home.events
 
 Template.home.helpers
 
+  # Set flag image filename
   flag: ->
     localization = Localization.findOne()
     if localization
       region = localization.region
       return region.toLowerCase()
 
+  # Set search heading text
   searchHeading: ->
     localization = Localization.findOne()
     if localization
       region = localization.region
       switch region
         when 'JP' then '今日は何を学ぶ？'
-        else 'What to improve today?'
+        else 'What will you study?'
 
+  # Set search placeholder text
   searchPlaceholder: ->
     localization = Localization.findOne()
     if localization
@@ -98,11 +114,31 @@ Template.home.helpers
           when 'JP' then 'ここで検索！'
           else 'Search by test, subject, or job!'
 
+  # Test results
   results: ->
-    tests = Results.find({result: true}, {sort: {name: 1}, limit: 100}).fetch()
-    # Assign order to results
+    tests = Results.find({result: true}, {sort: {name: 1}, limit: 1000}).fetch()
     return tests
 
+  # Section results
   sections: ->
     console.log "Sections..."
     sections = SectionResults.find({}, {sort: {name: 1}}).fetch()
+
+
+
+# Helpers
+
+@internationalCSS = (regionSelect) ->
+  # Login dropdown styling
+  loginDropdown = $(".login, .login-button, #login-buttons-logout")
+  loginDropdownMenu = $("#login-dropdown-list > .dropdown-menu")
+  if window.matchMedia("(max-width: 370px)").matches
+    switch regionSelect
+      when 'JP'
+        loginDropdown.css("font-size", "16px")
+        loginDropdown.css("font-family", "Belgrano")
+        loginDropdownMenu.css("left", "-70px")
+      else
+        loginDropdown.css("font-size", "20px")
+        loginDropdown.css("font-family", "La Belle Aurore")
+        loginDropdownMenu.css("left", "-90px;")
