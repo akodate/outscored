@@ -2,7 +2,7 @@
 }
 
 .search-heading {
-  font-family: 'La Belle Aurore';
+  font-family: 'Homemade Apple';
   font-size: 50px;
   color: white;
 }
@@ -15,7 +15,7 @@
 }
 
 .btn-warning {
-  background-color: black;
+  background-color: rgba(150, 150, 150, 0.3);
   border-color: black;
 }
 
@@ -50,7 +50,7 @@
   position: relative;
   top: -30px;
   display: inline;
-  background: black;
+  background-color: rgba(0, 0, 0, 0.3);
   border-radius: 10px;
   border-color: #E3DE4B;
   padding: 5px;

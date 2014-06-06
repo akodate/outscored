@@ -221,6 +221,7 @@
     margin: 17px 0px 0px 10px;
   }
   .search-heading {
+    font-size: 18px;
   }
   .search-arrow {
     top: 5px;
@@ -231,12 +232,13 @@
   .search-box {
     top: 0px;
     left: 10px;
-    font-size: 25px;
+    line-height: 51px;
+    font-size: 20px;
     width: 250px;
   }
   .search-result {
     padding: 0px 5px;
-    width: 250px;
+    width: 100%;
     line-height: 40px;
     font-size: 20px;
   }

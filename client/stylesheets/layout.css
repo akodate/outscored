@@ -1,5 +1,6 @@
 html {
-  background-color: #111;
+  background-image: url(/blackboard.jpg);
+/*  background-color: #111;*/
 }
 
 .sheet {
@@ -19,7 +20,7 @@ html {
 }
 
 .header {
-  background-color: #444;
+  background-color: rgba(150, 150, 150, 0.3);
 /*  max-height: 62px;*/
 }
 
