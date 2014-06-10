@@ -4,6 +4,11 @@
 
 Template.home.rendered = () ->
 
+  unless window.matchMedia("(max-width: 370px)").matches || window.matchMedia("(max-height: 400px)").matches
+    window.alert "Please access outsco.red from a mobile device"
+    window.stop()
+    throw new Error "Mobile-only"
+
   # Set-up
   $('.search-results').hide()
   Results.remove({})
