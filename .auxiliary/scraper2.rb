@@ -18,6 +18,7 @@ TARGET_URL = "http://www.4tests.com/exams/exams.asp"
 HEADERS_HASH = {"User-Agent" => "Ruby/#{RUBY_VERSION}"}
 
 #REGEXES
+SECTION_REGEX = /(?<=Section:\s).*/
 ANSWER_REGEX = /(?<=tr:nth-of-type\()./
 EXPLANATION_REGEX = /(?<=<b>Explanation of Answer:<\/b><br>).*/
 
@@ -25,6 +26,12 @@ mech = Mechanize.new { |agent|
   agent.follow_meta_refresh = true
 }
 mech.log = Logger.new "mechanize.log"
+
+
+# ******************************************************
+# ******************************************************
+# ******************************************************
+
 
 class Mechanize::Page::Link
   def asp_link_args
@@ -43,7 +50,7 @@ class Mechanize::Page::Link
   end
 end
 
-def get_answer(mech, questions, choices, answers, explanations, test_array)
+def get_answer(mech, test_array, i)
   remote_url = mech.page.uri
   puts "Fetching ANSWER PAGE at #{remote_url}..."
   begin
@@ -57,14 +64,22 @@ def get_answer(mech, questions, choices, answers, explanations, test_array)
     sleep 1.0 + rand
   end
 
-  puts "*** QUESTION NUMBER " + (questions.count + 1).to_s + " ***"
-  puts "Question: " + (questions.push find_question(mech)).last.to_s
-  puts "Choices: " + (choices.push find_choices(mech)).last.to_s
-  puts "Answer: " + (answers.push find_answer(mech)).last.to_s
-  puts "Explanation: " + (explanations.push find_explanation(mech)).last.to_s
+  puts "*** QUESTION NUMBER " + (test_array[i]['questions'].count + 1).to_s + " ***"
+  puts "Section: " + (test_array[i]['sections'].push find_section(mech)).last.to_s
+  puts "Question: " + (test_array[i]['questions'].push find_question(mech)).last.to_s
+  puts "Choices: " + (test_array[i]['choices'].push find_choices(mech)).last.to_s
+  puts "Answer: " + (test_array[i]['answers'].push find_answer(mech)).last.to_s
+  puts "Explanation: " + (test_array[i]['explanations'].push find_explanation(mech)).last.to_s
   puts ""
 
-  get_question(mech, questions, choices, answers, explanations, test_array)
+  get_question(mech, test_array, i)
+end
+
+def find_section(mech)
+  selector = '#frmQuestion > table > tr > td > table > tr:nth-child(1) > td > b'
+  if mech.page.search(selector)
+    return mech.page.search(selector).text.match(SECTION_REGEX).to_s
+  end
 end
 
 def find_question(mech)
@@ -113,10 +128,9 @@ def find_explanation(mech)
   if mech.page.search(selector)
     return mech.page.search(selector).to_html.match(EXPLANATION_REGEX).to_s
   end
-  binding.pry
 end
 
-def get_question(mech, questions, answers, choices, explanations, test_array)
+def get_question(mech, test_array, i)
   remote_url = mech.page.uri
   puts "Fetching QUESTION PAGE at #{remote_url}..."
   begin
@@ -131,30 +145,33 @@ def get_question(mech, questions, answers, choices, explanations, test_array)
   end
 
   if mech.page.link_with(:text => 'View Answer')
-    get_answer(mech, questions, answers, choices, explanations, test_array)
+    get_answer(mech, test_array, i)
   else
-    test_array['ACT'] = {}
-    test_array['ACT']['questions'] = questions
-    test_array['ACT']['choices'] = choices
-    test_array['ACT']['answers'] = answers
-    test_array['ACT']['explanations'] = explanations
     return test_array
   end
 
 end
 
+
+# ******************************************************
+# ******************************************************
+# ******************************************************
+
+
 main_page = Nokogiri::HTML(open(TARGET_URL)) # OPENS TARGET PAGE
 tests = main_page.css('#double > li > a')
 puts tests
 
-test_array = {}
+test_array = []
 
-tests.each do |test|
+tests.each_with_index do |test, i|
 
-  questions = []
-  choices = []
-  answers = []
-  explanations = []
+  test_array[i] = {}
+  test_array[i]['sections'] = []
+  test_array[i]['questions'] = []
+  test_array[i]['choices'] = []
+  test_array[i]['answers'] = []
+  test_array[i]['explanations'] = []
 
   # GET INITIAL TEST PAGE
   remote_url = BASE_URL + test['href']
@@ -166,12 +183,14 @@ tests.each do |test|
     sleep 5
   else
     puts '*' * 50
+    test_array[i]['name'] = mech.page.search('.examtitle').text
+    puts ">>>>> Test name is: " + test_array[i]['name']
     mech.page.forms[1].submit
   ensure
     sleep 1.0 + rand
   end
 
-  get_answer(mech, questions, choices, answers, explanations, test_array)
+  get_answer(mech, test_array, i)
   binding.pry
 
   # full_page.links.each do |link|
