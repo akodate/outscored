@@ -71,6 +71,7 @@ def get_answer(mech, test)
 
   test[section]['questions'] ||= []
   test[section]['choices'] ||= []
+  test[section]['selections'] ||= []
   test[section]['answers'] ||= []
   test[section]['explanations'] ||= []
 
@@ -78,6 +79,7 @@ def get_answer(mech, test)
   puts "Section: " + section
   puts "Question: " + (test[section]['questions'].push find_question(mech)).last.to_s
   puts "Choices: " + (test[section]['choices'].push find_choices(mech)).last.to_s
+  puts "Selections: " + (test[section]['selections'].push find_selections(mech)).last.to_s
   puts "Answer: " + (test[section]['answers'].push find_answer(mech)).last.to_s
   puts "Explanation: " + (test[section]['explanations'].push find_explanation(mech)).last.to_s
   puts ""
@@ -100,6 +102,17 @@ def find_question(mech)
 end
 
 def find_choices(mech)
+  selector = '.answer, .answerred'
+  if mech.page.search(selector)
+    arr = []
+    mech.page.search(selector).each do |choice|
+      arr.push choice.text if choice.text != ''
+    end
+    return arr.join('<br>')
+  end
+end
+
+def find_selections(mech)
   selector = '#frmQuestion > table > tr > td > table > tr:nth-child(3) > td > table > tr > td > font > img'
   if mech.page.search(selector)
 
@@ -177,6 +190,7 @@ def save_json(section, section_dir)
     arr[i] = {}
     arr[i]['question'] = section[1]['questions'][i]
     arr[i]['choices'] = section[1]['choices'][i]
+    arr[i]['selections'] = section[1]['selections'][i]
     arr[i]['answer'] = section[1]['answers'][i]
     arr[i]['explanation'] = section[1]['explanations'][i]
   end
@@ -209,7 +223,7 @@ tests.each_with_index do |test|
     sleep 5
   else
     puts '*' * 50
-    test_name = mech.page.search('.examtitle').text.gsub(/\*/, '')
+    test_name = mech.page.search('.examtitle').text.gsub(/\*/, '').gsub(/\//, '|')
     test_set[test_name] = {}
     puts ">>>>> Test name is: " + test_name
     mech.page.forms[1].submit

@@ -1,4 +1,4 @@
-if Tests.find().fetch().length != 76
+if Tests.find().fetch().length != 78
 
   COLLECTION_TYPES = [Tests, Questions, Sections, MidSections]
 
