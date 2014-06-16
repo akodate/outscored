@@ -50,7 +50,7 @@ class Mechanize::Page::Link
   end
 end
 
-def get_answer(mech, test_array, i)
+def get_answer(mech, test, i)
   remote_url = mech.page.uri
   puts "Fetching ANSWER PAGE at #{remote_url}..."
   begin
@@ -64,15 +64,25 @@ def get_answer(mech, test_array, i)
     sleep 1.0 + rand
   end
 
-  puts "*** QUESTION NUMBER " + (test_array[i]['questions'].count + 1).to_s + " ***"
-  puts "Section: " + (test_array[i]['sections'].push find_section(mech)).last.to_s
-  puts "Question: " + (test_array[i]['questions'].push find_question(mech)).last.to_s
-  puts "Choices: " + (test_array[i]['choices'].push find_choices(mech)).last.to_s
-  puts "Answer: " + (test_array[i]['answers'].push find_answer(mech)).last.to_s
-  puts "Explanation: " + (test_array[i]['explanations'].push find_explanation(mech)).last.to_s
+  section = find_section(mech)
+  unless test[section]
+    test[section] = {}
+  end
+
+  test[section]['questions'] ||= []
+  test[section]['choices'] ||= []
+  test[section]['answers'] ||= []
+  test[section]['explanations'] ||= []
+
+  puts "*** QUESTION NUMBER " + (test[section]['questions'].count + 1).to_s + " ***"
+  puts "Section: " + section
+  puts "Question: " + (test[section]['questions'].push find_question(mech)).last.to_s
+  puts "Choices: " + (test[section]['choices'].push find_choices(mech)).last.to_s
+  puts "Answer: " + (test[section]['answers'].push find_answer(mech)).last.to_s
+  puts "Explanation: " + (test[section]['explanations'].push find_explanation(mech)).last.to_s
   puts ""
 
-  get_question(mech, test_array, i)
+  get_question(mech, test, i)
 end
 
 def find_section(mech)
@@ -130,7 +140,7 @@ def find_explanation(mech)
   end
 end
 
-def get_question(mech, test_array, i)
+def get_question(mech, test, i)
   remote_url = mech.page.uri
   puts "Fetching QUESTION PAGE at #{remote_url}..."
   begin
@@ -145,9 +155,9 @@ def get_question(mech, test_array, i)
   end
 
   if mech.page.link_with(:text => 'View Answer')
-    get_answer(mech, test_array, i)
+    get_answer(mech, test, i)
   else
-    return test_array
+    return test
   end
 
 end
@@ -162,16 +172,9 @@ main_page = Nokogiri::HTML(open(TARGET_URL)) # OPENS TARGET PAGE
 tests = main_page.css('#double > li > a')
 puts tests
 
-test_array = []
+test_array = {}
 
 tests.each_with_index do |test, i|
-
-  test_array[i] = {}
-  test_array[i]['sections'] = []
-  test_array[i]['questions'] = []
-  test_array[i]['choices'] = []
-  test_array[i]['answers'] = []
-  test_array[i]['explanations'] = []
 
   # GET INITIAL TEST PAGE
   remote_url = BASE_URL + test['href']
@@ -183,14 +186,15 @@ tests.each_with_index do |test, i|
     sleep 5
   else
     puts '*' * 50
-    test_array[i]['name'] = mech.page.search('.examtitle').text
-    puts ">>>>> Test name is: " + test_array[i]['name']
+    test_name = mech.page.search('.examtitle').text
+    test_array[test_name] = {}
+    puts ">>>>> Test name is: " + test_name
     mech.page.forms[1].submit
   ensure
     sleep 1.0 + rand
   end
 
-  get_answer(mech, test_array, i)
+  get_answer(mech, test_array[test_name], i)
   binding.pry
 
   # full_page.links.each do |link|
