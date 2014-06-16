@@ -17,6 +17,10 @@ TARGET_URL = "http://www.4tests.com/exams/exams.asp"
 # HEADERS FOR REQUESTS
 HEADERS_HASH = {"User-Agent" => "Ruby/#{RUBY_VERSION}"}
 
+#REGEXES
+ANSWER_REGEX = /(?<=tr:nth-of-type\()./
+EXPLANATION_REGEX = /(?<=<b>Explanation of Answer:<\/b><br>).*/
+
 mech = Mechanize.new { |agent|
   agent.follow_meta_refresh = true
 }
@@ -39,20 +43,122 @@ class Mechanize::Page::Link
   end
 end
 
+def get_answer(mech, questions, choices, answers, explanations, test_array)
+  remote_url = mech.page.uri
+  puts "Fetching ANSWER PAGE at #{remote_url}..."
+  begin
+    full_page = mech.page.link_with(:text => 'View Answer').asp_click()
+  rescue => e
+    puts "Error: #{e}"
+    sleep 5
+  else
+    puts ''
+  ensure
+    sleep 1.0 + rand
+  end
+
+  puts "*** QUESTION NUMBER " + (questions.count + 1).to_s + " ***"
+  puts "Question: " + (questions.push find_question(mech)).last.to_s
+  puts "Choices: " + (choices.push find_choices(mech)).last.to_s
+  puts "Answer: " + (answers.push find_answer(mech)).last.to_s
+  puts "Explanation: " + (explanations.push find_explanation(mech)).last.to_s
+  puts ""
+
+  get_question(mech, questions, choices, answers, explanations, test_array)
+end
+
+def find_question(mech)
+  selector = '.question'
+  if mech.page.search(selector)
+    return mech.page.search(selector)[1].to_html.gsub(/\r\s*\t/, "")
+  end
+end
+
+def find_choices(mech)
+  selector = '#frmQuestion > table > tr > td > table > tr:nth-child(3) > td > table > tr > td > font > img'
+  if mech.page.search(selector)
+
+    # Makes 'ABCD' style multiple choice array
+    arr = []
+    mech.page.search(selector).each_with_index do |choice, i|
+      if arr == []
+        arr.push('A')
+      else
+        arr.push arr[i - 1].next
+      end
+    end
+    return arr
+
+  end
+end
+
+def find_answer(mech)
+  selector = '.answerred'
+  if mech.page.search(selector)
+    # Gets number of right choice from nth child
+    num = mech.page.search(selector)[0].css_path.scan(ANSWER_REGEX)[1].to_i - 2
+
+    num -= 1
+    let = 'A'
+    num.times do
+      let.next!
+    end
+    return let
+
+  end
+end
+
+def find_explanation(mech)
+  selector = '#frmQuestion > table > tr > td > table > tr:nth-child(4) > td > table > tr:nth-child(1) > td'
+  if mech.page.search(selector)
+    return mech.page.search(selector).to_html.match(EXPLANATION_REGEX).to_s
+  end
+  binding.pry
+end
+
+def get_question(mech, questions, answers, choices, explanations, test_array)
+  remote_url = mech.page.uri
+  puts "Fetching QUESTION PAGE at #{remote_url}..."
+  begin
+    full_page = mech.page.link_with(:text => 'Next Question').asp_click()
+  rescue => e
+    puts "Error: #{e}"
+    sleep 5
+  else
+    puts ''
+  ensure
+    sleep 1.0 + rand
+  end
+
+  if mech.page.link_with(:text => 'View Answer')
+    get_answer(mech, questions, answers, choices, explanations, test_array)
+  else
+    test_array['ACT'] = {}
+    test_array['ACT']['questions'] = questions
+    test_array['ACT']['choices'] = choices
+    test_array['ACT']['answers'] = answers
+    test_array['ACT']['explanations'] = explanations
+    return test_array
+  end
+
+end
+
 main_page = Nokogiri::HTML(open(TARGET_URL)) # OPENS TARGET PAGE
 tests = main_page.css('#double > li > a')
 puts tests
 
-questions = []
-choices = []
-answers = []
-explanations = []
+test_array = {}
 
 tests.each do |test|
 
+  questions = []
+  choices = []
+  answers = []
+  explanations = []
+
   # GET INITIAL TEST PAGE
   remote_url = BASE_URL + test['href']
-  puts "Fetching TEST PAGE at #{remote_url}"
+  puts "Fetching TEST PAGE at #{remote_url}..."
   begin
     mech.get remote_url
   rescue Exception=>e
@@ -65,20 +171,8 @@ tests.each do |test|
     sleep 1.0 + rand
   end
 
-  # GET FULL QUESTION
-  remote_url = mech.page.uri
-  puts "Fetching QUESTION PAGE at #{remote_url}"
-  begin
-    mech.get(remote_url)
-  rescue => e
-    puts "Error: #{e}"
-    sleep 5
-  else
-    puts 'A' * 50
-    full_page = mech.page.link_with(:text => 'View Answer').asp_click()
-  ensure
-    sleep 1.0 + rand
-  end
+  get_answer(mech, questions, choices, answers, explanations, test_array)
+  binding.pry
 
   # full_page.links.each do |link|
   #   test = link.text.strip
@@ -86,11 +180,8 @@ tests.each do |test|
   #   puts text
   # end
 
-  throw ''
-
-
-
 end
+
 
 
 
