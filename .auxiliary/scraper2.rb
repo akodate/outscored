@@ -3,7 +3,6 @@ require 'open-uri'
 require 'pry'
 require 'nokogiri'
 require 'active_support/all'
-
 require 'mechanize'
 require 'logger'
 
@@ -36,7 +35,6 @@ class Mechanize::Page::Link
     f.action = asp_link_args.values_at(action_arg) if action_arg
     f['dir'] = etarget
     f['nqid'] = earg
-    binding.pry
     f.submit
   end
 end
@@ -52,7 +50,7 @@ explanations = []
 
 tests.each do |test|
 
-  # GETS INITIAL TEST PAGE
+  # GET INITIAL TEST PAGE
   remote_url = BASE_URL + test['href']
   puts "Fetching TEST PAGE at #{remote_url}"
   begin
@@ -62,88 +60,35 @@ tests.each do |test|
     sleep 5
   else
     puts '*' * 50
-    puts mech.page.uri
     mech.page.forms[1].submit
-    puts '*' * 50
   ensure
     sleep 1.0 + rand
   end
 
-  remote_url = 'http://www.4tests.com/exams/questions.asp?exid=23100918&googlebot=13'
+  # GET FULL QUESTION
+  remote_url = mech.page.uri
   puts "Fetching QUESTION PAGE at #{remote_url}"
-
-  mech.get(remote_url) do |question_page|
-    puts question_page
-
-    question_page.links.each do |link|
-      puts link
-    end
-
-    question_page.forms.each do |form|
-      puts form
-    end
-
-    puts mech
-    puts mech.page
-    link = question_page.link_with(:text => 'View Answer')
-    puts link
-    puts mech.page.uri
-    binding.pry
+  begin
+    mech.get(remote_url)
+  rescue => e
+    puts "Error: #{e}"
+    sleep 5
+  else
+    puts 'A' * 50
     full_page = mech.page.link_with(:text => 'View Answer').asp_click()
-    binding.pry
-    puts full_page.body
-    puts mech.page.uri
-
-    # frmQuestion
-
-    # full_page = mech.page.link_with(:text => 'View Answer').click
-    # full_page = mech.click(question_page.link_with(:text => /View Answer/))
-    # full_page = question_page.link_with(:text => /View Answer/).click()
-
-    # full_page.links.each do |link|
-    #   test = link.text.strip
-    #   next unless text.length > 0
-    #   puts text
-    # end
-
-    throw ''
-
+  ensure
+    sleep 1.0 + rand
   end
 
-
-  # # GETS QUESTION
-  # remote_url = mech.page.uri
-  # puts "Fetching question at #{remote_url}"
-  # begin
-  #   question_page = open(remote_url, HEADERS_HASH).read
-  # rescue Exception=>e
-  #   puts "Error: #{e}"
-  #   sleep 5
-  # else
-  #   puts '?' * 50
-  #   puts question_page[0..500]
-  #   puts '?' * 50
-  # ensure
-  #   sleep 1.0 + rand
+  # full_page.links.each do |link|
+  #   test = link.text.strip
+  #   next unless text.length > 0
+  #   puts text
   # end
 
-  # remote_url = mech.page.uri
-  # puts "Clicking show answers at #{remote_url}"
-  # begin
-  #   mech.get remote_url
-  # rescue Exception=>e
-  #   puts "Error: #{e}"
-  #   sleep 5
-  # else
-  #   puts '?' * 50
-  #   puts mech.page.uri
-  #   binding.pry
-  #   question_page = mech.click(page.link_with(:text => /View Answer/))
-  #   puts mech.page.uri
-  #   puts '?' * 50
-  # ensure
-  #   sleep 1.0 + rand
-  # end
+  throw ''
+
+
 
 end
 
