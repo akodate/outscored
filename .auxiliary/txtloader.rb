@@ -3,12 +3,15 @@ require 'pry'
 require 'active_support/all'
 
 # BEFORE RUNNING: Save Excel as UTF-16 .txt then save as UTF-8 in Sublime
+# AFTER RUNNING: Copy folder tree into /private, copy a working file tree in /private, rename its files, copy-paste json contents to renamed files, move renamed files into folder tree
 
 SOURCE_DIR = "txt"
 DATA_DIR = "assets"
 Dir.mkdir(DATA_DIR) unless File.exists?(DATA_DIR)
 TEST_FILE = '第二種衛生管理者試験.txt'
 TEST_NAME = '第二種衛生管理者試験'
+TEST_DIR = "#{DATA_DIR}/#{TEST_NAME}"
+Dir.mkdir(TEST_DIR) unless File.exists?(TEST_DIR)
 
 file = File.open("#{SOURCE_DIR}/#{TEST_FILE}", "r").read
 puts file[0..50]
@@ -70,26 +73,22 @@ while file
 
 end
 
-binding.pry
-
+test_obj = {}
 question_arr.each do |question|
-  section_dir = "#{test_dir}/#{question.first.gsub(/\*/, '').gsub(/\//, '|')}"
-  Dir.mkdir(section_dir) unless File.exists?(section_dir)
-  puts "\t...Saved question as #{section_dir}"
-  save_json(question, section_dir)
+  if test_obj[question['section']]
+    test_obj[question['section']].push(question)
+  else
+    test_obj[question['section']] = [].push(question)
+  end
 end
 
-def save_json(question, section_dir)
-  arr = []
-  question[1]['questions'].each_with_index do |question, i|
-    arr[i] = {}
-    arr[i]['question'] = question[1]['questions'][i]
-    arr[i]['choices'] = question[1]['choices'][i]
-    arr[i]['selections'] = question[1]['selections'][i]
-    arr[i]['answer'] = question[1]['answers'][i]
-    arr[i]['explanation'] = question[1]['explanations'][i]
-  end
-  json_file = "#{section_dir}/#{question.first.gsub(/\*/, '').gsub(/\//, '|')}.json"
-  File.open(json_file, 'w'){|file| file.write(arr.to_json)}
+test_obj.each do |section|
+  binding.pry
+  section_dir = "#{DATA_DIR}/#{TEST_NAME}/#{section.first.gsub(/\//, '|')}"
+  Dir.mkdir(section_dir) unless File.exists?(section_dir)
+  puts "\t...Saving question in #{section_dir}"
+
+  json_file = "#{section_dir}/#{section.first.gsub(/\//, '|')}.json"
+  File.open(json_file, 'w'){|file| file.write(section[1].to_json)}
   puts "\t...Saved QUESTIONS as #{json_file}"
 end
