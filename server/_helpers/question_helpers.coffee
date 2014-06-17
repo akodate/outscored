@@ -26,7 +26,7 @@ LOWERCASE_COUNT_REGEX = /(?:\n\S{0,10})([b-z])(?:[\.:])/g
 
 @filterQuestion = (question) ->
   question.answer = filterAnswer(question.answer)
-  question.selections = filterChoices(question.choices)
+  # question.selections = filterChoices(question.choices)
   return question
 
 @processQuestion = (collection, question, file, questionNumber) ->
