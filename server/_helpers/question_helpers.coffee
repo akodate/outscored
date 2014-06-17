@@ -1,5 +1,5 @@
 # Answer regexes
-ANSWER_REGEX = /[A-Z]/
+ANSWER_REGEX = /[A-Z0-9]/
 
 # Choices regexes
 LIST_REGEX = /<li>(.|\n)*<li>/
