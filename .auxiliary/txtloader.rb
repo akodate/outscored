@@ -8,8 +8,14 @@ require 'active_support/all'
 SOURCE_DIR = "txt"
 DATA_DIR = "assets"
 Dir.mkdir(DATA_DIR) unless File.exists?(DATA_DIR)
-TEST_FILE = '第二種衛生管理者試験.txt'
-TEST_NAME = '第二種衛生管理者試験'
+
+puts "Test name?"
+TEST_NAME = gets.chomp
+TEST_FILE = TEST_NAME + '.txt'
+puts TEST_FILE
+
+# TEST_FILE = '第二種衛生管理者試験.txt'
+# TEST_NAME = '第二種衛生管理者試験'
 TEST_DIR = "#{DATA_DIR}/#{TEST_NAME}"
 Dir.mkdir(TEST_DIR) unless File.exists?(TEST_DIR)
 
@@ -23,9 +29,13 @@ def parse(file)
 end
 
 def parse_end(file, test)
-  item = file.match(/.*?(?=#{test[0..10]})/)
+  item = file.match(/.*?(?=\r第)/)
   file = item.post_match
   return item.to_s.strip, file
+end
+
+def clean(item)
+  return item.gsub(/\"/, '').strip.gsub(/\A　*/, '')
 end
 
 question_arr = []
@@ -40,14 +50,19 @@ while file
   question, file = parse(file)
   selections, file = parse(file)
   answer, file = parse(file)
-  if file.match(/.*?(?=#{test[0..10]})/)
+  if file.match(/.*?(?=\r第)/)
     explanation, file = parse_end(file, test)
   else
     file = nil
   end
 
-  choices = question.scan(/<br>\d:.*?(?=<br>|\z)/)
-  question = question.match(/.*?(?=<br>\d:)/).to_s.strip.gsub(/問\d+\s*/, '')
+  if question.match(/.*?(?=<br>(?:\d:|（))/)
+    choices = question.scan(/<br>(?:\d:|（).*?(?=<br>|\z)/)
+    question = question.match(/.*?(?=<br>(?:\d:|（))/).to_s.strip.gsub(/問.*?(　|\s+)/, '')
+  else
+    choices = []
+  end
+
   selections = selections.gsub(/\"/, '').split(',')
 
   puts test
@@ -61,6 +76,10 @@ while file
   puts explanation
   puts '*' * 500
 
+  choices[-1] = clean(choices[-1]) if choices != []
+  question = clean(question)
+  explanation = clean(explanation)
+
   question_arr[count] = {}
   question_arr[count]['question'] = question
   question_arr[count]['choices'] = choices
@@ -70,6 +89,10 @@ while file
   question_arr[count]['section'] = section
   question_arr[count]['tags'] = [].push(year)
   count += 1
+
+  if count == 315
+    binding.pry
+  end
 
 end
 
@@ -83,7 +106,6 @@ question_arr.each do |question|
 end
 
 test_obj.each do |section|
-  binding.pry
   section_dir = "#{DATA_DIR}/#{TEST_NAME}/#{section.first.gsub(/\//, '|')}"
   Dir.mkdir(section_dir) unless File.exists?(section_dir)
   puts "\t...Saving question in #{section_dir}"
