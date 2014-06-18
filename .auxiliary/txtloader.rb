@@ -29,7 +29,7 @@ def parse(file)
 end
 
 def parse_end(file, test)
-  item = file.match(/.*?(?=\r第)/)
+  item = file.match(/.*?(?=[\r\"]第)/)
   file = item.post_match
   return item.to_s.strip, file
 end
@@ -50,15 +50,15 @@ while file
   question, file = parse(file)
   selections, file = parse(file)
   answer, file = parse(file)
-  if file.match(/.*?(?=\r第)/)
+  if file.match(/.*?(?=[\r\"]第)/)
     explanation, file = parse_end(file, test)
   else
     file = nil
   end
 
-  if question.match(/.*?(?=<br>(?:\d:|（))/)
-    choices = question.scan(/<br>(?:\d:|（).*?(?=<br>|\z)/)
-    question = question.match(/.*?(?=<br>(?:\d:|（))/).to_s.strip.gsub(/問.*?(　|\s+)/, '')
+  if question.match(/.*?(?=<br>(?:\d:|[（①②③④]))/)
+    choices = question.scan(/<br>(?:\d:|[（①②③④]).*?(?=<br>|\z)/)
+    question = question.match(/.*?(?=<br>(?:\d:|[（①②③④]))/).to_s.strip.gsub(/問[題１２３４５６７８９０[0-9]　\s]+/, '')
   else
     choices = []
   end
@@ -79,6 +79,7 @@ while file
   choices[-1] = clean(choices[-1]) if choices != []
   question = clean(question)
   explanation = clean(explanation)
+  section = clean(section)
 
   question_arr[count] = {}
   question_arr[count]['question'] = question
@@ -90,9 +91,9 @@ while file
   question_arr[count]['tags'] = [].push(year)
   count += 1
 
-  if count == 315
-    binding.pry
-  end
+  # if count == 315
+  #   binding.pry
+  # end
 
 end
 
