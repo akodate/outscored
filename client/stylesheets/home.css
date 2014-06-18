@@ -64,6 +64,11 @@
   line-height: 100px;
 }
 
+.result-box {
+  height: 100%;
+  overflow: scroll;
+}
+
 .search-result {
 /*  position: absolute;
   width: 800px;

@@ -4,10 +4,10 @@
 
 Template.home.rendered = () ->
 
-  unless window.matchMedia("(max-width: 370px)").matches || window.matchMedia("(max-height: 400px)").matches
-    window.alert "Please access outsco.red from a mobile device"
-    window.stop()
-    throw new Error "Mobile-only"
+  # unless window.matchMedia("(max-width: 370px)").matches || window.matchMedia("(max-height: 400px)").matches
+  #   window.alert "Please access outsco.red from a mobile device"
+  #   window.stop()
+  #   throw new Error "Mobile-only"
 
   # Set-up
   $('.search-results').hide()
@@ -48,22 +48,22 @@ Template.home.events
     if @search
       Results.update({name: {$regex: @search, $options: "i" }}, {$set: {result: true}}, {multi: true})
 
-  "click .search-result": (event, ui) ->
-    # Set only clicked test to 'result: true'
-    $('.search-results').show()
-    console.log event.target.innerText
-    Results.update({}, {$set: {result: false}}, {multi: true})
-    Results.update({name: event.target.innerText}, {$set: {result: true}})
-    # Find children of clicked test and display them by their dir name
-    testResult = Results.findOne(result: true)
-    SectionResults.remove({})
-    TestSections.find({_id: {$in: testResult.children}}).fetch()
-    TestSections.find({_id: {$in: testResult.children}}).forEach( (doc) ->
-      doc.name = (/[^\/]+$/.exec(doc.filePath))
-      SectionResults.insert(doc)
-      console.log "Executing...."
-    )
-    $('.search-box').focus()
+  # "click .search-result": (event, ui) ->
+  #   # Set only clicked test to 'result: true'
+  #   $('.search-results').show()
+  #   console.log event.target.innerText
+  #   Results.update({}, {$set: {result: false}}, {multi: true})
+  #   Results.update({name: event.target.innerText}, {$set: {result: true}})
+  #   # Find children of clicked test and display them by their dir name
+  #   testResult = Results.findOne(result: true)
+  #   SectionResults.remove({})
+  #   TestSections.find({_id: {$in: testResult.children}}).fetch()
+  #   TestSections.find({_id: {$in: testResult.children}}).forEach( (doc) ->
+  #     doc.name = (/[^\/]+$/.exec(doc.filePath))
+  #     SectionResults.insert(doc)
+  #     console.log "Executing...."
+  #   )
+  #   $('.search-box').focus()
 
   "click .section-result": (event, ui) ->
     # Find section by clicked title and go to section page
@@ -71,6 +71,7 @@ Template.home.events
     sectionResult = SectionResults.findOne({name: event.target.innerText})
     console.log sectionResult.name
     console.log sectionResult.original
+
     Router.go('sectionPage', {testSecID: sectionResult._id, secID: sectionResult.original})
 
   "click #localization": (event, ui) ->
@@ -85,7 +86,17 @@ Template.home.events
     # Update localization region
     Localization.update({}, {$set: {region: regionSelect}}, {multi: true})
 
-
+  "click a[href*=#]": (event, ui) ->
+    event.preventDefault()
+    if location.pathname.replace(/^\//, "") is event.target.pathname.replace(/^\//, "") || location.hostname is event.target.hostname
+      target = $(event.target.hash)
+      target = (if target.length then target else $("[name=" + event.target.hash.slice(1) + "]"))
+      if target.length
+        $(".result-box").animate
+          scrollTop: target.offset().top
+        , 1000
+        false
+    console.log "CLICKED"
 
 
 Template.home.helpers
