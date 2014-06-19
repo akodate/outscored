@@ -1,25 +1,33 @@
 <template name='sectionPage'>
   <div class='section-page'>
-    <h1>{{sectionName}}</h1>
-    <ul class='pager'>
-      <li class='previous previous-question'><a id='previous-link' href='#'>&larr; Previous</a></li>
-      <li class='next next-question'><a id='next-link' href='#'>Next &rarr;</a></li>
-    </ul>
-    <br>
+<!--     <h1>{{sectionName}}</h1> -->
     {{#each questions}}
       {{> question}}
     {{/each}}
   </div>
+  <nav class="navbar navbar-default navbar-fixed-bottom" role="navigation">
+    <div class="container">
+      <ul class='pager'>
+        <li class='previous previous-question'><a id='previous-link' href='#'>&larr; Previous</a></li>
+        <li class='next next-question'><a id='next-link' href='#'>Next &rarr;</a></li>
+      </ul>
+    </div>
+  </nav>
 </template>
 
 <template name='question'>
   <div class='question'>
-<!--     <p>{{order}}</p> -->
+    <p class='question-heading'>Question {{order}}/30:</p>
     <p>{{{question}}}</p>
-    <p>{{{choices}}}</p>
+  </div>
+  <div class='choices'>
+    {{#each choices}}
+      <p class='choice'>{{{choice}}}</p>
+    {{/each}}
+  </div>
+  <div class='answer'>
     <p>{{{explanation}}}</p>
     <p>{{{answer}}}</p>
     <p>{{selections}}</p>
-    <br><br>
   </div>
 </template>

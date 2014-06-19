@@ -26,6 +26,8 @@ LOWERCASE_COUNT_REGEX = /(?:\n\S{0,10})([b-z])(?:[\.:])/g
 
 @filterQuestion = (question) ->
   question.answer = filterAnswer(question.answer)
+  if typeof question.choices == 'string'
+    question.choices = question.choices.split('<br>').filter((n) -> n != '')
   # question.selections = filterChoices(question.choices)
   return question
 

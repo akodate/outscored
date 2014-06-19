@@ -1,19 +1,55 @@
 .section-page {
+  position: absolute;
+  width: 100%;
+  top: 50px;
+  bottom: 50px;
+  background-image: url(/blackboard.jpg);
   max-height: 100%;
+  overflow: hidden;
+  border-top: 1px solid white;
+  padding: 45px;
   font-size: 20px;
   font-family: 'Belgrano';
-  background: url(/construction-paper-600x400.jpg);
-  border: 1px solid gray;
-  box-shadow: -5px -5px 8px gray;
-  padding: 45px;
+  color: white;
+}
+
+.question, .choices {
+  width: 100%;
   overflow: scroll;
 }
 
-#next-link, #previous-link {
-  border: none;
-  background: none;
-  color: black;
+.question {
+  height: 60%;
+}
+
+.choices {
+  height: 40%;
+  border-top: 3px solid yellow;
+}
+
+.question-heading {
+  margin-bottom: 5px;
   font-size: 24px;
 }
 
+.choice {
+  background-color: black;
+  width: 100%;
+  border: 1px solid yellow;
+  border-radius: 10px;
+  padding: 5px;
+}
 
+#next-link, #previous-link {
+  background: none;
+  padding-top: 16px;
+  padding-right: 0px;
+  padding-left: 0px;
+  border: none;
+  color: white;
+  font-size: 24px;
+}
+
+.navbar-fixed-bottom {
+  background: black;
+}

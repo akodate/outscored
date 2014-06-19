@@ -40,3 +40,8 @@ Template.sectionPage.helpers
 
   sectionName: ->
     return TestSections.findOne().filePath
+
+Template.question.helpers
+  choice: ->
+    choice = @.replace(/^\w*<br>*/, '')
+    return choice

@@ -241,6 +241,7 @@
     margin-top: 10px;
     padding: 0px 10px;
   }
+
   .section-result {
     width: 100%;
     font-size: 18px;
@@ -297,10 +298,16 @@
     font-size: 24px;
   }
   .section-page {
-    padding: 10px;
+    padding: 0px;
     font-size: 14px;
+  }
+  .question, .choices {
+    padding: 10px;
   }
   #next-link, #previous-link {
     font-size: 18px;
+  }
+  .choice {
+    font-size: 20px;
   }
 }
