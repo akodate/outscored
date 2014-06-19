@@ -9,6 +9,9 @@ Template.home.rendered = () ->
   #   window.stop()
   #   throw new Error "Mobile-only"
 
+  $('#main').css('height', ($('.sheet')[0].offsetHeight - $('#main')[0].offsetTop) + 45)
+  $('.result-box').css('height', ($('#main')[0].offsetHeight - $('.result-box')[0].offsetTop))
+
   # Set-up
   $('.search-results').hide()
   Results.remove({})
@@ -21,6 +24,7 @@ Template.home.rendered = () ->
       Results.insert(doc)
       @rendered = true
     )
+    Results.update({}, {$set: {result: true}}, {multi: true})
 
   # Search arrow animation
   arrow = $('.search-arrow')
@@ -40,30 +44,40 @@ Template.home.events
 
   "keyup .search-box": (event, ui) ->
     # Set search matches to 'result: true'
-    $('.search-arrow').animate
+    $(".search-arrow").animate
       opacity: 0.25
     @search = event.target.value
-    SectionResults.remove({})
-    Results.update({}, {$set: {result: false}}, {multi: true})
-    if @search
-      Results.update({name: {$regex: @search, $options: "i" }}, {$set: {result: true}}, {multi: true})
 
-  # "click .search-result": (event, ui) ->
-  #   # Set only clicked test to 'result: true'
-  #   $('.search-results').show()
-  #   console.log event.target.innerText
-  #   Results.update({}, {$set: {result: false}}, {multi: true})
-  #   Results.update({name: event.target.innerText}, {$set: {result: true}})
-  #   # Find children of clicked test and display them by their dir name
-  #   testResult = Results.findOne(result: true)
-  #   SectionResults.remove({})
-  #   TestSections.find({_id: {$in: testResult.children}}).fetch()
-  #   TestSections.find({_id: {$in: testResult.children}}).forEach( (doc) ->
-  #     doc.name = (/[^\/]+$/.exec(doc.filePath))
-  #     SectionResults.insert(doc)
-  #     console.log "Executing...."
-  #   )
-  #   $('.search-box').focus()
+    if @search
+      for result in $(".search-result")
+        if result.innerText.match(new RegExp(@search, 'i'))
+          $(".result-box").animate
+            scrollTop: result.offsetTop + 570
+          , 300
+          return
+      console.log @search
+
+    # SectionResults.remove({})
+    # Results.update({}, {$set: {result: false}}, {multi: true})
+    # if @search
+    #   Results.update({name: {$regex: @search, $options: "i" }}, {$set: {result: true}}, {multi: true})
+
+  "click .search-result": (event, ui) ->
+    # Set only clicked test to 'result: true'
+    $('.search-results').show()
+    console.log event.target.innerText
+    Results.update({}, {$set: {result: false}}, {multi: true})
+    Results.update({name: event.target.innerText}, {$set: {result: true}})
+    # Find children of clicked test and display them by their dir name
+    testResult = Results.findOne(result: true)
+    SectionResults.remove({})
+    TestSections.find({_id: {$in: testResult.children}}).fetch()
+    TestSections.find({_id: {$in: testResult.children}}).forEach( (doc) ->
+      doc.name = (/[^\/]+$/.exec(doc.filePath))
+      SectionResults.insert(doc)
+      console.log "Executing...."
+    )
+    $('.search-box').focus()
 
   "click .section-result": (event, ui) ->
     # Find section by clicked title and go to section page
@@ -86,17 +100,6 @@ Template.home.events
     # Update localization region
     Localization.update({}, {$set: {region: regionSelect}}, {multi: true})
 
-  "click a[href*=#]": (event, ui) ->
-    event.preventDefault()
-    if location.pathname.replace(/^\//, "") is event.target.pathname.replace(/^\//, "") || location.hostname is event.target.hostname
-      target = $(event.target.hash)
-      target = (if target.length then target else $("[name=" + event.target.hash.slice(1) + "]"))
-      if target.length
-        $(".result-box").animate
-          scrollTop: target.offset().top
-        , 1000
-        false
-    console.log "CLICKED"
 
 
 Template.home.helpers

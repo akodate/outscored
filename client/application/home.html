@@ -18,9 +18,9 @@
     </div>
 
     <p class="search-arrow animated slideInLeft">-&gt;</p>
-    <input class="search-box" type="search" autofocus="true" placeholder="{{searchPlaceholder}}" />
+    <input class="search-box" type="search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" autofocus="true" placeholder="{{searchPlaceholder}}" />
   </div>
-  <p style="font-size: 16px; color: white">*Outsco.red is currently in early development</p>
+<!--   <p style="font-size: 16px; color: white">*Outsco.red is currently in early development</p> -->
   <div class="result-box">
     {{#each results}}
       {{> result}}
@@ -36,7 +36,6 @@
 <template name="result">
   <div class="search-result animated fadeInUp" style="left: {{styleLeft}}px; top: {{styleTop}}px">
     {{name}}
-    <a href="#localization">Localization ↑</a>
   </div>
 </template>
 
