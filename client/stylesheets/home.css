@@ -67,6 +67,7 @@
 .result-box {
   height: 100%;
   overflow: scroll;
+/*  box-shadow: 0px 0px 15px white;*/
 }
 
 .search-result {
@@ -75,8 +76,11 @@
   bottom: 0px;
   background-color: white;*/
 /*  background: url(/construction-paper-600x400.jpg);*/
-  border: 1px solid gray;
-  box-shadow: -5px -5px 8px gray;
+  margin: 10px 0px;
+  border: 1px solid white;
+  border-radius: 5px;
+  box-shadow: 0px 0px 8px white;
+  text-align: center;
   line-height: 75px;
   font-size: 36px;
   font-family: 'Belgrano';

@@ -43,16 +43,17 @@ Template.home.rendered = () ->
 Template.home.events
 
   "keyup .search-box": (event, ui) ->
-    # Set search matches to 'result: true'
     $(".search-arrow").animate
       opacity: 0.25
     @search = event.target.value
 
+    SectionResults.remove({})
+    Results.update({}, {$set: {result: true}}, {multi: true})
     if @search
       for result in $(".search-result")
         if result.innerText.match(new RegExp(@search, 'i'))
           $(".result-box").animate
-            scrollTop: result.offsetTop + 570
+            scrollTop: result.offsetTop + 910 # 570
           , 300
           return
       console.log @search
@@ -77,6 +78,7 @@ Template.home.events
       SectionResults.insert(doc)
       console.log "Executing...."
     )
+    $('.result-box').scrollTop(0)
     $('.search-box').focus()
 
   "click .section-result": (event, ui) ->
