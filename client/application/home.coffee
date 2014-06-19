@@ -51,7 +51,7 @@ Template.home.events
     resetScroll()
 
   "click .section-result": (event, ui) ->
-    # Find section by clicked title and go to section page
+    # Find section by clicked title and go to section page, use test to subscribe to questions
     console.log event.target.innerText
     sectionResult = SectionResults.findOne({name: event.target.innerText})
     test = Results.findOne({result: true})
@@ -117,7 +117,7 @@ Template.home.helpers
 
   # Test results
   results: ->
-    tests = Results.find({result: true}, {sort: {name: 1}, limit: 1000}).fetch()
+    tests = Results.find({result: true}, {sort: {name: 1}}).fetch()
     return tests
 
   # Section results
