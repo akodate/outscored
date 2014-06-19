@@ -108,11 +108,13 @@
   width: 100%;
   margin: 8px;
   padding: 5px;
+  border: 1px solid gray;
+  border-radius: 5px;
+  background-color: rgba(0, 0, 0, .6);
   font-size: 30px;
   font-family: 'Belgrano';
   line-height: 50px;
   color: white;
-  border: 1px solid gray;
 }
 
 .search-box::-webkit-input-placeholder {
