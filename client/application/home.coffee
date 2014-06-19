@@ -53,7 +53,7 @@ Template.home.events
       for result in $(".search-result")
         if result.innerText.match(new RegExp(@search, 'i'))
           $(".result-box").animate
-            scrollTop: result.offsetTop + 910 # 570
+            scrollTop: result.offsetTop + 700 # 570
           , 300
           return
       console.log @search
@@ -79,7 +79,8 @@ Template.home.events
       console.log "Executing...."
     )
     $('.result-box').scrollTop(0)
-    $('.search-box').focus()
+    if window.matchMedia("(min-width: 1000px)").matches || window.matchMedia("(min-height: 1000px)").matches
+      $('.search-box').focus()
 
   "click .section-result": (event, ui) ->
     # Find section by clicked title and go to section page
