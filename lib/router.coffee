@@ -6,10 +6,10 @@ Router.map(() ->
   @route('home', {
     path: '/',
     waitOn: () ->
-      return [Meteor.subscribe('tests'), Meteor.subscribe('testSections')]
+      return [Meteor.subscribe('tests'), Meteor.subscribe('testSections'), Meteor.subscribe('section')]
   })
   @route('sectionPage', {
-    path: '/:secID/:testSecID',
+    path: ':testID/:secID/:testSecID',
     waitOn: () ->
       console.log @params.secID
       console.log @params.testSecID
@@ -17,7 +17,7 @@ Router.map(() ->
         Meteor.subscribe('section', @params.secID)
         Meteor.subscribe('testSection', @params.testSecID)
         Meteor.subscribe('testQuestions', @params.testSecID)
-        Meteor.subscribe('questions')
+        Meteor.subscribe('questions', @params.testID)
       ]
     data: () ->
       return Sections.findOne(@params.secID)

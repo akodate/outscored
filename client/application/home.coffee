@@ -9,36 +9,11 @@ Template.home.rendered = () ->
   #   window.stop()
   #   throw new Error "Mobile-only"
 
-  $('#main').css('height', ($('.sheet')[0].offsetHeight - $('#main')[0].offsetTop) + 45)
-  $('.result-box').css('height', ($('#main')[0].offsetHeight - $('.result-box')[0].offsetTop))
+  setDivHeights()
+  renderSetup()
+  searchArrowSetup()
 
-  # Set-up
-  $('.search-results').hide()
-  Results.remove({})
-  SectionResults.remove({})
 
-  unless @rendered == true
-    Localization.insert(region: 'US')
-    internationalCSS('US')
-    Tests.find().forEach( (doc) ->
-      Results.insert(doc)
-      @rendered = true
-    )
-    Results.update({}, {$set: {result: true}}, {multi: true})
-
-  # Search arrow animation
-  arrow = $('.search-arrow')
-
-  point = () ->
-    arrow.removeClass('slideInLeft')
-    arrow.addClass('shake')
-    arrow[0].style.webkitAnimationDuration = '5s'
-
-  arrow[0].addEventListener('webkitAnimationEnd', point)
-  arrow[0].addEventListener('mozAnimationEnd', point)
-  arrow[0].addEventListener('MSAnimationEnd', point)
-  arrow[0].addEventListener('oanimationend', point)
-  arrow[0].addEventListener('animationend', point)
 
 Template.home.events
 
@@ -51,9 +26,15 @@ Template.home.events
     Results.update({}, {$set: {result: true}}, {multi: true})
     if @search
       for result in $(".search-result")
+        if result.innerText.match(new RegExp('^' + @search, 'i'))
+          $(".result-box").animate
+            scrollTop: result.offsetTop - 160
+          , 300
+          return
+      for result in $(".search-result")
         if result.innerText.match(new RegExp(@search, 'i'))
           $(".result-box").animate
-            scrollTop: result.offsetTop + 700 # 570
+            scrollTop: result.offsetTop - 160
           , 300
           return
       console.log @search
@@ -64,32 +45,22 @@ Template.home.events
     #   Results.update({name: {$regex: @search, $options: "i" }}, {$set: {result: true}}, {multi: true})
 
   "click .search-result": (event, ui) ->
-    # Set only clicked test to 'result: true'
-    $('.search-results').show()
-    console.log event.target.innerText
-    Results.update({}, {$set: {result: false}}, {multi: true})
-    Results.update({name: event.target.innerText}, {$set: {result: true}})
-    # Find children of clicked test and display them by their dir name
-    testResult = Results.findOne(result: true)
-    SectionResults.remove({})
-    TestSections.find({_id: {$in: testResult.children}}).fetch()
-    TestSections.find({_id: {$in: testResult.children}}).forEach( (doc) ->
-      doc.name = (/[^\/]+$/.exec(doc.filePath))
-      SectionResults.insert(doc)
-      console.log "Executing...."
-    )
-    $('.result-box').scrollTop(0)
-    if window.matchMedia("(min-width: 1000px)").matches || window.matchMedia("(min-height: 1000px)").matches
-      $('.search-box').focus()
+
+    showClickedTest(event, ui)
+    showTestSections()
+    resetScroll()
 
   "click .section-result": (event, ui) ->
     # Find section by clicked title and go to section page
     console.log event.target.innerText
     sectionResult = SectionResults.findOne({name: event.target.innerText})
+    test = Results.findOne({result: true})
+    console.log test.name
+    console.log test._id
     console.log sectionResult.name
     console.log sectionResult.original
 
-    Router.go('sectionPage', {testSecID: sectionResult._id, secID: sectionResult.original})
+    Router.go('sectionPage', {testSecID: sectionResult._id, secID: sectionResult.original, testID: test._id})
 
   "click #localization": (event, ui) ->
     # Get 2-letter region from localization dropdown text
@@ -137,6 +108,13 @@ Template.home.helpers
           when 'JP' then 'ここで検索！'
           else 'Search by test, subject, or job!'
 
+  # Creates empty space at the bottom as needed so scroll works properly
+  resultBottom: ->
+    if Results.find({result: true}).count() > 1
+      return ''
+    else
+      return 'none'
+
   # Test results
   results: ->
     tests = Results.find({result: true}, {sort: {name: 1}, limit: 1000}).fetch()
@@ -150,6 +128,63 @@ Template.home.helpers
 
 
 # Helpers
+
+@setDivHeights = () ->
+  $('#main').css('height', ($('.sheet')[0].offsetHeight - $('#main')[0].offsetTop) + 45)
+  $('.result-box').css('height', ($('#main')[0].offsetHeight - $('.result-box')[0].offsetTop))
+
+@renderSetup = () ->
+  console.log "Rendered..."
+  # Clear data
+  $('.search-results').hide()
+  Results.remove({})
+  SectionResults.remove({})
+  Localization.remove({})
+
+  # Fill data
+  Localization.insert(region: 'US')
+  internationalCSS('US')
+  Tests.find().forEach( (doc) ->
+    Results.insert(doc)
+  )
+  Results.update({}, {$set: {result: true}}, {multi: true})
+
+@searchArrowSetup = () ->
+  arrow = $('.search-arrow')
+
+  point = () ->
+    arrow.removeClass('slideInLeft')
+    arrow.addClass('shake')
+    arrow[0].style.webkitAnimationDuration = '5s'
+
+  arrow[0].addEventListener('webkitAnimationEnd', point)
+  arrow[0].addEventListener('mozAnimationEnd', point)
+  arrow[0].addEventListener('MSAnimationEnd', point)
+  arrow[0].addEventListener('oanimationend', point)
+  arrow[0].addEventListener('animationend', point)
+
+@showClickedTest = (event, ui) ->
+  # Set only clicked test to 'result: true'
+  $('.search-results').show()
+  console.log event.target.innerText
+  Results.update({}, {$set: {result: false}}, {multi: true})
+  Results.update({name: event.target.innerText}, {$set: {result: true}})
+
+@showTestSections = () ->
+  # Find children of clicked test and display them by their dir name
+  testResult = Results.findOne(result: true)
+  SectionResults.remove({})
+  TestSections.find({_id: {$in: testResult.children}}).fetch()
+  TestSections.find({_id: {$in: testResult.children}}).forEach( (doc) ->
+    doc.name = (/[^\/]+$/.exec(doc.filePath))
+    SectionResults.insert(doc)
+    console.log "Executing...."
+  )
+
+@resetScroll = () ->
+  $('.result-box').scrollTop(0)
+  if window.matchMedia("(min-width: 1000px)").matches || window.matchMedia("(min-height: 1000px)").matches
+    $('.search-box').focus()
 
 @internationalCSS = (regionSelect) ->
   # Login dropdown styling

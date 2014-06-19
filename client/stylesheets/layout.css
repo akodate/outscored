@@ -1,8 +1,10 @@
 html {
-  background-image: url(/blackboard.jpg);
+
 }
 
 .sheet {
+  background-image: url(/blackboard.jpg);
+  background-size: auto 100%;
 /*  background-color: rgba(0, 0, 0, 1);*/
   font-family: 'La Belle Aurore', cursive;
 /*  bottom: 0px;

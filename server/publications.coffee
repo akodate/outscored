@@ -1,8 +1,8 @@
-Meteor.publish 'tests', (options) ->
-  Tests.find({}, options)
+Meteor.publish 'tests', () ->
+  Tests.find({}, {fields: {name: 1, children: 1}})
 
-Meteor.publish 'testSections', (options) ->
-  TestSections.find({}, options)
+Meteor.publish 'testSections', () ->
+  TestSections.find({}, {fields: {filePath: 1, original: 1}})
 
 Meteor.publish 'testSection', (id) ->
   TestSections.find(_id: id)
@@ -13,8 +13,8 @@ Meteor.publish 'section', (id) ->
 Meteor.publish 'testQuestions', (id) ->
   TestQuestions.find(parent: id)
 
-Meteor.publish 'questions', () ->
-  Questions.find()
+Meteor.publish 'questions', (testID) ->
+  Questions.find(inTest: testID)
 
 # Meteor.publish('singlePost', function(id) { return id && Posts.find(id);
 # });
