@@ -28,14 +28,14 @@ Template.home.events
       for result in $(".search-result")
         if result.innerText.match(new RegExp('^' + @search, 'i'))
           $(".result-box").animate
-            scrollTop: result.offsetTop - 160
-          , 300
+            scrollTop: result.offsetTop - 160,
+            300
           return
       for result in $(".search-result")
         if result.innerText.match(new RegExp(@search, 'i'))
           $(".result-box").animate
-            scrollTop: result.offsetTop - 160
-          , 300
+            scrollTop: result.offsetTop - 160,
+            300
           return
       console.log @search
 

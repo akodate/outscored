@@ -27,8 +27,18 @@ Template.sectionPage.events
     thisQuestion = QuestionResults.findOne({result: true})
     if thisQuestion.answer.match(event.target.innerText)
       console.log "CORRECT"
+      $(event.target).css
+        backgroundColor: 'blue'
+      $(event.target).animate
+        backgroundColor: 'black',
+        1500
     else
       console.log "INCORRECT"
+      $(event.target).css
+        backgroundColor: 'red'
+      $(event.target).animate
+        backgroundColor: 'black',
+        1500
 
 Template.sectionPage.helpers
   questions: ->
