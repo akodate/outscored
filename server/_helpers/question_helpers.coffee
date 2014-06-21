@@ -25,7 +25,7 @@ LOWERCASE_COUNT_REGEX = /(?:\n\S{0,10})([b-z])(?:[\.:])/g
     return false
 
 @filterQuestion = (question) ->
-  question.answer = filterAnswer(question.answer)
+  # question.answer = filterAnswer(question.answer)
   if typeof question.choices == 'string'
     question.choices = question.choices.split('<br>').filter((n) -> n != '')
   # question.selections = filterChoices(question.choices)
@@ -43,34 +43,34 @@ LOWERCASE_COUNT_REGEX = /(?:\n\S{0,10})([b-z])(?:[\.:])/g
     # Point test to original and add placeholder
     insertPlaceholder(collection, file, originalID, questionNumber)
 
-filterAnswer = (answer) ->
-  if ANSWER_REGEX.exec(answer)
-    answer = ANSWER_REGEX.exec(answer)[0]
-  else
-    answer = "COULD NOT READ ANSWER"
-  return answer
+# filterAnswer = (answer) ->
+#   if ANSWER_REGEX.exec(answer)
+#     answer = ANSWER_REGEX.exec(answer)[0]
+#   else
+#     answer = "COULD NOT READ ANSWER"
+#   return answer
 
-filterChoices = (choices) ->
-  # Checks for and counts <li> instances
-  selections = []
-  if LIST_REGEX.test(choices)
-    selections = choices.match(LIST_COUNT_REGEX)
-    # Creates alphabet choices from matches
-    for selection, i in selections
-      selections[i] = String.fromCharCode('A'.charCodeAt() + i)
-  else if ROMAN_REGEX.test(choices)
-    selections = ["ROMAN"]
-  else if UPPERCASE_REGEX.test(choices)
-    selections.push('A')
-    while selection = UPPERCASE_COUNT_REGEX.exec(choices)
-      selections.push(selection[1])
-  else if LOWERCASE_REGEX.test(choices)
-    selections.push('a')
-    while selection = LOWERCASE_COUNT_REGEX.exec(choices)
-      selections.push(selection[1])
-  if selections
-    return selections
-  else
-    console.log "Choices: " + choices + "\nSelections: " + selections
-    debugger
-    return false
+# filterChoices = (choices) ->
+#   # Checks for and counts <li> instances
+#   selections = []
+#   if LIST_REGEX.test(choices)
+#     selections = choices.match(LIST_COUNT_REGEX)
+#     # Creates alphabet choices from matches
+#     for selection, i in selections
+#       selections[i] = String.fromCharCode('A'.charCodeAt() + i)
+#   else if ROMAN_REGEX.test(choices)
+#     selections = ["ROMAN"]
+#   else if UPPERCASE_REGEX.test(choices)
+#     selections.push('A')
+#     while selection = UPPERCASE_COUNT_REGEX.exec(choices)
+#       selections.push(selection[1])
+#   else if LOWERCASE_REGEX.test(choices)
+#     selections.push('a')
+#     while selection = LOWERCASE_COUNT_REGEX.exec(choices)
+#       selections.push(selection[1])
+#   if selections
+#     return selections
+#   else
+#     console.log "Choices: " + choices + "\nSelections: " + selections
+#     debugger
+#     return false

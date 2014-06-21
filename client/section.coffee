@@ -3,11 +3,12 @@
 
 Template.sectionPage.rendered = () ->
   $('.previous-question').hide()
+  $('.navbar-fixed-bottom').css('position', 'relative')
+  $('.navbar-fixed-bottom').css('position', 'absolute')
 
 Template.sectionPage.events
   "click .previous-question": (event, ui) ->
     currentQuestionNum -= 1
-    console.log 'Clicked PREVIOUS'
     $('.next-question').show()
     if currentQuestionNum <= 1
       $('.previous-question').hide()
@@ -16,12 +17,18 @@ Template.sectionPage.events
 
   "click .next-question": (event, ui) ->
     currentQuestionNum += 1
-    console.log 'Clicked NEXT'
     $('.previous-question').show()
     if currentQuestionNum >= QuestionResults.find().count()
       $('.next-question').hide()
     QuestionResults.update({}, {$set: {result: false}}, {multi: true})
     QuestionResults.update(order: currentQuestionNum, {$set: {result: true}})
+
+  "click .choice": (event, ui) ->
+    thisQuestion = QuestionResults.findOne({result: true})
+    if thisQuestion.answer.match(event.target.innerText)
+      console.log "CORRECT"
+    else
+      console.log "INCORRECT"
 
 Template.sectionPage.helpers
   questions: ->

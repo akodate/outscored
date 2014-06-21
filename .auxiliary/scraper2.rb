@@ -132,18 +132,23 @@ end
 
 def find_answer(mech)
   selector = '.answerred'
+
   if mech.page.search(selector)
-    # Gets number of right choice from nth child
-    num = mech.page.search(selector)[0].css_path.scan(ANSWER_REGEX)[1].to_i - 2
-
-    num -= 1
-    let = 'A'
-    num.times do
-      let.next!
-    end
-    return let
-
+    return mech.page.search(selector)[0].text
   end
+
+  # if mech.page.search(selector)
+  #   # Gets number of right choice from nth child
+  #   num = mech.page.search(selector)[0].css_path.scan(ANSWER_REGEX)[1].to_i - 2
+
+  #   num -= 1
+  #   let = 'A'
+  #   num.times do
+  #     let.next!
+  #   end
+  #   return let
+
+  # end
 end
 
 def find_explanation(mech)
