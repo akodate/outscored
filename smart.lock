@@ -6,7 +6,8 @@
       "bootstrap-3": {},
       "accounts-ui-bootstrap-3-blaze": {},
       "glob": {},
-      "iron-router-progress": {}
+      "iron-router-progress": {},
+      "jquery-color-animation": {}
     },
     "packages": {
       "iron-router": {
@@ -31,8 +32,13 @@
       },
       "iron-router-progress": {
         "git": "https://github.com/Multiply/iron-router-progress.git",
-        "tag": "v0.3.1",
-        "commit": "3f7900feb4bb70a1289b39a1fdcd1f438c0335b3"
+        "tag": "v0.4.0",
+        "commit": "02f78bdaca4c13d59f548d5a0ce83408c34b56d1"
+      },
+      "jquery-color-animation": {
+        "git": "https://github.com/jonjamz/meteor-jquery-color-animation.git",
+        "tag": "v1.6.0",
+        "commit": "1999252f73e0d93067a44f46d476539922152e2e"
       },
       "blaze-layout": {
         "git": "https://github.com/EventedMind/blaze-layout.git",
