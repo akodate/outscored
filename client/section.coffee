@@ -57,6 +57,9 @@ Template.question.helpers
     choice = @.replace(/^\w*<br>*/, '')
     return choice
 
+  totalQuestions: ->
+    return QuestionResults.find().count()
+
 
 
 # Helpers
