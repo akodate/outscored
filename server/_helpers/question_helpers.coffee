@@ -22,6 +22,15 @@ LOWERCASE_COUNT_REGEX = /(?:\n\S{0,10})([b-z])(?:[\.:])/g
   if question.question && question.choices && question.answer
     return true
   else
+    console.log '*******************************'
+    console.log '*******************************'
+    console.log '*******************************'
+    console.log 'QUESTION: ' + question.question
+    console.log 'CHOICES: ' + question.choices
+    console.log 'ANSWER: ' + question.answer
+    console.log '*******************************'
+    console.log '*******************************'
+    console.log '*******************************'
     return false
 
 @filterQuestion = (question) ->
