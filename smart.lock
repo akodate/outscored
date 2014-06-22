@@ -7,7 +7,8 @@
       "accounts-ui-bootstrap-3-blaze": {},
       "glob": {},
       "iron-router-progress": {},
-      "jquery-color-animation": {}
+      "jquery-color-animation": {},
+      "fastclick": {}
     },
     "packages": {
       "iron-router": {
@@ -39,6 +40,11 @@
         "git": "https://github.com/jonjamz/meteor-jquery-color-animation.git",
         "tag": "v1.6.0",
         "commit": "1999252f73e0d93067a44f46d476539922152e2e"
+      },
+      "fastclick": {
+        "git": "https://github.com/percolatestudio/meteor-fastclick",
+        "tag": "v0.6.7",
+        "commit": "fcb3bfd34d9f6874e626b4e24e8f54107938db41"
       },
       "blaze-layout": {
         "git": "https://github.com/EventedMind/blaze-layout.git",
