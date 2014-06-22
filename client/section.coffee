@@ -3,6 +3,7 @@
 Template.sectionPage.created = () ->
 
   window.outscored.currentQuestionNum = 1
+  window.outscored.clickedSection = false
   QuestionResults.remove({})
   sectionSetup()
 
@@ -29,12 +30,14 @@ Template.sectionPage.events
     cycleQuestion()
 
   "click .choice": (event, ui) ->
-    thisQuestion = QuestionResults.findOne({result: true})
-    if thisQuestion.answer.match('^' + event.target.innerText + '$')
-      correctAnswer(event)
-    else
-      incorrectAnswer(event)
-    # nextQuestion()
+    if window.outscored.clickedSection == false
+      thisQuestion = QuestionResults.findOne({result: true})
+      window.outscored.clickedSection = true
+      if thisQuestion.answer.match('^' + event.target.innerText + '$')
+        correctAnswer(event)
+      else
+        incorrectAnswer(event)
+      # nextQuestion()
 
 
 Template.question.rendered = () ->
@@ -90,10 +93,11 @@ Template.question.helpers
   QuestionResults.update({}, {$set: {result: false}}, {multi: true})
   QuestionResults.update(order: window.outscored.currentQuestionNum, {$set: {result: true}})
   shuffleChoices()
+  window.outscored.clickedSection = false
 
 @correctAnswer = (event) ->
   $(event.target).css
-    backgroundColor: 'blue'
+    backgroundColor: 'lime'
   $(event.target).animate
     backgroundColor: 'black',
     1500
