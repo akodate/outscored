@@ -17,17 +17,28 @@
 
 <template name='question'>
   <div class='question'>
-    <p class='question-heading'>Question {{order}}/{{totalQuestions}}:</p>
-    <p>{{{question}}}</p>
+    <div class='question-area'>
+      <p class='question-heading'>Question {{order}}/{{totalQuestions}}:</p>
+      <p class='question-content'>{{{question}}}</p>
+    </div>
+    <div class='answer-area' style='display: none'>
+      <div class='answer-heading'>
+        {{#if isCorrect}}
+          <p class='correct'>Correct!</p>
+        {{else}}
+          <p class='incorrect'>Incorrect.</p>
+        {{/if}}
+      </div>
+      <p class='choice'>{{{answer}}}</p>
+      {{#if explanationFilter}}
+        <p class="explanation-heading">Explanation:</p>
+        <p>{{{explanation}}}</p>
+      {{/if}}
+    </div>
   </div>
   <div class='choices'>
     {{#each choices}}
       <p class='choice not-animated-choice' style='display: none'>{{{choice}}}</p>
     {{/each}}
-  </div>
-  <div class='answer'>
-    <p>{{{explanation}}}</p>
-    <p>{{{answer}}}</p>
-    <p>{{selections}}</p>
   </div>
 </template>

@@ -1,3 +1,4 @@
+@Outscored = new Meteor.Collection(null)
 @Results = new Meteor.Collection(null)
 @SectionResults = new Meteor.Collection(null)
 @Localization = new Meteor.Collection(null)
@@ -9,9 +10,9 @@ Template.home.rendered = () ->
   #   window.stop()
   #   throw new Error "Mobile-only"
 
-  window.outscored = {}
-  window.outscored.clickedTest = false
-  window.outscored.clickedSection = false
+  if Outscored.find().count() == 0
+    Outscored.insert({})
+  outscoredUpdate({clickedTest: false, clickedSection: false})
   setDivHeights()
   renderSetup()
   sectionsIn()
@@ -24,7 +25,7 @@ Template.home.events
   "keyup .search-box": (event, ui) ->
     $(".search-arrow").animate
       opacity: 0.25
-    window.outscored.clickedSection = false
+    outscoredUpdate({clickedSection: false})
     @search = event.target.value
 
     SectionResults.remove({})
@@ -53,8 +54,8 @@ Template.home.events
     showClickedTest()
     showTestSections()
     resetScroll()
-    unless window.outscored.clickedTest
-      window.outscored.clickedTest = true
+    unless outscoredFind('clickedTest')
+      outscoredUpdate({clickedTest: true})
       clickHighlight(event)
 
   "click .section-result": (event, ui) ->
@@ -62,8 +63,8 @@ Template.home.events
     sectionResult = SectionResults.findOne({name: event.target.innerText})
     console.log sectionResult
     test = Results.findOne({result: true})
-    unless window.outscored.clickedSection
-      window.outscored.clickedSection = true
+    unless outscoredFind('clickedSection')
+      outscoredUpdate({clickedSection: true})
       clickHighlight(event)
 
     Router.go('sectionPage', {testSecID: sectionResult._id, secID: sectionResult.original, testID: test._id})
@@ -134,6 +135,12 @@ Template.home.helpers
 
 # Helpers
 
+@outscoredUpdate = (objects) ->
+  Outscored.update({}, {$set: objects})
+
+@outscoredFind = (field) ->
+  Outscored.findOne()[field]
+
 @setDivHeights = () ->
   $('#main').css('height', ($('.sheet')[0].offsetHeight - $('#main')[0].offsetTop) + 45)
   $('.result-box').css('height', ($('#main')[0].offsetHeight - $('.result-box')[0].offsetTop))
@@ -165,13 +172,16 @@ Template.home.helpers
   point = () ->
     arrow.removeClass('slideInLeft')
     arrow.addClass('shake')
-    arrow[0].style.webkitAnimationDuration = '5s'
+  #   arrow[0].style.webkitAnimationDuration = '5s'
+  #   arrow[0].style.mozAnimationDuration = '5s'
+  #   arrow[0].style.oanimationDuration = '5s'
+  #   arrow[0].style.animationDuration = '5s'
 
-  arrow[0].addEventListener('webkitAnimationEnd', point)
-  arrow[0].addEventListener('mozAnimationEnd', point)
-  arrow[0].addEventListener('MSAnimationEnd', point)
-  arrow[0].addEventListener('oanimationend', point)
-  arrow[0].addEventListener('animationend', point)
+  # arrow[0].addEventListener('webkitAnimationEnd', point)
+  # arrow[0].addEventListener('mozAnimationEnd', point)
+  # arrow[0].addEventListener('MSAnimationEnd', point)
+  # arrow[0].addEventListener('oanimationend', point)
+  # arrow[0].addEventListener('animationend', point)
 
 @showClickedTest = () ->
   # Set only clicked test to 'result: true'

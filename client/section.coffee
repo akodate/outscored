@@ -2,8 +2,8 @@
 
 Template.sectionPage.created = () ->
 
-  window.outscored.currentQuestionNum = 1
-  window.outscored.clickedSection = false
+  outscoredUpdate({currentQuestionNum: 1})
+  outscoredUpdate({clickedSection: false})
   QuestionResults.remove({})
   sectionSetup()
 
@@ -16,27 +16,31 @@ Template.sectionPage.rendered = () ->
 
 Template.sectionPage.events
   "click .previous-question": (event, ui) ->
-    window.outscored.currentQuestionNum -= 1
+    current = outscoredFind('currentQuestionNum')
+    outscoredUpdate({currentQuestionNum: current - 1})
     $('.next-question').show()
-    if window.outscored.currentQuestionNum <= 1
+    if outscoredFind('currentQuestionNum') <= 1
       $('.previous-question').hide()
     cycleQuestion()
 
   "click .next-question": (event, ui) ->
-    window.outscored.currentQuestionNum += 1
+    current = outscoredFind('currentQuestionNum')
+    outscoredUpdate({currentQuestionNum: current + 1})
     $('.previous-question').show()
-    if window.outscored.currentQuestionNum >= QuestionResults.find().count()
+    if outscoredFind('currentQuestionNum') >= QuestionResults.find().count()
       $('.next-question').hide()
     cycleQuestion()
 
   "click .choice": (event, ui) ->
-    if window.outscored.clickedSection == false
+    if outscoredFind('clickedSection') == false
       thisQuestion = QuestionResults.findOne({result: true})
-      window.outscored.clickedSection = true
+      outscoredUpdate({clickedSection: true})
       if thisQuestion.answer.match('^' + event.target.innerText + '$')
         correctAnswer(event)
       else
         incorrectAnswer(event)
+      $('.question-area').hide()
+      $('.answer-area').show()
       # nextQuestion()
 
 
@@ -63,6 +67,13 @@ Template.question.helpers
   totalQuestions: ->
     return QuestionResults.find().count()
 
+  isCorrect: ->
+    return outscoredFind('isCorrect')
+
+  explanationFilter: ->
+    explanation = QuestionResults.findOne(result: true).explanation
+    console.log "EXPLANATION: " + explanation
+    return explanation.replace(/<(?:.|\n)*?>/gm, '')
 
 
 # Helpers
@@ -77,7 +88,7 @@ Template.question.helpers
   for original, i in originals
     thisID = QuestionResults.insert(Questions.findOne(_id: original))
     QuestionResults.update(thisID, {$set: {order: (i + 1), result: false}})
-  QuestionResults.update(order: window.outscored.currentQuestionNum, {$set: {result: true}})
+  QuestionResults.update(order: outscoredFind('currentQuestionNum'), {$set: {result: true}})
 
 @sectionStyleSetup = () ->
   $('.previous-question').hide()
@@ -85,15 +96,15 @@ Template.question.helpers
   $('.navbar-fixed-bottom').css('position', 'absolute')
 
 @shuffleChoices = () ->
-  currentQuestion = QuestionResults.find(result: true).fetch()
-  shuffledChoices = _.shuffle(currentQuestion[0]['choices'])
+  currentQuestion = QuestionResults.findOne(result: true)
+  shuffledChoices = _.shuffle(currentQuestion.choices)
   QuestionResults.update(result: true, {$set: {choices: shuffledChoices}})
 
 @cycleQuestion = () ->
   QuestionResults.update({}, {$set: {result: false}}, {multi: true})
-  QuestionResults.update(order: window.outscored.currentQuestionNum, {$set: {result: true}})
+  QuestionResults.update(order: outscoredFind('currentQuestionNum'), {$set: {result: true}})
   shuffleChoices()
-  window.outscored.clickedSection = false
+  outscoredUpdate({clickedSection: false})
 
 @correctAnswer = (event) ->
   $(event.target).css
@@ -101,6 +112,7 @@ Template.question.helpers
   $(event.target).animate
     backgroundColor: 'black',
     1500
+  outscoredUpdate({isCorrect: true})
 
 @incorrectAnswer = (event) ->
   $(event.target).css
@@ -108,3 +120,4 @@ Template.question.helpers
   $(event.target).animate
     backgroundColor: 'black',
     1500
+  outscoredUpdate({isCorrect: false})
