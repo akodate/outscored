@@ -9,6 +9,9 @@ Template.home.rendered = () ->
   #   window.stop()
   #   throw new Error "Mobile-only"
 
+  window.outscored = {}
+  window.outscored.clickedTest = false
+  window.outscored.clickedSection = false
   setDivHeights()
   renderSetup()
   searchArrowSetup()
@@ -20,6 +23,7 @@ Template.home.events
   "keyup .search-box": (event, ui) ->
     $(".search-arrow").animate
       opacity: 0.25
+    window.outscored.clickedSection = false
     @search = event.target.value
 
     SectionResults.remove({})
@@ -37,7 +41,6 @@ Template.home.events
             scrollTop: result.offsetTop - 160,
             300
           return
-      console.log @search
 
     # SectionResults.remove({})
     # Results.update({}, {$set: {result: false}}, {multi: true})
@@ -46,19 +49,21 @@ Template.home.events
 
   "click .search-result": (event, ui) ->
 
-    showClickedTest(event, ui)
+    showClickedTest()
     showTestSections()
     resetScroll()
+    unless window.outscored.clickedTest
+      window.outscored.clickedTest = true
+      clickHighlight(event)
 
   "click .section-result": (event, ui) ->
     # Find section by clicked title and go to section page, use test to subscribe to questions
-    console.log event.target.innerText
     sectionResult = SectionResults.findOne({name: event.target.innerText})
+    console.log sectionResult
     test = Results.findOne({result: true})
-    console.log test.name
-    console.log test._id
-    console.log sectionResult.name
-    console.log sectionResult.original
+    unless window.outscored.clickedSection
+      window.outscored.clickedSection = true
+      clickHighlight(event)
 
     Router.go('sectionPage', {testSecID: sectionResult._id, secID: sectionResult.original, testID: test._id})
 
@@ -122,7 +127,6 @@ Template.home.helpers
 
   # Section results
   sections: ->
-    console.log "Sections..."
     sections = SectionResults.find({}, {sort: {name: 1}}).fetch()
 
 
@@ -134,7 +138,6 @@ Template.home.helpers
   $('.result-box').css('height', ($('#main')[0].offsetHeight - $('.result-box')[0].offsetTop))
 
 @renderSetup = () ->
-  console.log "Rendered..."
   # Clear data
   $('.search-results').hide()
   Results.remove({})
@@ -163,12 +166,18 @@ Template.home.helpers
   arrow[0].addEventListener('oanimationend', point)
   arrow[0].addEventListener('animationend', point)
 
-@showClickedTest = (event, ui) ->
+@showClickedTest = () ->
   # Set only clicked test to 'result: true'
   $('.search-results').show()
-  console.log event.target.innerText
   Results.update({}, {$set: {result: false}}, {multi: true})
   Results.update({name: event.target.innerText}, {$set: {result: true}})
+
+@clickHighlight = (event) ->
+  $(event.target).css
+    backgroundColor: 'white'
+  $(event.target).animate
+    backgroundColor: 'black',
+    1500
 
 @showTestSections = () ->
   # Find children of clicked test and display them by their dir name
@@ -178,7 +187,6 @@ Template.home.helpers
   TestSections.find({_id: {$in: testResult.children}}).forEach( (doc) ->
     doc.name = (/[^\/]+$/.exec(doc.filePath))
     SectionResults.insert(doc)
-    console.log "Executing...."
   )
 
 @resetScroll = () ->

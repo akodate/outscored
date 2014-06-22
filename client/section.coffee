@@ -1,10 +1,12 @@
 @QuestionResults = new Meteor.Collection(null)
-@currentQuestionNum = 1
 
 Template.sectionPage.created = () ->
 
+  window.outscored.currentQuestionNum = 1
   QuestionResults.remove({})
   sectionSetup()
+
+
 
 Template.sectionPage.rendered = () ->
 
@@ -13,18 +15,18 @@ Template.sectionPage.rendered = () ->
 
 Template.sectionPage.events
   "click .previous-question": (event, ui) ->
-    currentQuestionNum -= 1
+    window.outscored.currentQuestionNum -= 1
     $('.next-question').show()
-    if currentQuestionNum <= 1
+    if window.outscored.currentQuestionNum <= 1
       $('.previous-question').hide()
-    cycleQuestion(currentQuestionNum)
+    cycleQuestion()
 
   "click .next-question": (event, ui) ->
-    currentQuestionNum += 1
+    window.outscored.currentQuestionNum += 1
     $('.previous-question').show()
-    if currentQuestionNum >= QuestionResults.find().count()
+    if window.outscored.currentQuestionNum >= QuestionResults.find().count()
       $('.next-question').hide()
-    cycleQuestion(currentQuestionNum)
+    cycleQuestion()
 
   "click .choice": (event, ui) ->
     thisQuestion = QuestionResults.findOne({result: true})
@@ -32,6 +34,15 @@ Template.sectionPage.events
       correctAnswer(event)
     else
       incorrectAnswer(event)
+
+
+Template.question.rendered = () ->
+  console.log "Question template rendered."
+  choicesIn = () ->
+    $($('.not-animated')[0]).removeClass('not-animated')
+      .addClass('animated bounceInLeft').show()
+  choicesIn()
+  setInterval choicesIn, 300
 
 Template.sectionPage.helpers
   questions: ->
@@ -45,6 +56,8 @@ Template.question.helpers
     choice = @.replace(/^\w*<br>*/, '')
     return choice
 
+
+
 # Helpers
 
 @sectionSetup = () ->
@@ -57,7 +70,7 @@ Template.question.helpers
   for original, i in originals
     thisID = QuestionResults.insert(Questions.findOne(_id: original))
     QuestionResults.update(thisID, {$set: {order: (i + 1), result: false}})
-  QuestionResults.update(order: currentQuestionNum, {$set: {result: true}})
+  QuestionResults.update(order: window.outscored.currentQuestionNum, {$set: {result: true}})
 
 @sectionStyleSetup = () ->
   $('.previous-question').hide()
@@ -69,9 +82,9 @@ Template.question.helpers
   shuffledChoices = _.shuffle(currentQuestion[0]['choices'])
   QuestionResults.update(result: true, {$set: {choices: shuffledChoices}})
 
-@cycleQuestion = (currentQuestionNum) ->
+@cycleQuestion = () ->
   QuestionResults.update({}, {$set: {result: false}}, {multi: true})
-  QuestionResults.update(order: currentQuestionNum, {$set: {result: true}})
+  QuestionResults.update(order: window.outscored.currentQuestionNum, {$set: {result: true}})
   shuffleChoices()
 
 @correctAnswer = (event) ->
