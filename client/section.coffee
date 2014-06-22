@@ -34,12 +34,13 @@ Template.sectionPage.events
       correctAnswer(event)
     else
       incorrectAnswer(event)
+    # nextQuestion()
 
 
 Template.question.rendered = () ->
   console.log "Question template rendered."
   choicesIn = () ->
-    $($('.not-animated')[0]).removeClass('not-animated')
+    $($('.not-animated-choice')[0]).removeClass('not-animated-choice')
       .addClass('animated bounceInLeft').show()
   choicesIn()
   setInterval choicesIn, 300

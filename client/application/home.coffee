@@ -14,6 +14,7 @@ Template.home.rendered = () ->
   window.outscored.clickedSection = false
   setDivHeights()
   renderSetup()
+  sectionsIn()
   searchArrowSetup()
 
 
@@ -151,6 +152,12 @@ Template.home.helpers
     Results.insert(doc)
   )
   Results.update({}, {$set: {result: true}}, {multi: true})
+
+@sectionsIn = () ->
+    $($('.not-animated-section')[0]).removeClass('not-animated-section')
+      .addClass('animated bounceInUp').show()
+  sectionsIn()
+  setInterval sectionsIn, 30
 
 @searchArrowSetup = () ->
   arrow = $('.search-arrow')

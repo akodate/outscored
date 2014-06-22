@@ -299,15 +299,15 @@
   }
   .section-page {
     padding: 0px;
-    font-size: 14px;
+    font-size: 15px;
   }
   .question, .choices {
     padding: 10px;
   }
   #next-link, #previous-link {
-    font-size: 18px;
+    font-size: 24px;
   }
   .choice {
-    font-size: 20px;
+    font-size: 18px;
   }
 }
