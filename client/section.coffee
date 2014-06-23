@@ -59,7 +59,7 @@ Template.question.rendered = () ->
 
   choicesIn = () ->
     $($('.not-animated-choice')[0]).removeClass('not-animated-choice')
-      .addClass('animated bounceInLeft').show()
+      .addClass('animated bounceInUp').show()
   choicesIn()
   Meteor.setInterval choicesIn, 300
 
@@ -181,7 +181,10 @@ Template.question.helpers
 @fadeInExplanation = () ->
   $('.explanation').show()
   $('.explanation').css
-    color: 'transparent'
+    opacity: 0
   $('.explanation').animate
-    color: 'white',
+    opacity: 1,
+    1500
+  $('.choices').animate
+    opacity: .2,
     1500
