@@ -16,6 +16,7 @@
 </template>
 
 <template name='question'>
+
   <div class='question animated bounceInRight'>
     <div class='question-area'>
       <p class='question-heading'>Question {{order}}/{{totalQuestions}}:</p>
@@ -33,6 +34,12 @@
               <div class='explanation-button finish'>
                 <p class='symbol'><span class="glyphicon glyphicon-question-sign"></span></p>
               </div>
+            {{else}}
+              {{#if textCovered}}
+                <div class='text-button finish'>
+                  <p class='symbol'><span class="glyphicon glyphicon-search"></span></p>
+                </div>
+              {{/if}}
             {{/if}}
             <div class='next-button next-question finish'>
               <p class='symbol'><span class="glyphicon glyphicon-arrow-right"></span></p>
@@ -44,9 +51,11 @@
 
     </div>
   </div>
+
   <div class='choices'>
     {{#each choices}}
       <p class='choice not-animated-choice' style='display: none'>{{{choice}}}</p>
     {{/each}}
   </div>
+
 </template>

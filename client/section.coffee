@@ -4,6 +4,7 @@ Template.sectionPage.created = () ->
 
   outscoredUpdate({currentQuestionNum: 1})
   outscoredUpdate({clickedSection: false})
+  outscoredUpdate({isTextCovered: false})
   QuestionResults.remove({})
   sectionSetup()
 
@@ -85,6 +86,9 @@ Template.question.helpers
     console.log "EXPLANATION: " + explanation
     return explanation.replace(/<(?:.|\n)*?>/gm, '')
 
+  textCovered: ->
+    return outscoredFind('isTextCovered')
+
 
 
 
@@ -111,6 +115,10 @@ Template.question.helpers
   currentQuestion = QuestionResults.findOne(result: true)
   shuffledChoices = _.shuffle(currentQuestion.choices)
   QuestionResults.update(result: true, {$set: {choices: shuffledChoices}})
+
+@questionOut = () ->
+  $('.question, .choice').addClass('bounceOutLeft')
+  Meteor.setTimeout nextQuestion, 500
 
 @nextQuestion = () ->
   current = outscoredFind('currentQuestionNum')
@@ -141,9 +149,7 @@ Template.question.helpers
   $('.correct').animate
     color: 'lime',
     1500
-  Meteor.setTimeout (() ->
-    fadeInExplanation('.correct')
-  ), 500
+  Meteor.setTimeout questionOut, 1000
 
 @incorrectClick = (event) ->
   $(event.target).css
@@ -194,7 +200,6 @@ Template.question.helpers
     opacity: .2,
     1500
   # Are finish buttons covering text?
-  # if $('.finish')[0]
-  #   if $(answerClass).offset().top + parseInt($(answerClass).css('font-size')) > $('.finish').offset().top
-  #     $('.finish').css
-  #       border: '1px solid gray'
+  if $('.finish')[0]
+    if $(answerClass).offset().top + parseInt($(answerClass).css('font-size')) > $('.finish').offset().top
+      outscoredUpdate({isTextCovered: true})

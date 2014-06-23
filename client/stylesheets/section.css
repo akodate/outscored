@@ -88,7 +88,7 @@
   line-height: 100px;
 }
 
-.explanation-button {
+.explanation-button, .text-button {
   left: 25px;
 }
 
