@@ -50,7 +50,7 @@ Template.sectionPage.events
             incorrectAnswer event
           ), 500
         ), 500
-      $('.question-area').hide()
+      $('.question-heading, .question-content').hide()
       $('.answer-area').show()
       # nextQuestion()
 
