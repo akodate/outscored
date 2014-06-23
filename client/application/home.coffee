@@ -133,6 +133,7 @@ Template.home.helpers
 
 
 
+
 # Helpers
 
 @outscoredUpdate = (objects) ->
@@ -164,7 +165,7 @@ Template.home.helpers
     $($('.not-animated-section')[0]).removeClass('not-animated-section')
       .addClass('animated bounceInUp').show()
   sectionsIn()
-  setInterval sectionsIn, 30
+  Meteor.setInterval sectionsIn, 30
 
 @searchArrowSetup = () ->
   arrow = $('.search-arrow')

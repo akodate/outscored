@@ -39,10 +39,34 @@
   padding: 5px;
 }
 
+.x {
+  font-size: 160px;
+  text-align: center;
+}
+
 .answer-heading {
-  font-size: 28px;
+  font-size: 24px;
   font-style: italic;
+}
+
+.answer {
+  background-color: black;
+  width: 100%;
+  border: 1px solid white;
+  border-radius: 10px;
+  padding: 5px;
+}
+
+.correct {
   color: lime;
+}
+
+.incorrect {
+  color: red;
+}
+
+.explanation {
+  border-radius: 10px;
 }
 
 #next-link, #previous-link {

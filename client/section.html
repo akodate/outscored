@@ -22,17 +22,17 @@
       <p class='question-content'>{{{question}}}</p>
     </div>
     <div class='answer-area' style='display: none'>
+      <p class='answer' style='display: none'>{{{answer}}}</p>
+      <p class='x' style='display: none'>x</p>
       <div class='answer-heading'>
-        {{#if isCorrect}}
-          <p class='correct'>Correct!</p>
-        {{else}}
-          <p class='incorrect'>Incorrect.</p>
-        {{/if}}
+        <p class='correct' style='display: none'>is correct!</p>
+        <p class='incorrect' style='display: none'>is the correct answer</p>
       </div>
-      <p class='choice'>{{{answer}}}</p>
       {{#if explanationFilter}}
-        <p class="explanation-heading">Explanation:</p>
-        <p>{{{explanation}}}</p>
+        <div class='explanation' style='display: none'>
+          <p class='explanation-heading'>Explanation:</p>
+          <p>{{{explanation}}}</p>
+        </div>
       {{/if}}
     </div>
   </div>
