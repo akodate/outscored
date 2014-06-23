@@ -60,8 +60,11 @@ Template.question.rendered = () ->
   choicesIn = () ->
     $($('.not-animated-choice')[0]).removeClass('not-animated-choice')
       .addClass('animated bounceInUp').show()
-  choicesIn()
-  Meteor.setInterval choicesIn, 300
+  Meteor.setTimeout (() ->
+    choicesIn()
+    Meteor.setInterval choicesIn, 300
+  ), 500
+
 
 
 
@@ -140,7 +143,9 @@ Template.question.helpers
   $('.correct').animate
     color: 'lime',
     1500
-  Meteor.setTimeout fadeInExplanation, 500
+  Meteor.setTimeout (() ->
+    fadeInExplanation('.correct')
+  ), 500
 
 @incorrectClick = (event) ->
   $(event.target).css
@@ -168,7 +173,9 @@ Template.question.helpers
   $('.incorrect').animate
     color: 'red',
     1500
-  Meteor.setTimeout fadeInExplanation, 500
+  Meteor.setTimeout (() ->
+    fadeInExplanation('.incorrect')
+  ), 500
 
 @fadeInAnswer = () ->
   $('.answer').show()
@@ -178,7 +185,7 @@ Template.question.helpers
     backgroundColor: 'black',
     1500
 
-@fadeInExplanation = () ->
+@fadeInExplanation = (answerClass) ->
   $('.explanation').show()
   $('.explanation').css
     opacity: 0
@@ -188,3 +195,8 @@ Template.question.helpers
   $('.choices').animate
     opacity: .2,
     1500
+  # Are finish buttons covering text?
+  # if $('.finish')[0]
+  #   if $(answerClass).offset().top + parseInt($(answerClass).css('font-size')) > $('.finish').offset().top
+  #     $('.finish').css
+  #       border: '1px solid gray'

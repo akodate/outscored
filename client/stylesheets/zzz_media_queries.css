@@ -314,3 +314,12 @@
     font-size: 18px;
   }
 }
+
+@media (max-height: 480px) {
+  .x {
+    font-size: 120px;
+  }
+  .finish {
+    top: 62px;
+  }
+}

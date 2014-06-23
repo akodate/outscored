@@ -72,11 +72,11 @@
 
 .finish {
   position: absolute;
-  top: 120px;
+  top: 115px;
   height: 100px;
   width: 100px;
   background-color: black;
-  border: 1px solid white;
+  border: 2px solid white;
   border-radius: 10px;
   box-shadow: 0px 0px 10px 3px black;
   padding: 5px;
