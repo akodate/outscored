@@ -53,9 +53,13 @@
   </div>
 
   <div class='choices'>
-    {{#each choices}}
-      <p class='choice not-animated-choice' style='display: none'>{{{choice}}}</p>
-    {{/each}}
+    {{#if viewExplanation}}
+      <p class='explanation animated fadeIn'>{{{explanation}}}</p>
+    {{else}}
+      {{#each choices}}
+        <p class='choice not-animated-choice' style='display: none'>{{{choice}}}</p>
+      {{/each}}
+    {{/if}}
   </div>
 
 </template>

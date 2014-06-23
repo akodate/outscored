@@ -3,8 +3,10 @@
 Template.sectionPage.created = () ->
 
   outscoredUpdate({currentQuestionNum: 1})
-  outscoredUpdate({clickedSection: false})
+  outscoredUpdate({clickedChoice: false})
   outscoredUpdate({isTextCovered: false})
+  outscoredUpdate({grayedOut: false})
+  outscoredUpdate({noChoicesIn: false})
   QuestionResults.remove({})
   sectionSetup()
 
@@ -17,20 +19,20 @@ Template.sectionPage.rendered = () ->
 
 Template.sectionPage.events
   "click .previous-question": (event, ui) ->
-    current = outscoredFind('currentQuestionNum')
-    outscoredUpdate({currentQuestionNum: current - 1})
-    $('.next-question').show()
-    if outscoredFind('currentQuestionNum') <= 1
-      $('.previous-question').hide()
-    cycleQuestion()
+    outscoredUpdate({noChoicesIn: false})
+    previousQuestion()
 
   "click .next-question": (event, ui) ->
-    nextQuestion()
+    # Unless user clicks on grayed-out next button
+    unless $(event.currentTarget).hasClass('finish') && outscoredFind('grayedOut')
+      outscoredUpdate({noChoicesIn: false})
+      nextQuestion()
 
   "click .choice": (event, ui) ->
-    if outscoredFind('clickedSection') == false
+    if outscoredFind('clickedChoice') == false
+      outscoredUpdate({noChoicesIn: true})
       thisQuestion = QuestionResults.findOne({result: true})
-      outscoredUpdate({clickedSection: true})
+      outscoredUpdate({clickedChoice: true})
       if thisQuestion.answer.match('^' + event.target.innerText + '$')
         correctClick(event)
         fadeInAnswer()
@@ -45,12 +47,21 @@ Template.sectionPage.events
       $('.question-heading, .question-content').hide()
       $('.answer-area').show()
 
+  "click .explanation-button, click .text-button": (event, ui) ->
+    if !outscoredFind('grayedOut')
+      Meteor.setTimeout (() ->
+        outscoredUpdate({grayedOut: true})
+        grayOut()
+      ), 10
+
+  "click .finish": (event, ui) ->
+    if outscoredFind('grayedOut')
+      outscoredUpdate({grayedOut: false})
+      grayIn()
+
 
 Template.question.rendered = () ->
 
-  choicesIn = () ->
-    $($('.not-animated-choice')[0]).removeClass('not-animated-choice')
-      .addClass('animated bounceInUp').show()
   Meteor.setTimeout (() ->
     choicesIn()
     Meteor.setInterval choicesIn, 300
@@ -83,11 +94,14 @@ Template.question.helpers
 
   explanationFilter: ->
     explanation = QuestionResults.findOne(result: true).explanation
-    console.log "EXPLANATION: " + explanation
     return explanation.replace(/<(?:.|\n)*?>/gm, '')
 
   textCovered: ->
     return outscoredFind('isTextCovered')
+
+  viewExplanation: ->
+    explanation = QuestionResults.findOne(result: true).explanation
+    return outscoredFind('grayedOut') && explanation.replace(/<(?:.|\n)*?>/gm, '')
 
 
 
@@ -116,9 +130,25 @@ Template.question.helpers
   shuffledChoices = _.shuffle(currentQuestion.choices)
   QuestionResults.update(result: true, {$set: {choices: shuffledChoices}})
 
+@choicesIn = () ->
+  if outscoredFind('noChoicesIn')
+    $($('.not-animated-choice')[0]).removeClass('not-animated-choice')
+      .addClass('animated fadeIn').show()
+  else
+    $($('.not-animated-choice')[0]).removeClass('not-animated-choice')
+      .addClass('animated bounceInUp').show()
+
 @questionOut = () ->
   $('.question, .choice').addClass('bounceOutLeft')
   Meteor.setTimeout nextQuestion, 500
+
+@previousQuestion = () ->
+  current = outscoredFind('currentQuestionNum')
+  outscoredUpdate({currentQuestionNum: current - 1})
+  $('.next-question').show()
+  if outscoredFind('currentQuestionNum') <= 1
+    $('.previous-question').hide()
+  cycleQuestion()
 
 @nextQuestion = () ->
   current = outscoredFind('currentQuestionNum')
@@ -132,7 +162,7 @@ Template.question.helpers
   QuestionResults.update({}, {$set: {result: false}}, {multi: true})
   QuestionResults.update(order: outscoredFind('currentQuestionNum'), {$set: {result: true}})
   shuffleChoices()
-  outscoredUpdate({clickedSection: false})
+  outscoredUpdate({clickedChoice: false})
 
 @correctClick = (event) ->
   $(event.target).css
@@ -203,3 +233,21 @@ Template.question.helpers
   if $('.finish')[0]
     if $(answerClass).offset().top + parseInt($(answerClass).css('font-size')) > $('.finish').offset().top
       outscoredUpdate({isTextCovered: true})
+
+@grayOut = () ->
+  $('.finish').animate
+    opacity: .1,
+    500
+  $('.choices').css
+    opacity: 0
+  $('.choices').animate
+    opacity: 1,
+    500
+
+@grayIn = () ->
+  $('.finish').animate
+    opacity: 1,
+    500
+  $('.choices').animate
+    opacity: .2,
+    500
