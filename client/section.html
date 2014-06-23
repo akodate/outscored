@@ -28,18 +28,18 @@
           <p class='correct' style='display: none'>is correct!</p>
           <p class='incorrect' style='display: none'>...is the correct answer</p>
         </div>
-        {{#if explanationFilter}}
           <div class='explanation' style='display: none'>
-            <div class='explanation-button finish'>
-              <p class='symbol'><span class="glyphicon glyphicon-question-sign"></span></p>
-            </div>
+            {{#if explanationFilter}}
+              <div class='explanation-button finish'>
+                <p class='symbol'><span class="glyphicon glyphicon-question-sign"></span></p>
+              </div>
+            {{/if}}
             <div class='next-button next-question finish'>
               <p class='symbol'><span class="glyphicon glyphicon-arrow-right"></span></p>
             </div>
 <!--             <p class='explanation-heading'>Explanation:</p>
             <p>{{{explanation}}}</p> -->
           </div>
-        {{/if}}
       </div>
 
     </div>

@@ -24,12 +24,7 @@ Template.sectionPage.events
     cycleQuestion()
 
   "click .next-question": (event, ui) ->
-    current = outscoredFind('currentQuestionNum')
-    outscoredUpdate({currentQuestionNum: current + 1})
-    $('.previous-question').show()
-    if outscoredFind('currentQuestionNum') >= QuestionResults.find().count()
-      $('.next-question').hide()
-    cycleQuestion()
+    nextQuestion()
 
   "click .choice": (event, ui) ->
     if outscoredFind('clickedSection') == false
@@ -38,21 +33,16 @@ Template.sectionPage.events
       if thisQuestion.answer.match('^' + event.target.innerText + '$')
         correctClick(event)
         fadeInAnswer()
-        Meteor.setTimeout (() ->
-          correctAnswer event
-        ), 500
+        Meteor.setTimeout correctAnswer, 500
       else
         incorrectClick(event)
         displayX()
         Meteor.setTimeout (() ->
           fadeInAnswer()
-          Meteor.setTimeout (() ->
-            incorrectAnswer event
-          ), 500
+          Meteor.setTimeout incorrectAnswer, 500
         ), 500
       $('.question-heading, .question-content').hide()
       $('.answer-area').show()
-      # nextQuestion()
 
 
 Template.question.rendered = () ->
@@ -122,6 +112,14 @@ Template.question.helpers
   shuffledChoices = _.shuffle(currentQuestion.choices)
   QuestionResults.update(result: true, {$set: {choices: shuffledChoices}})
 
+@nextQuestion = () ->
+  current = outscoredFind('currentQuestionNum')
+  outscoredUpdate({currentQuestionNum: current + 1})
+  $('.previous-question').show()
+  if outscoredFind('currentQuestionNum') >= QuestionResults.find().count()
+    $('.next-question').hide()
+  cycleQuestion()
+
 @cycleQuestion = () ->
   QuestionResults.update({}, {$set: {result: false}}, {multi: true})
   QuestionResults.update(order: outscoredFind('currentQuestionNum'), {$set: {result: true}})
@@ -135,7 +133,7 @@ Template.question.helpers
     backgroundColor: 'black',
     1500
 
-@correctAnswer = (event) ->
+@correctAnswer = () ->
   outscoredUpdate({isCorrect: true})
   $('.correct').show()
   $('.correct').css
@@ -165,7 +163,7 @@ Template.question.helpers
     $('.x').hide()
   ), 500
 
-@incorrectAnswer = (event) ->
+@incorrectAnswer = () ->
   outscoredUpdate({isCorrect: false})
   $('.incorrect').show()
   $('.incorrect').css
