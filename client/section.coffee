@@ -33,15 +33,8 @@ Template.sectionPage.events
       outscoredUpdate({clickedChoice: true})
       if thisQuestion.answer.match('^' + event.target.innerText + '$')
         correctClick(event)
-        fadeInAnswer()
-        Meteor.setTimeout correctAnswer, 500
       else
         incorrectClick(event)
-        displayX()
-        Meteor.setTimeout (() ->
-          fadeInAnswer()
-          Meteor.setTimeout incorrectAnswer, 500
-        ), 500
       $('.question-heading, .question-content').hide()
       $('.answer-area').show()
 
@@ -165,6 +158,11 @@ Template.question.helpers
   outscoredUpdate({clickedChoice: false})
 
 @correctClick = (event) ->
+  fadeInAnswer()
+  correctClickAnimate()
+  Meteor.setTimeout correctAnswer, 500
+
+@correctClickAnimate = () ->
   $(event.target).css
     backgroundColor: 'lime'
   $(event.target).animate
@@ -182,6 +180,14 @@ Template.question.helpers
   Meteor.setTimeout questionOut, 1000
 
 @incorrectClick = (event) ->
+  displayX()
+  incorrectClickAnimate()
+  Meteor.setTimeout (() ->
+    fadeInAnswer()
+    Meteor.setTimeout incorrectAnswer, 500
+  ), 500
+
+@incorrectClickAnimate = () ->
   $(event.target).css
     backgroundColor: 'red'
   $(event.target).animate
@@ -231,8 +237,11 @@ Template.question.helpers
     1500
   # Are finish buttons covering text?
   if $('.finish')[0]
-    if $(answerClass).offset().top + parseInt($(answerClass).css('font-size')) > $('.finish').offset().top
+    # parseInt($(answerClass).css('font-size')) to get heading font size
+    if $(answerClass).offset().top > $('.finish').offset().top
       outscoredUpdate({isTextCovered: true})
+    else
+      outscoredUpdate({isTextCovered: false})
 
 @grayOut = () ->
   $('.finish').animate
