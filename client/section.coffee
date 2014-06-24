@@ -19,13 +19,11 @@ Template.sectionPage.rendered = () ->
 
 Template.sectionPage.events
   "click .previous-question": (event, ui) ->
-    outscoredUpdate({noChoicesIn: false})
     previousQuestion()
 
   "click .next-question": (event, ui) ->
     # Unless user clicks on grayed-out next button
     unless $(event.currentTarget).hasClass('finish') && outscoredFind('grayedOut')
-      outscoredUpdate({noChoicesIn: false})
       nextQuestion()
 
   "click .choice": (event, ui) ->
@@ -149,6 +147,7 @@ Template.question.helpers
   if outscoredFind('currentQuestionNum') <= 1
     $('.previous-question').hide()
   cycleQuestion()
+  outscoredUpdate({noChoicesIn: false})
 
 @nextQuestion = () ->
   current = outscoredFind('currentQuestionNum')
@@ -157,6 +156,7 @@ Template.question.helpers
   if outscoredFind('currentQuestionNum') >= QuestionResults.find().count()
     $('.next-question').hide()
   cycleQuestion()
+  outscoredUpdate({noChoicesIn: false})
 
 @cycleQuestion = () ->
   QuestionResults.update({}, {$set: {result: false}}, {multi: true})
@@ -236,10 +236,10 @@ Template.question.helpers
 
 @grayOut = () ->
   $('.finish').animate
-    opacity: .1,
+    opacity: .3,
     500
   $('.choices').css
-    opacity: 0
+    opacity: .2
   $('.choices').animate
     opacity: 1,
     500

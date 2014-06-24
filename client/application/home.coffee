@@ -18,31 +18,19 @@ Template.home.rendered = () ->
   sectionsIn()
   searchArrowSetup()
 
+Template.header.events
 
+  "click .navbar-brand": (event, ui) ->
+    searchText = $('.search-box')[0].value
+    runSearch(searchText)
 
 Template.home.events
 
   "keyup .search-box": (event, ui) ->
     $(".search-arrow").animate
       opacity: 0.25
-    outscoredUpdate({clickedSection: false})
-    @search = event.target.value
-
-    SectionResults.remove({})
-    Results.update({}, {$set: {result: true}}, {multi: true})
-    if @search
-      for result in $(".search-result")
-        if result.innerText.match(new RegExp('^' + @search, 'i'))
-          $(".result-box").animate
-            scrollTop: result.offsetTop - 160,
-            300
-          return
-      for result in $(".search-result")
-        if result.innerText.match(new RegExp(@search, 'i'))
-          $(".result-box").animate
-            scrollTop: result.offsetTop - 160,
-            300
-          return
+    searchText = $('.search-box')[0].value
+    runSearch(searchText)
 
     # SectionResults.remove({})
     # Results.update({}, {$set: {result: false}}, {multi: true})
@@ -133,7 +121,6 @@ Template.home.helpers
 
 
 
-
 # Helpers
 
 @outscoredUpdate = (objects) ->
@@ -165,7 +152,7 @@ Template.home.helpers
     $($('.not-animated-section')[0]).removeClass('not-animated-section')
       .addClass('animated bounceInUp').show()
   sectionsIn()
-  Meteor.setInterval sectionsIn, 30
+  setInterval sectionsIn, 30
 
 @searchArrowSetup = () ->
   arrow = $('.search-arrow')
@@ -183,6 +170,25 @@ Template.home.helpers
   # arrow[0].addEventListener('MSAnimationEnd', point)
   # arrow[0].addEventListener('oanimationend', point)
   # arrow[0].addEventListener('animationend', point)
+
+@runSearch = (searchText) ->
+  outscoredUpdate({clickedSection: false})
+  SectionResults.remove({})
+  Results.update({}, {$set: {result: true}}, {multi: true})
+  if searchText
+    for result in $(".search-result")
+      if result.innerText.match(new RegExp('^' + searchText, 'i'))
+        scrollResults(result)
+        return
+    for result in $(".search-result")
+      if result.innerText.match(new RegExp(searchText, 'i'))
+        scrollResults(result)
+        return
+
+@scrollResults = (result) ->
+  $(".result-box").animate
+    scrollTop: result.offsetTop - 160,
+    300
 
 @showClickedTest = () ->
   # Set only clicked test to 'result: true'
