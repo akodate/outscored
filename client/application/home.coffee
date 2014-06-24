@@ -138,7 +138,7 @@ Template.home.helpers
   Outscored.findOne()[field]
 
 @setDivHeights = () ->
-  $('#main').css('height', ($('.sheet')[0].offsetHeight - $('#main')[0].offsetTop) + 45)
+  $('#main').css('height', ($('.sheet')[0].offsetHeight - $('#main')[0].offsetTop) + 72)
   $('.result-box').css('height', ($('#main')[0].offsetHeight - $('.result-box')[0].offsetTop))
 
 @setLocalization = () ->
