@@ -13,8 +13,8 @@ Template.home.rendered = () ->
   if Outscored.find().count() == 0
     Outscored.insert({})
   outscoredUpdate({clickedTest: false, clickedSection: false})
-  setDivHeights()
   renderSetup()
+  setDivHeights()
   sectionsIn()
   searchArrowSetup()
 
@@ -117,8 +117,11 @@ Template.home.helpers
 
   # Test results
   results: ->
-    tests = Results.find({result: true}, {sort: {name: 1}}).fetch()
-    return tests
+    console.log Localization.findOne().region
+    if Localization.findOne().region == 'JP'
+      return Results.find({result: true, name: /^\W/}, {sort: {name: 1}}).fetch()
+    else
+      return Results.find({result: true, name: /^\w/}, {sort: {name: 1}}).fetch()
 
   # Section results
   sections: ->
@@ -138,16 +141,18 @@ Template.home.helpers
   $('#main').css('height', ($('.sheet')[0].offsetHeight - $('#main')[0].offsetTop) + 45)
   $('.result-box').css('height', ($('#main')[0].offsetHeight - $('.result-box')[0].offsetTop))
 
+@setLocalization = () ->
+  Localization.remove({})
+  Localization.insert(region: 'US')
+  internationalCSS('US')
+
 @renderSetup = () ->
   # Clear data
   $('.search-results').hide()
   Results.remove({})
   SectionResults.remove({})
-  Localization.remove({})
 
   # Fill data
-  Localization.insert(region: 'US')
-  internationalCSS('US')
   Tests.find().forEach( (doc) ->
     Results.insert(doc)
   )
@@ -237,3 +242,5 @@ Template.home.helpers
         loginDropdown.css("font-size", "20px")
         loginDropdown.css("font-family", "La Belle Aurore")
         loginDropdownMenu.css("left", "-93px")
+
+@setLocalization()
