@@ -28,11 +28,18 @@ Template.sectionPage.events
 
   "click .choice": (event, ui) ->
     if outscoredFind('clickedChoice') == false
+      choice = event.target.innerText
       outscoredUpdate({noChoicesIn: true})
       thisQuestion = QuestionResults.findOne({result: true})
       outscoredUpdate({clickedChoice: true})
-      if thisQuestion.answer.match('^' + event.target.innerText + '$')
+      if thisQuestion.answer.match('^' + choice + '$')
         correctClick(event)
+      else if thisQuestion.answer.match(/^.$/)
+        selection = processSelection(choice)
+        if selection == thisQuestion.answer
+          correctClick(event)
+        else
+          incorrectClick(event)
       else
         incorrectClick(event)
       $('.question-heading, .question-content').hide()
@@ -156,6 +163,20 @@ Template.question.helpers
   QuestionResults.update(order: outscoredFind('currentQuestionNum'), {$set: {result: true}})
   shuffleChoices()
   outscoredUpdate({clickedChoice: false})
+
+@processSelection = (choice) ->
+  if choice.match(/^\d/)
+    choice.match(/^\d/)[0]
+  else if choice.match(/（(\d)/)
+    choice.match(/（(\d)/)[1]
+  else if choice.match(/[①②③④]/)
+    selection = choice.match(/[①②③④]/)[0]
+    switch selection
+      when '①' then '1'
+      when '②' then '2'
+      when '③' then '3'
+      when '④' then '4'
+      else selection
 
 @correctClick = (event) ->
   fadeInAnswer()
