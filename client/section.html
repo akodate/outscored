@@ -41,7 +41,7 @@
                 </div>
               {{/if}}
             {{/if}}
-            <div class='next-button next-question finish'>
+            <div class='next-button next finish'>
               <p class='symbol'><span class="glyphicon glyphicon-arrow-right"></span></p>
             </div>
 <!--             <p class='explanation-heading'>Explanation:</p>
@@ -54,7 +54,7 @@
 
   <div class='choices'>
     {{#if viewExplanation}}
-      <p class='explanation animated fadeIn'>{{{explanation}}}</p>
+      <p class='explanation animated fadeIn'>{{{explanationFilter}}}</p>
     {{else}}
       {{#each choices}}
         <p class='choice not-animated-choice' style='display: none'>{{{choice}}}</p>

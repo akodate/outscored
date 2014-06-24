@@ -21,7 +21,10 @@ Template.home.rendered = () ->
 Template.header.events
 
   "click .navbar-brand": (event, ui) ->
-    searchText = $('.search-box')[0].value
+    if $('.search-box')[0]
+      searchText = $('.search-box')[0].value
+    else
+      searchText = ''
     runSearch(searchText)
 
 Template.home.events
@@ -79,6 +82,8 @@ Template.home.helpers
     if localization
       region = localization.region
       return region.toLowerCase()
+    else
+      return 'us'
 
   # Set search heading text
   searchHeading: ->

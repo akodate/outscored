@@ -21,13 +21,14 @@ Template.sectionPage.events
   "click .previous-question": (event, ui) ->
     previousQuestion()
 
-  "click .next-question": (event, ui) ->
+  "click .next": (event, ui) ->
     # Unless user clicks on grayed-out next button
     unless $(event.currentTarget).hasClass('finish') && outscoredFind('grayedOut')
       nextQuestion()
 
   "click .choice": (event, ui) ->
     if outscoredFind('clickedChoice') == false
+      $('.next-question, .previous-question').hide()
       choice = event.target.innerText
       outscoredUpdate({noChoicesIn: true})
       thisQuestion = QuestionResults.findOne({result: true})
@@ -92,7 +93,7 @@ Template.question.helpers
 
   explanationFilter: ->
     explanation = QuestionResults.findOne(result: true).explanation
-    return explanation.replace(/<(?:.|\n)*?>/gm, '')
+    return explanation.replace(/\n|<.*?>|解説無し/m, '')
 
   textCovered: ->
     return outscoredFind('isTextCovered')
@@ -141,18 +142,18 @@ Template.question.helpers
   Meteor.setTimeout nextQuestion, 500
 
 @previousQuestion = () ->
+  $('.next-question, .previous-question').show()
   current = outscoredFind('currentQuestionNum')
   outscoredUpdate({currentQuestionNum: current - 1})
-  $('.next-question').show()
   if outscoredFind('currentQuestionNum') <= 1
     $('.previous-question').hide()
   cycleQuestion()
   outscoredUpdate({noChoicesIn: false})
 
 @nextQuestion = () ->
+  $('.next-question, .previous-question').show()
   current = outscoredFind('currentQuestionNum')
   outscoredUpdate({currentQuestionNum: current + 1})
-  $('.previous-question').show()
   if outscoredFind('currentQuestionNum') >= QuestionResults.find().count()
     $('.next-question').hide()
   cycleQuestion()
