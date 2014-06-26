@@ -85,12 +85,30 @@ Template.sectionPage.helpers
 
 Template.question.helpers
 
+  questionHeading: ->
+    if Localization.findOne().region == 'JP'
+      return "問題"
+    else
+      return "Question"
+
+  totalQuestions: ->
+    return QuestionResults.find().count()
+
   choice: ->
     choice = @.replace(/^\w*<br>*/, '')
     return choice
 
-  totalQuestions: ->
-    return QuestionResults.find().count()
+  correct: ->
+    if Localization.findOne().region == 'JP'
+      return "正解です！"
+    else
+      return "Correct!"
+
+  incorrect: ->
+    if Localization.findOne().region == 'JP'
+      return "が正解でした..."
+    else
+      return "...is the correct answer"
 
   isCorrect: ->
     return outscoredFind('isCorrect')
