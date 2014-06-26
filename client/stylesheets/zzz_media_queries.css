@@ -299,7 +299,7 @@
   }
   .section-page {
     padding: 0px;
-    font-size: 15px;
+    font-size: 16px;
   }
   .question, .choices {
     padding: 10px;
@@ -310,15 +310,37 @@
   #next-link, #previous-link {
     font-size: 24px;
   }
-  .choice {
+  .choices {
     font-size: 18px;
+    margin-bottom: 5px;
+  }
+  .explanation {
+    font-size: 16px;
   }
 }
 
 @media (max-height: 480px) {
+  .section-page {
+    font-size: 14px;
+  }
   .x {
     font-size: 120px;
   }
+  .question {
+    height: 60%;
+  }
+  .answer {
+    font-size: 14px;
+  }
+  .choices {
+    height: 40%;
+  }
+  .choices > p {
+    font-size: 15px;
+  }
+}
+
+@media (max-height: 450px) {
   .finish {
     top: 62px;
   }

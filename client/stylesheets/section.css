@@ -18,17 +18,18 @@
 }
 
 .question {
-  height: 60%;
+  height: 50%;
 }
 
 .choices {
-  height: 40%;
+  height: 50%;
   border-top: 3px solid yellow;
 }
 
 .question-heading {
   margin-bottom: 5px;
   font-size: 24px;
+  font-style: italic;
 }
 
 .choice {
@@ -68,11 +69,12 @@
 
 .explanation {
   border-radius: 10px;
+  font-style: italic;
 }
 
 .finish {
   position: absolute;
-  top: 115px;
+  top: 100px;
   height: 100px;
   width: 100px;
   background-color: black;
