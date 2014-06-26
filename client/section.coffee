@@ -29,15 +29,19 @@ Template.sectionPage.events
   "click .choice": (event, ui) ->
     if outscoredFind('clickedChoice') == false
       $('.next-question, .previous-question').hide()
-      choice = event.target.innerText
       outscoredUpdate({noChoicesIn: true})
-      thisQuestion = QuestionResults.findOne({result: true})
       outscoredUpdate({clickedChoice: true})
-      if thisQuestion.answer.match('^' + choice + '$')
+      choice = event.target.innerText
+      thisQuestion = QuestionResults.findOne({result: true})
+      choice = choice.replace(/^\s+|\s+$/g, "")
+      answer = thisQuestion.answer.replace(/^\s+|\s+$/g, "")
+      console.log "CHOICE: " + choice
+      console.log "ANSWER: " + answer
+      if answer.match('^' + choice + '$')
         correctClick(event)
-      else if thisQuestion.answer.match(/^.$/)
+      else if answer.match(/^.$/)
         selection = processSelection(choice)
-        if selection == thisQuestion.answer
+        if selection == answer
           correctClick(event)
         else
           incorrectClick(event)
@@ -266,6 +270,7 @@ Template.question.helpers
       outscoredUpdate({isTextCovered: false})
 
 @grayOut = () ->
+  $('.choices').scrollTop(0)
   $('.finish').animate
     opacity: .3,
     500
@@ -276,6 +281,7 @@ Template.question.helpers
     500
 
 @grayIn = () ->
+  $('.choices').scrollTop(0)
   $('.finish').animate
     opacity: 1,
     500
