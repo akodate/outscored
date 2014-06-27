@@ -1,5 +1,9 @@
 @QuestionResults = new Meteor.Collection(null)
 
+JP_DIGIT_REGEX = /^(\d):/
+JP_PARENTH_REGEX = /^（(\d)）/
+JP_CIRCLE_REGEX = /^[①②③④]/
+
 Template.sectionPage.created = () ->
 
   outscoredUpdate({currentQuestionNum: 1})
@@ -96,7 +100,29 @@ Template.question.helpers
 
   choice: ->
     choice = @.replace(/^\w*<br>*/, '')
+    # choice = choice.replace(JP_DIGIT_REGEX, '')
+    # choice = choice.replace(JP_PARENTH_REGEX, '')
+    # choice = choice.replace(JP_CIRCLE_REGEX, '')
     return choice
+
+  # answer: ->
+  #   answer = @.answer
+  #   firstChoice = @.choices[0].replace(/^\w*<br>*/, '')
+  #   if @.answer.match(/\d/) && (firstChoice.match(JP_DIGIT_REGEX) || firstChoice.match(JP_PARENTH_REGEX) || firstChoice.match(JP_CIRCLE_REGEX))
+  #     for choice in @.choices
+  #       choice = choice.replace(/^\w*<br>*/, '')
+  #       console.log "choice" + choice
+  #       console.log "answer" + answer
+  #       console.log "processed" + processSelection(choice)
+  #       if answer == processSelection(choice)
+  #         answer = choice.replace(/^\w*<br>*/, '')
+  #         answer = answer.replace(JP_DIGIT_REGEX, '')
+  #         answer = answer.replace(JP_PARENTH_REGEX, '')
+  #         answer = answer.replace(JP_CIRCLE_REGEX, '')
+  #         QuestionResults.update({result: true}, {$set: {answer: answer}})
+  #         return answer
+  #   else
+  #     return answer
 
   correct: ->
     if Localization.findOne().region == 'JP'
@@ -188,12 +214,12 @@ Template.question.helpers
   outscoredUpdate({clickedChoice: false})
 
 @processSelection = (choice) ->
-  if choice.match(/^\d/)
-    choice.match(/^\d/)[0]
-  else if choice.match(/（(\d)/)
-    choice.match(/（(\d)/)[1]
-  else if choice.match(/[①②③④]/)
-    selection = choice.match(/[①②③④]/)[0]
+  if choice.match(JP_DIGIT_REGEX)
+    choice.match(JP_DIGIT_REGEX)[1]
+  else if choice.match(JP_PARENTH_REGEX)
+    choice.match(JP_PARENTH_REGEX)[1]
+  else if choice.match(JP_CIRCLE_REGEX)
+    selection = choice.match(JP_CIRCLE_REGEX)[0]
     switch selection
       when '①' then '1'
       when '②' then '2'
