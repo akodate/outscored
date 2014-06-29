@@ -43,12 +43,12 @@ Template.sectionPage.events
       console.log "ANSWER: " + answer
       if answer.match('^' + choice + '$')
         correctClick(event)
-      else if answer.match(/^.$/)
-        selection = processSelection(choice)
-        if selection == answer
-          correctClick(event)
-        else
-          incorrectClick(event)
+      # else if answer.match(/^.$/)
+      #   selection = processSelection(choice)
+      #   if selection == answer
+      #     correctClick(event)
+      #   else
+      #     incorrectClick(event)
       else
         incorrectClick(event)
       $('.question-heading, .question-content').hide()
@@ -213,19 +213,19 @@ Template.question.helpers
   shuffleChoices()
   outscoredUpdate({clickedChoice: false})
 
-@processSelection = (choice) ->
-  if choice.match(JP_DIGIT_REGEX)
-    choice.match(JP_DIGIT_REGEX)[1]
-  else if choice.match(JP_PARENTH_REGEX)
-    choice.match(JP_PARENTH_REGEX)[1]
-  else if choice.match(JP_CIRCLE_REGEX)
-    selection = choice.match(JP_CIRCLE_REGEX)[0]
-    switch selection
-      when '①' then '1'
-      when '②' then '2'
-      when '③' then '3'
-      when '④' then '4'
-      else selection
+# @processSelection = (choice) ->
+#   if choice.match(JP_DIGIT_REGEX)
+#     choice.match(JP_DIGIT_REGEX)[1]
+#   else if choice.match(JP_PARENTH_REGEX)
+#     choice.match(JP_PARENTH_REGEX)[1]
+#   else if choice.match(JP_CIRCLE_REGEX)
+#     selection = choice.match(JP_CIRCLE_REGEX)[0]
+#     switch selection
+#       when '①' then '1'
+#       when '②' then '2'
+#       when '③' then '3'
+#       when '④' then '4'
+#       else selection
 
 @correctClick = (event) ->
   fadeInAnswer()
