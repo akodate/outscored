@@ -176,7 +176,8 @@ Template.question.helpers
   $('.navbar-fixed-bottom').css('position', 'absolute')
 
 @shuffleChoices = () ->
-  currentQuestion = QuestionResults.findOne(result: true)
+  currentQuestion = getCurrentQuestion()
+  questionViewCount(getCurrentQuestionID())
   shuffledChoices = _.shuffle(currentQuestion.choices)
   QuestionResults.update(result: true, {$set: {choices: shuffledChoices}})
 
@@ -231,6 +232,7 @@ Template.question.helpers
 #       else selection
 
 @correctClick = (event) ->
+  questionCorrectCount(getCurrentQuestionID())
   fadeInAnswer()
   correctClickAnimate()
   Meteor.setTimeout correctAnswer, 500
@@ -253,6 +255,7 @@ Template.question.helpers
   Meteor.setTimeout questionOut, 1000
 
 @incorrectClick = (event) ->
+  questionIncorrectCount(getCurrentQuestionID())
   displayX()
   incorrectClickAnimate()
   Meteor.setTimeout (() ->
@@ -335,3 +338,32 @@ Template.question.helpers
   $('.choices').animate
     opacity: .2,
     500
+
+@getCurrentQuestion = () ->
+  QuestionResults.findOne(result: true)
+
+@getCurrentQuestionID = () ->
+  QuestionResults.findOne(result: true)._id
+
+
+
+
+# Meteor methods
+
+@questionViewCount = (questionID) ->
+  Meteor.call( "questionViewCount", questionID, (error, id) ->
+    if (error)
+      alert error.reason
+  )
+
+@questionCorrectCount = (questionID) ->
+  Meteor.call( "questionCorrectCount", questionID, (error, id) ->
+    if (error)
+      alert error.reason
+  )
+
+@questionIncorrectCount = (questionID) ->
+  Meteor.call( "questionIncorrectCount", questionID, (error, id) ->
+    if (error)
+      alert error.reason
+  )
