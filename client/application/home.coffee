@@ -57,7 +57,8 @@ Template.home.events
     unless outscoredFind('clickedSection')
       outscoredUpdate({clickedSection: true})
       clickHighlight(event)
-
+    sectionViewCount(sectionResult.original)
+    testViewCount(test._id)
     Router.go('sectionPage', {testSecID: sectionResult._id, secID: sectionResult.original, testID: test._id})
 
   "click #localization": (event, ui) ->
@@ -244,3 +245,20 @@ Template.home.helpers
         loginDropdownMenu.css("left", "-93px")
 
 @setLocalization()
+
+
+
+
+# Meteor methods
+
+@sectionViewCount = (sectionID) ->
+  Meteor.call( "sectionViewCount", sectionID, (error, id) ->
+    if (error)
+      alert error.reason
+  )
+
+@testViewCount = (testID) ->
+  Meteor.call( "testViewCount", testID, (error, id) ->
+    if (error)
+      alert error.reason
+  )
