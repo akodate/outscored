@@ -6,6 +6,9 @@ JP_CIRCLE_REGEX = /^[①②③④]/
 
 Template.sectionPage.created = () ->
 
+  if Outscored.find().count() == 0
+    Outscored.insert({})
+
   outscoredUpdate({currentQuestionNum: 1})
   outscoredUpdate({clickedChoice: false})
   outscoredUpdate({isTextCovered: false})
