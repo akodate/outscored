@@ -6,7 +6,12 @@ Router.map(() ->
   @route('home', {
     path: '/',
     waitOn: () ->
-      return [Meteor.subscribe('tests'), Meteor.subscribe('testSections'), Meteor.subscribe('section')]
+      return [
+        Meteor.subscribe('userData')
+        Meteor.subscribe('tests')
+        Meteor.subscribe('testSections')
+        Meteor.subscribe('section')
+      ]
   })
   @route('sectionPage', {
     path: ':testID/:secID/:testSecID',
@@ -14,6 +19,7 @@ Router.map(() ->
       console.log @params.secID
       console.log @params.testSecID
       return [
+        Meteor.subscribe('userData')
         Meteor.subscribe('section', @params.secID)
         Meteor.subscribe('testSection', @params.testSecID)
         Meteor.subscribe('testQuestions', @params.testSecID)

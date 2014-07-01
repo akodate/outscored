@@ -30,11 +30,11 @@ Meteor.methods
 
   sectionViewCount: (sectionID) ->
     Sections.update({_id: sectionID}, {$inc: {viewCount: 1}})
-    console.log sectionID + " section view count increased by 1."
+    # console.log sectionID + " section view count increased by 1."
 
   testViewCount: (testID) ->
     Tests.update({_id: testID}, {$inc: {viewCount: 1}})
-    console.log testID + " test view count increased by 1."
+    # console.log testID + " test view count increased by 1."
 
 @questionSkipCount = (currentQuestion) ->
   currentQuestion.correctCount ||= 0
