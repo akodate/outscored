@@ -17,5 +17,5 @@ Meteor.publish 'questions', (testID) ->
   Questions.find(inTest: testID)
 
 Meteor.publish "userData", ->
-  return null unless @userId
-  Meteor.users.find({@userId}, {fields: {testsViewed: 1, sectionsViewed: 1, questionsViewed: 1, questionsSkipped: 1, questionsCorrect: 1, questionsIncorrect: 1}})
+  if !! @userId
+    Meteor.users.find({@userId}, {fields: {testsViewed: 1, sectionsViewed: 1, questionsViewed: 1, questionsSkipped: 1, questionsCorrect: 1, questionsIncorrect: 1}})

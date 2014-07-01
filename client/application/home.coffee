@@ -251,14 +251,28 @@ Template.home.helpers
 
 # Meteor methods
 
+@testViewCount = (testID) ->
+  Meteor.call( "testViewCount", testID, (error, id) ->
+    if (error)
+      alert error.reason
+  )
+  testViewed(testID)
+
 @sectionViewCount = (sectionID) ->
   Meteor.call( "sectionViewCount", sectionID, (error, id) ->
     if (error)
       alert error.reason
   )
+  sectionViewed(sectionID)
 
-@testViewCount = (testID) ->
-  Meteor.call( "testViewCount", testID, (error, id) ->
+@testViewed = (testID) ->
+  Meteor.call( "testViewed", testID, (error, id) ->
+    if (error)
+      alert error.reason
+  )
+
+@sectionViewed = (sectionID) ->
+  Meteor.call( "sectionViewed", sectionID, (error, id) ->
     if (error)
       alert error.reason
   )

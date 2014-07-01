@@ -355,15 +355,36 @@ Template.question.helpers
     if (error)
       alert error.reason
   )
+  questionViewed(questionID)
 
 @questionCorrectCount = (questionID) ->
   Meteor.call( "questionCorrectCount", questionID, (error, id) ->
     if (error)
       alert error.reason
   )
+  questionCorrect(questionID)
 
 @questionIncorrectCount = (questionID) ->
   Meteor.call( "questionIncorrectCount", questionID, (error, id) ->
+    if (error)
+      alert error.reason
+  )
+  questionIncorrect(questionID)
+
+@questionViewed = (questionID) ->
+  Meteor.call( "questionViewed", questionID, (error, id) ->
+    if (error)
+      alert error.reason
+  )
+
+@questionCorrect = (questionID) ->
+  Meteor.call( "questionCorrect", questionID, (error, id) ->
+    if (error)
+      alert error.reason
+  )
+
+@questionIncorrect = (questionID) ->
+  Meteor.call( "questionIncorrect", questionID, (error, id) ->
     if (error)
       alert error.reason
   )

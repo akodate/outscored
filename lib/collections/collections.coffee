@@ -8,6 +8,16 @@
 
 Meteor.methods
 
+  # Test-side methods
+
+  testViewCount: (testID) ->
+    Tests.update({_id: testID}, {$inc: {viewCount: 1}})
+    # console.log testID + " test view count increased by 1."
+
+  sectionViewCount: (sectionID) ->
+    Sections.update({_id: sectionID}, {$inc: {viewCount: 1}})
+    # console.log sectionID + " section view count increased by 1."
+
   questionViewCount: (questionID) ->
     Questions.update({_id: questionID}, {$inc: {viewCount: 1}})
     currentQuestion = getCurrentQuestion(questionID)
@@ -28,13 +38,50 @@ Meteor.methods
     currentQuestion = questionSkipCount(currentQuestion)
     questionCorrectPercentage(currentQuestion)
 
-  sectionViewCount: (sectionID) ->
-    Sections.update({_id: sectionID}, {$inc: {viewCount: 1}})
-    # console.log sectionID + " section view count increased by 1."
 
-  testViewCount: (testID) ->
-    Tests.update({_id: testID}, {$inc: {viewCount: 1}})
-    # console.log testID + " test view count increased by 1."
+
+
+  # User-side methods
+
+  testViewed: (testID) ->
+    if !! Meteor.userId()
+      userID = Meteor.userId()
+      console.log testID + " test viewed, current user is: " + userID
+      Meteor.users.update({_id: userID}, {$addToSet: {testsViewed: testID}})
+
+  sectionViewed: (sectionID) ->
+    if !! Meteor.userId()
+      userID = Meteor.userId()
+      console.log sectionID + " section viewed, current user is: " + userID
+      Meteor.users.update({_id: userID}, {$addToSet: {sectionsViewed: sectionID}})
+
+  questionViewed: (questionID) ->
+    if !! Meteor.userId()
+      userID = Meteor.userId()
+      console.log questionID + " question viewed, current user is: " + userID
+      Meteor.users.update({_id: userID}, {$addToSet: {questionsViewed: questionID}})
+      Meteor.users.update({_id: userID}, {$addToSet: {questionsSkipped: questionID}})
+
+  questionCorrect: (questionID) ->
+    if !! Meteor.userId()
+      userID = Meteor.userId()
+      console.log questionID + " question correct, current user is: " + userID
+      Meteor.users.update({_id: userID}, {$pull: {questionsIncorrect: questionID}})
+      Meteor.users.update({_id: userID}, {$addToSet: {questionsCorrect: questionID}})
+      Meteor.users.update({_id: userID}, {$pull: {questionsSkipped: questionID}})
+
+  questionIncorrect: (questionID) ->
+    if !! Meteor.userId()
+      userID = Meteor.userId()
+      console.log questionID + " question incorrect, current user is: " + userID
+      Meteor.users.update({_id: userID}, {$pull: {questionsCorrect: questionID}})
+      Meteor.users.update({_id: userID}, {$addToSet: {questionsIncorrect: questionID}})
+      Meteor.users.update({_id: userID}, {$pull: {questionsSkipped: questionID}})
+
+
+
+
+# Helper methods
 
 @questionSkipCount = (currentQuestion) ->
   currentQuestion.correctCount ||= 0
