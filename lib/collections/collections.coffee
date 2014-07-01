@@ -65,18 +65,35 @@ Meteor.methods
   questionCorrect: (questionID) ->
     if !! Meteor.userId()
       userID = Meteor.userId()
-      console.log questionID + " question correct, current user is: " + userID
-      Meteor.users.update({_id: userID}, {$pull: {questionsIncorrect: questionID}})
-      Meteor.users.update({_id: userID}, {$addToSet: {questionsCorrect: questionID}})
-      Meteor.users.update({_id: userID}, {$pull: {questionsSkipped: questionID}})
+      user = Meteor.user()
+      if user.questionsSkilled && questionID in user.questionsSkilled # Question mastered
+        console.log questionID + " question mastered, current user is: " + userID
+        Meteor.users.update({_id: userID}, {$addToSet: {questionsMastered: questionID}})
+      else if user.questionsCorrect && questionID in user.questionsCorrect # Question skilled
+        console.log questionID + " question skilled, current user is: " + userID
+        Meteor.users.update({_id: userID}, {$addToSet: {questionsSkilled: questionID}})
+      else # Question correct
+        console.log questionID + " question correct, current user is: " + userID
+        Meteor.users.update({_id: userID}, {$pull: {questionsIncorrect: questionID}})
+        Meteor.users.update({_id: userID}, {$addToSet: {questionsCorrect: questionID}})
+        Meteor.users.update({_id: userID}, {$pull: {questionsSkipped: questionID}})
 
   questionIncorrect: (questionID) ->
     if !! Meteor.userId()
       userID = Meteor.userId()
       console.log questionID + " question incorrect, current user is: " + userID
       Meteor.users.update({_id: userID}, {$pull: {questionsCorrect: questionID}})
+      Meteor.users.update({_id: userID}, {$pull: {questionsSkilled: questionID}})
+      Meteor.users.update({_id: userID}, {$pull: {questionsMastered: questionID}})
       Meteor.users.update({_id: userID}, {$addToSet: {questionsIncorrect: questionID}})
       Meteor.users.update({_id: userID}, {$pull: {questionsSkipped: questionID}})
+
+# testsSkilled
+# testsMastered
+# sectionsSkilled
+# sectionsMastered
+# questionsSkilled
+# questionsMastered
 
 
 
