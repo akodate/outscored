@@ -160,10 +160,8 @@ Template.home.helpers
   Results.update({}, {$set: {result: true}}, {multi: true})
 
 @sectionsIn = () ->
-    $($('.not-animated-section')[0]).removeClass('not-animated-section')
-      .addClass('animated bounceInUp').show()
-  sectionsIn()
-  setInterval sectionsIn, 30
+  $($('.not-animated-section')[0]).removeClass('not-animated-section').addClass('animated bounceInUp').show()
+  setTimeout sectionsIn, 30
 
 @searchArrowSetup = () ->
   arrow = $('.search-arrow')

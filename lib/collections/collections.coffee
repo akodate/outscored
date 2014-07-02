@@ -92,8 +92,6 @@ Meteor.methods
 # testsMastered
 # sectionsSkilled
 # sectionsMastered
-# questionsSkilled
-# questionsMastered
 
 
 
