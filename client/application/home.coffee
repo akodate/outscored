@@ -57,8 +57,9 @@ Template.home.events
     unless outscoredFind('clickedSection')
       outscoredUpdate({clickedSection: true})
       clickHighlight(event)
-    sectionViewCount(sectionResult.original)
-    testViewCount(test._id)
+    if Meteor.userId()
+      sectionViewCount(sectionResult.original)
+      testViewCount(test._id)
     Router.go('sectionPage', {testSecID: sectionResult._id, secID: sectionResult.original, testID: test._id})
 
   "click #localization": (event, ui) ->

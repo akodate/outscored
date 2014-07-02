@@ -7,7 +7,7 @@ Router.map(() ->
     path: '/',
     waitOn: () ->
       return [
-        Meteor.subscribe('userData')
+        Meteor.subscribe('userData') if Meteor.userId()
         Meteor.subscribe('tests')
         Meteor.subscribe('testSections')
         Meteor.subscribe('section')
@@ -17,7 +17,7 @@ Router.map(() ->
     path: ':testID/:secID/:testSecID',
     waitOn: () ->
       return [
-        Meteor.subscribe('userData')
+        Meteor.subscribe('userData') if Meteor.userId()
         Meteor.subscribe('section', @params.secID)
         Meteor.subscribe('testSection', @params.testSecID)
         Meteor.subscribe('testQuestions', @params.testSecID)
