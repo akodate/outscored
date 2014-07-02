@@ -12,7 +12,7 @@ Template.home.rendered = () ->
 
   if Outscored.find().count() == 0
     Outscored.insert({})
-  outscoredUpdate({clickedTest: false, clickedSection: false})
+  outscoredUpdate({clickedTest: false, clickedSection: false, testsEntered: false})
   renderSetup()
   setDivHeights()
   sectionsIn()
@@ -160,8 +160,26 @@ Template.home.helpers
   Results.update({}, {$set: {result: true}}, {multi: true})
 
 @sectionsIn = () ->
-  $($('.not-animated-section')[0]).removeClass('not-animated-section').addClass('animated bounceInUp').show()
-  setTimeout sectionsIn, 30
+  if $('.not-animated-section')[0] # jQuery found a test
+    outscoredUpdate({testsEntered: true})
+    if Meteor.user()
+      colorTest($('.not-animated-section')[0])
+  $($('.not-animated-section')[0]).removeClass('not-animated-section').addClass('animated bounceInUp').show() # Animate the first remaining test
+  # Execute while jQuery hasn't found a test yet or tests can still be found
+  if !outscoredFind('testsEntered') || $('.not-animated-section')[0]
+    setTimeout sectionsIn, 30
+
+@colorTest = (testElement) ->
+  testText = testElement.innerText.replace(/^\s+|\s+$/g, "")
+  # console.log "Test text: " + testText
+  currentTestID = Results.findOne(name: testText)._id
+  user = Meteor.user()
+  if user.testsMastered && currentTestID in user.testsMastered
+    $(testElement).addClass('mastered-test')
+  else if user.testsSkilled && currentTestID in user.testsSkilled
+    $(testElement).addClass('skilled-test')
+  else if user.testsAnswered && currentTestID in user.testsAnswered
+    $(testElement).addClass('answered-test')
 
 @searchArrowSetup = () ->
   arrow = $('.search-arrow')

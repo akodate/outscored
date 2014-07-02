@@ -88,8 +88,10 @@ Meteor.methods
       Meteor.users.update({_id: userID}, {$addToSet: {questionsIncorrect: questionID}})
       Meteor.users.update({_id: userID}, {$pull: {questionsSkipped: questionID}})
 
+# testsAnswered
 # testsSkilled
 # testsMastered
+# sectionsAnswered
 # sectionsSkilled
 # sectionsMastered
 
