@@ -233,6 +233,9 @@ Template.question.helpers
 
 @correctClick = (event) ->
   questionCorrectCount(getCurrentQuestionID())
+  if Meteor.userId()
+    currentTestID = TestSections.findOne().inTest
+    testStatus(currentTestID)
   fadeInAnswer()
   correctClickAnimate()
   Meteor.setTimeout correctAnswer, 500
@@ -349,6 +352,12 @@ Template.question.helpers
 
 
 # Meteor methods
+
+@testStatus = (testID) ->
+  Meteor.call( "testStatus", testID, (error, id) ->
+    if (error)
+      alert error.reason
+  )
 
 @questionViewCount = (questionID) ->
   Meteor.call( "questionViewCount", questionID, (error, id) ->

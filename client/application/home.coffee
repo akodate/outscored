@@ -162,7 +162,7 @@ Template.home.helpers
 @sectionsIn = () ->
   if $('.not-animated-section')[0] # jQuery found a test
     outscoredUpdate({testsEntered: true})
-    if Meteor.user()
+    if Meteor.userId()
       colorTest($('.not-animated-section')[0])
   $($('.not-animated-section')[0]).removeClass('not-animated-section').addClass('animated bounceInUp').show() # Animate the first remaining test
   # Execute while jQuery hasn't found a test yet or tests can still be found
@@ -178,6 +178,8 @@ Template.home.helpers
     $(testElement).addClass('mastered-test')
   else if user.testsSkilled && currentTestID in user.testsSkilled
     $(testElement).addClass('skilled-test')
+  else if user.testsExperienced && currentTestID in user.testsExperienced
+    $(testElement).addClass('experienced-test')
   else if user.testsAnswered && currentTestID in user.testsAnswered
     $(testElement).addClass('answered-test')
 

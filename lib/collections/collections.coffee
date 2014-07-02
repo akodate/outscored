@@ -49,6 +49,25 @@ Meteor.methods
       console.log testID + " test viewed, current user is: " + userID
       Meteor.users.update({_id: userID}, {$addToSet: {testsViewed: testID}})
 
+  testStatus: (testID) ->
+    if !! Meteor.userId() && !@isSimulation
+      user = Meteor.user()
+      test = Tests.findOne(_id: testID)
+      numCorrect = _.intersection(test.hasQuestions, (user.questionsCorrect ||= [])).length
+      numSkilled = _.intersection(test.hasQuestions, (user.questionsSkilled ||= [])).length
+      numMastered = _.intersection(test.hasQuestions, (user.questionsMastered ||= [])).length
+      mastery = (numCorrect + numSkilled + numMastered) / 3 / (test.hasQuestions.length) * 100
+      console.log "Mastery is: " + mastery
+      if mastery == 100
+        console.log "TEST STATUS IS MASTERED!!!"
+        Meteor.users.update({_id: user._id}, {$addToSet: {testsMastered: testID}})
+      else if mastery > 66
+        Meteor.users.update({_id: user._id}, {$addToSet: {testsSkilled: testID}})
+      else if mastery > 33
+        Meteor.users.update({_id: user._id}, {$addToSet: {testsExperienced: testID}})
+      else if mastery > 0
+        Meteor.users.update({_id: user._id}, {$addToSet: {testsAnswered: testID}})
+
   sectionViewed: (sectionID) ->
     if !! Meteor.userId()
       userID = Meteor.userId()

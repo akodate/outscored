@@ -18,4 +18,4 @@ Meteor.publish 'questions', (testID) ->
 
 Meteor.publish "userData", () ->
   if !! @userId
-    Meteor.users.find({_id: @userId}, {fields: {testsViewed: 1, testsAnswered: 1, testsSkilled: 1, testsMastered: 1, sectionsViewed: 1, sectionsAnswered: 1, sectionsSkilled: 1, sectionsMastered: 1, questionsViewed: 1, questionsSkipped: 1, questionsCorrect: 1, questionsSkilled: 1, questionsMastered: 1, questionsIncorrect: 1}})
+    Meteor.users.find({_id: @userId}, {fields: {testsViewed: 1, testsAnswered: 1, testsExperienced: 1, testsSkilled: 1, testsMastered: 1, sectionsViewed: 1, sectionsAnswered: 1, sectionsSkilled: 1, sectionsMastered: 1, questionsViewed: 1, questionsSkipped: 1, questionsCorrect: 1, questionsSkilled: 1, questionsMastered: 1, questionsIncorrect: 1}})
