@@ -94,6 +94,23 @@
           animation-duration: .2s;*/
 }
 
+.answered-test {
+  background-color: rgba(0,128,0,.3);
+}
+
+.experienced-test {
+  background-color: rgba(102,205,170,.3)
+}
+
+.skilled-test {
+  background-color: rgba(0,0,255,.3);
+}
+
+.mastered-test {
+  background-color: white;
+  color: black
+}
+
 .search-results {
 /*  width: 800px;
   height: 390px;
