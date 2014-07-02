@@ -233,9 +233,7 @@ Template.question.helpers
 
 @correctClick = (event) ->
   questionCorrectCount(getCurrentQuestionID())
-  if Meteor.userId()
-    currentTestID = TestSections.findOne().inTest
-    testStatus(currentTestID)
+  masteryStatus()
   fadeInAnswer()
   correctClickAnimate()
   Meteor.setTimeout correctAnswer, 500
@@ -342,6 +340,14 @@ Template.question.helpers
     opacity: .2,
     500
 
+@masteryStatus = () ->
+  if Meteor.userId()
+    currentTestSection = TestSections.findOne()
+    currentTestID = currentTestSection.inTest
+    testStatus(currentTestID)
+    currentSectionID = currentTestSection.original
+    sectionStatus(currentSectionID)
+
 @getCurrentQuestion = () ->
   QuestionResults.findOne(result: true)
 
@@ -355,6 +361,12 @@ Template.question.helpers
 
 @testStatus = (testID) ->
   Meteor.call( "testStatus", testID, (error, id) ->
+    if (error)
+      alert error.reason
+  )
+
+@sectionStatus = (sectionID) ->
+  Meteor.call( "sectionStatus", sectionID, (error, id) ->
     if (error)
       alert error.reason
   )

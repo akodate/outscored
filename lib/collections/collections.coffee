@@ -53,11 +53,12 @@ Meteor.methods
     if !! Meteor.userId() && !@isSimulation
       user = Meteor.user()
       test = Tests.findOne(_id: testID)
-      numCorrect = _.intersection(test.hasQuestions, (user.questionsCorrect ||= [])).length
-      numSkilled = _.intersection(test.hasQuestions, (user.questionsSkilled ||= [])).length
-      numMastered = _.intersection(test.hasQuestions, (user.questionsMastered ||= [])).length
+      userTestCorrect = _.intersection(test.hasQuestions, (user.questionsCorrect ||= []))
+      numCorrect = userTestCorrect.length
+      numSkilled = _.intersection(userTestCorrect, (user.questionsSkilled ||= [])).length
+      numMastered = _.intersection(userTestCorrect, (user.questionsMastered ||= [])).length
       mastery = (numCorrect + numSkilled + numMastered) / 3 / (test.hasQuestions.length) * 100
-      console.log "Mastery is: " + mastery
+      console.log "Test mastery is: " + mastery
       if mastery == 100
         console.log "TEST STATUS IS MASTERED!!!"
         Meteor.users.update({_id: user._id}, {$addToSet: {testsMastered: testID}})
@@ -73,6 +74,26 @@ Meteor.methods
       userID = Meteor.userId()
       console.log sectionID + " section viewed, current user is: " + userID
       Meteor.users.update({_id: userID}, {$addToSet: {sectionsViewed: sectionID}})
+
+  sectionStatus: (sectionID) ->
+    if !! Meteor.userId() && !@isSimulation
+      user = Meteor.user()
+      section = Sections.findOne(_id: sectionID)
+      userSectionCorrect = _.intersection(section.hasQuestions, (user.questionsCorrect ||= []))
+      numCorrect = userSectionCorrect.length
+      numSkilled = _.intersection(userSectionCorrect, (user.questionsSkilled ||= [])).length
+      numMastered = _.intersection(userSectionCorrect, (user.questionsMastered ||= [])).length
+      mastery = (numCorrect + numSkilled + numMastered) / 3 / (section.hasQuestions.length) * 100
+      console.log "Section mastery is: " + mastery
+      if mastery == 100
+        console.log "SECTION STATUS IS MASTERED!!!"
+        Meteor.users.update({_id: user._id}, {$addToSet: {sectionsMastered: sectionID}})
+      else if mastery > 66
+        Meteor.users.update({_id: user._id}, {$addToSet: {sectionsSkilled: sectionID}})
+      else if mastery > 33
+        Meteor.users.update({_id: user._id}, {$addToSet: {sectionsExperienced: sectionID}})
+      else if mastery > 0
+        Meteor.users.update({_id: user._id}, {$addToSet: {sectionsAnswered: sectionID}})
 
   questionViewed: (questionID) ->
     if !! Meteor.userId()
