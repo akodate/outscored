@@ -14,6 +14,7 @@ Template.sectionPage.created = () ->
   outscoredUpdate({isTextCovered: false})
   outscoredUpdate({grayedOut: false})
   outscoredUpdate({noChoicesIn: false})
+  resetQuestion()
   QuestionResults.remove({})
   sectionSetup()
 
@@ -142,6 +143,9 @@ Template.question.helpers
   isCorrect: ->
     return outscoredFind('isCorrect')
 
+  isIncorrect: ->
+    return outscoredFind('isIncorrect')
+
   explanationFilter: ->
     explanation = QuestionResults.findOne(result: true).explanation
     return explanation.replace(/\n|<.*?>|解説無し/m, '')
@@ -212,10 +216,17 @@ Template.question.helpers
   outscoredUpdate({noChoicesIn: false})
 
 @cycleQuestion = () ->
+  resetQuestion()
   QuestionResults.update({}, {$set: {result: false}}, {multi: true})
   QuestionResults.update(order: outscoredFind('currentQuestionNum'), {$set: {result: true}})
   shuffleChoices()
   outscoredUpdate({clickedChoice: false})
+
+@resetQuestion = () ->
+  outscoredUpdate({isCorrect: false})
+  outscoredUpdate({isIncorrect: false})
+  outscoredUpdate({isSkilled: false})
+  outscoredUpdate({isMastered: false})
 
 # @processSelection = (choice) ->
 #   if choice.match(JP_DIGIT_REGEX)
@@ -247,7 +258,6 @@ Template.question.helpers
 
 @correctAnswer = () ->
   outscoredUpdate({isCorrect: true})
-  $('.correct').show()
   $('.correct').css
     color: 'white'
   $('.correct').animate
@@ -283,8 +293,7 @@ Template.question.helpers
   ), 500
 
 @incorrectAnswer = () ->
-  outscoredUpdate({isCorrect: false})
-  $('.incorrect').show()
+  outscoredUpdate({isIncorrect: true})
   $('.incorrect').css
     color: 'white'
   $('.incorrect').animate

@@ -15,8 +15,8 @@ Template.home.rendered = () ->
   outscoredUpdate({clickedTest: false, clickedSection: false, testsEntered: false})
   renderSetup()
   setDivHeights()
-  sectionsIn()
   searchArrowSetup()
+  sectionsIn()
 
 Template.header.events
 
@@ -74,6 +74,10 @@ Template.home.events
       internationalCSS(regionSelect)
     # Update localization region
     Localization.update({}, {$set: {region: regionSelect}}, {multi: true})
+    searchText = $('.search-box')[0].value
+    Meteor.setTimeout (() ->
+      runSearch(searchText)
+    ), 30
 
 
 
@@ -203,10 +207,10 @@ Template.home.helpers
   # arrow[0].addEventListener('animationend', point)
 
 @runSearch = (searchText) ->
-  sectionsIn()
   outscoredUpdate({clickedSection: false})
   SectionResults.remove({})
   Results.update({}, {$set: {result: true}}, {multi: true})
+  sectionsIn()
   if searchText
     for result in $(".search-result")
       if result.innerText.match(new RegExp('^' + searchText, 'i'))

@@ -26,8 +26,12 @@
         <p class='answer' style='display: none'>{{{answer}}}</p>
         <p class='x' style='display: none'>x</p>
         <div class='answer-heading'>
-          <p class='correct' style='display: none'>{{correct}}</p>
-          <p class='incorrect' style='display: none'>{{incorrect}}</p>
+          {{#if isCorrect}}
+          <p class='correct'>{{correct}}</p>
+          {{/if}}
+          {{#if isIncorrect}}
+          <p class='incorrect'>{{incorrect}}</p>
+          {{/if}}
         </div>
           <div class='explanation' style='display: none'>
             {{#if explanationFilter}}
