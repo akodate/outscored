@@ -39,24 +39,22 @@
             {{> incorrect}}
           {{/if}}
         </div>
-          <div class='explanation' style='display: none'>
-            {{#if explanationFilter}}
-              <div class='explanation-button finish'>
-                <p class='symbol'><span class="glyphicon glyphicon-question-sign"></span></p>
-              </div>
-            {{else}}
-              {{#if textCovered}}
-                <div class='text-button finish'>
-                  <p class='symbol'><span class="glyphicon glyphicon-search"></span></p>
-                </div>
-              {{/if}}
-            {{/if}}
-            <div class='next-button next finish'>
-              <p class='symbol'><span class="glyphicon glyphicon-arrow-right"></span></p>
+        <div class='explanation' style='display: none'>
+          {{#if explanationFilter}}
+            <div class='explanation-button finish'>
+              <p class='symbol'><span class="glyphicon glyphicon-question-sign"></span></p>
             </div>
-<!--             <p class='explanation-heading'>Explanation:</p>
-            <p>{{{explanation}}}</p> -->
+          {{else}}
+            {{#if textCovered}}
+              <div class='text-button finish'>
+                <p class='symbol'><span class="glyphicon glyphicon-search"></span></p>
+              </div>
+            {{/if}}
+          {{/if}}
+          <div class='next-button next finish'>
+            <p class='symbol'><span class="glyphicon glyphicon-arrow-right"></span></p>
           </div>
+        </div>
       </div>
 
     </div>

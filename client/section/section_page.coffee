@@ -77,6 +77,7 @@ Template.question.rendered = () ->
     choicesIn()
     Meteor.setInterval choicesIn, 300
   ), 500
+  choiceStatus()
 
 
 
@@ -187,6 +188,33 @@ Template.question.helpers
     $($('.not-animated-choice')[0]).removeClass('not-animated-choice')
       .addClass('animated bounceInUp').show()
 
+@choiceStatus = () ->
+  if Meteor.userId()
+    user = Meteor.user()
+    questionID = getCurrentQuestionID()
+    if user.questionsMastered && questionID in user.questionsMastered
+      $('.choice').addClass('mastered-choice')
+    else if user.questionsSkilled && questionID in user.questionsSkilled
+      $('.choice').addClass('skilled-choice')
+    else if user.questionsCorrect && questionID in user.questionsCorrect
+      $('.choice').addClass('correct-choice')
+
+@choiceColor = () ->
+  if Meteor.userId()
+    user = Meteor.user()
+    questionID = getCurrentQuestionID()
+    if user.questionsMastered && questionID in user.questionsMastered
+      return 'rgba(0,255,255,.3)'
+    else if user.questionsSkilled && questionID in user.questionsSkilled
+      return 'rgba(0,128,128,.3)'
+    else if user.questionsCorrect && questionID in user.questionsCorrect
+      return 'rgba(0,128,0,.3)'
+    else if user.questionsIncorrect && questionID in user.questionsIncorrect
+      $('.choice').removeClass('correct-choice skilled-choice mastered-choice')
+      return 'black'
+    else
+      return 'black'
+
 @questionOut = () ->
   $('.question, .choice').addClass('bounceOutLeft')
   Meteor.setTimeout nextQuestion, 500
@@ -247,16 +275,16 @@ Template.question.helpers
   $(event.target).css
     backgroundColor: 'lime'
   $(event.target).animate
-    backgroundColor: 'black',
+    backgroundColor: choiceColor(),
     1500
 
 @correctAnswer = () ->
   questionID = getCurrentQuestionID()
   if Meteor.userId()
     user = Meteor.user()
-    if user.questionsSkilled && questionID in user.questionsMastered
+    if user.questionsMastered && questionID in user.questionsMastered
       outscoredUpdate({isMastered: true})
-    else if user.questionsCorrect && questionID in user.questionsSkilled
+    else if user.questionsSkilled && questionID in user.questionsSkilled
       outscoredUpdate({isSkilled: true})
     else
       outscoredUpdate({isCorrect: true})
@@ -277,7 +305,7 @@ Template.question.helpers
   $(event.target).css
     backgroundColor: 'red'
   $(event.target).animate
-    backgroundColor: 'black',
+    backgroundColor: choiceColor(),
     1500
 
 @displayX = () ->
