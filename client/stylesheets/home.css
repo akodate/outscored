@@ -94,22 +94,6 @@
           animation-duration: .2s;*/
 }
 
-.answered-test {
-  background-color: rgba(0,128,0,.3);
-}
-
-.experienced-test {
-  background-color: rgba(0,139,139,.3)
-}
-
-.skilled-test {
-  background-color: rgba(0,0,255,.3);
-}
-
-.mastered-test {
-  background-color: rgba(255,215,0,.3);
-}
-
 .search-results {
 /*  width: 800px;
   height: 390px;
@@ -131,6 +115,22 @@
   font-family: 'Belgrano';
   line-height: 50px;
   color: white;
+}
+
+.answered-test, .answered-section {
+  background-color: rgba(0,128,0,.3);
+}
+
+.experienced-test, .experienced-section {
+  background-color: rgba(0,139,139,.3)
+}
+
+.skilled-test, .skilled-section {
+  background-color: rgba(0,0,255,.3);
+}
+
+.mastered-test, .mastered-section {
+  background-color: rgba(255,215,0,.3);
 }
 
 .search-box::-webkit-input-placeholder {

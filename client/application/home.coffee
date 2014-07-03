@@ -21,6 +21,7 @@ Template.home.rendered = () ->
 Template.header.events
 
   "click .navbar-brand": (event, ui) ->
+    outscoredUpdate({testsEntered: false})
     if $('.search-box')[0]
       searchText = $('.search-box')[0].value
     else
@@ -30,6 +31,7 @@ Template.header.events
 Template.home.events
 
   "keyup .search-box": (event, ui) ->
+    outscoredUpdate({testsEntered: false})
     $(".search-arrow").animate
       opacity: 0.25
     searchText = $('.search-box')[0].value
@@ -41,7 +43,6 @@ Template.home.events
     #   Results.update({name: {$regex: @search, $options: "i" }}, {$set: {result: true}}, {multi: true})
 
   "click .search-result": (event, ui) ->
-
     showClickedTest()
     showTestSections()
     resetScroll()
@@ -168,7 +169,7 @@ Template.home.helpers
   $($('.not-animated-section')[0]).removeClass('not-animated-section').addClass('animated bounceInUp').show() # Animate the first remaining test
   # Execute while jQuery hasn't found a test yet or tests can still be found
   if !outscoredFind('testsEntered') || $('.not-animated-section')[0]
-    setTimeout sectionsIn, 30
+    Meteor.setTimeout sectionsIn, 30
 
 @colorTest = (testElement) ->
   testText = testElement.innerText.replace(/^\s+|\s+$/g, "")
@@ -202,6 +203,7 @@ Template.home.helpers
   # arrow[0].addEventListener('animationend', point)
 
 @runSearch = (searchText) ->
+  sectionsIn()
   outscoredUpdate({clickedSection: false})
   SectionResults.remove({})
   Results.update({}, {$set: {result: true}}, {multi: true})
@@ -239,9 +241,26 @@ Template.home.helpers
   SectionResults.remove({})
   TestSections.find({_id: {$in: testResult.children}}).fetch()
   TestSections.find({_id: {$in: testResult.children}}).forEach( (doc) ->
-    doc.name = (/[^\/]+$/.exec(doc.filePath))
+    doc.name = (/[^\/]+$/.exec(doc.filePath))[0] ||= ''
     SectionResults.insert(doc)
+    if Meteor.userId()
+      Meteor.setTimeout (() ->
+        colorSection(doc)
+      ), 30
   )
+
+@colorSection = (section) ->
+  for sectionElement in $('.section-result')
+    if sectionElement.innerText == section.name
+      user = Meteor.user()
+      if user.sectionsMastered && section.original in user.sectionsMastered
+        $(sectionElement).addClass('mastered-section')
+      else if user.sectionsSkilled && section.original in user.sectionsSkilled
+        $(sectionElement).addClass('skilled-section')
+      else if user.sectionsExperienced && section.original in user.sectionsExperienced
+        $(sectionElement).addClass('experienced-section')
+      else if user.sectionsAnswered && section.original in user.sectionsAnswered
+        $(sectionElement).addClass('answered-section')
 
 @resetScroll = () ->
   $('.result-box').scrollTop(0)
