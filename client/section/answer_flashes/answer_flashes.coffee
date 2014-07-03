@@ -48,7 +48,7 @@ Template.mastered.helpers
 
   mastered: ->
     if Localization.findOne().region == 'JP'
-      return "覚えましたね！！！"
+      return "覚えました！！！"
     else
       return "MASTERED!!!"
 
