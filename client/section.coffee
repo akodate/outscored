@@ -128,20 +128,14 @@ Template.question.helpers
   #   else
   #     return answer
 
-  correct: ->
-    if Localization.findOne().region == 'JP'
-      return "正解です！"
-    else
-      return "Correct!"
-
-  incorrect: ->
-    if Localization.findOne().region == 'JP'
-      return "が正解でした..."
-    else
-      return "...is the correct answer"
-
   isCorrect: ->
     return outscoredFind('isCorrect')
+
+  isSkilled: ->
+    return outscoredFind('isSkilled')
+
+  isMastered: ->
+    return outscoredFind('isMastered')
 
   isIncorrect: ->
     return outscoredFind('isIncorrect')
@@ -157,6 +151,81 @@ Template.question.helpers
     explanation = QuestionResults.findOne(result: true).explanation
     return outscoredFind('grayedOut') && explanation.replace(/<(?:.|\n)*?>/gm, '')
 
+
+
+
+Template.correct.rendered = () ->
+
+  $('.correct').css
+    color: 'white'
+  $('.correct').animate
+    color: 'lime',
+    500
+
+Template.correct.helpers
+
+  correct: ->
+    if Localization.findOne().region == 'JP'
+      return "正解です！"
+    else
+      return "Correct!"
+
+
+
+
+Template.skilled.rendered = () ->
+
+  $('.skilled').css
+    color: 'white'
+  $('.skilled').animate
+    color: 'aqua',
+    500
+
+Template.skilled.helpers
+
+  skilled: ->
+    if Localization.findOne().region == 'JP'
+      return "また正解です！！"
+    else
+      return "Skilled!!"
+
+
+
+
+Template.mastered.rendered = () ->
+
+  $('.mastered').css
+    color: 'white'
+  $('.mastered').animate
+    color: 'blue',
+    500
+
+Template.mastered.helpers
+
+  mastered: ->
+    if Localization.findOne().region == 'JP'
+      return "覚えましたね！！！"
+    else
+      return "MASTERED!!!"
+
+
+
+
+Template.incorrect.rendered = () ->
+
+  $('.incorrect').css
+    color: 'white'
+  $('.incorrect').animate
+    color: 'red',
+    1500
+
+Template.incorrect.helpers
+
+  incorrect: ->
+    if Localization.findOne().region == 'JP'
+      return "が正解でした..."
+    else
+      return "...is the correct answer"
 
 
 
@@ -224,9 +293,9 @@ Template.question.helpers
 
 @resetQuestion = () ->
   outscoredUpdate({isCorrect: false})
-  outscoredUpdate({isIncorrect: false})
   outscoredUpdate({isSkilled: false})
   outscoredUpdate({isMastered: false})
+  outscoredUpdate({isIncorrect: false})
 
 # @processSelection = (choice) ->
 #   if choice.match(JP_DIGIT_REGEX)
@@ -257,7 +326,17 @@ Template.question.helpers
     1500
 
 @correctAnswer = () ->
-  outscoredUpdate({isCorrect: true})
+  questionID = getCurrentQuestionID()
+  if Meteor.userId()
+    user = Meteor.user()
+    if user.questionsSkilled && questionID in user.questionsMastered
+      outscoredUpdate({isMastered: true})
+    else if user.questionsCorrect && questionID in user.questionsSkilled
+      outscoredUpdate({isSkilled: true})
+    else
+      outscoredUpdate({isCorrect: true})
+  else
+    outscoredUpdate({isCorrect: true})
   $('.correct').css
     color: 'white'
   $('.correct').animate

@@ -63,6 +63,14 @@
   color: lime;
 }
 
+.skilled {
+  color: aqua;
+}
+
+.mastered {
+  color: blue;
+}
+
 .incorrect {
   color: red;
 }

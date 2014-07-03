@@ -27,10 +27,16 @@
         <p class='x' style='display: none'>x</p>
         <div class='answer-heading'>
           {{#if isCorrect}}
-          <p class='correct'>{{correct}}</p>
+            {{> correct}}
+          {{/if}}
+          {{#if isSkilled}}
+            {{> skilled}}
+          {{/if}}
+          {{#if isMastered}}
+            {{> mastered}}
           {{/if}}
           {{#if isIncorrect}}
-          <p class='incorrect'>{{incorrect}}</p>
+            {{> incorrect}}
           {{/if}}
         </div>
           <div class='explanation' style='display: none'>
@@ -66,4 +72,20 @@
     {{/if}}
   </div>
 
+</template>
+
+<template name='correct'>
+  <p class='correct animated pulse'>{{correct}}</p>
+</template>
+
+<template name='skilled'>
+  <p class='skilled animated pulse'>{{skilled}}</p>
+</template>
+
+<template name='mastered'>
+  <p class='mastered animated pulse'>{{mastered}}</p>
+</template>
+
+<template name='incorrect'>
+  <p class='incorrect'>{{incorrect}}</p>
 </template>
