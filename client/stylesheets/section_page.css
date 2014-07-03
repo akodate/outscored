@@ -58,9 +58,9 @@
 }
 
 .answer-heading {
-  font-size: 24px;
   line-height: 18px;
   font-style: italic;
+  text-align: left;
 }
 
 .answer {
@@ -72,18 +72,24 @@
 }
 
 .correct {
+  font-size: 24px;
   color: lime;
 }
 
 .skilled {
+  font-size: 36px;
   color: teal;
+  text-align: center;
 }
 
 .mastered {
+  font-size: 36px;
   color: aqua;
+  text-align: center;
 }
 
 .incorrect {
+  font-size: 24px;
   color: red;
 }
 
