@@ -154,81 +154,6 @@ Template.question.helpers
 
 
 
-Template.correct.rendered = () ->
-
-  $('.correct').css
-    color: 'white'
-  $('.correct').animate
-    color: 'lime',
-    500
-
-Template.correct.helpers
-
-  correct: ->
-    if Localization.findOne().region == 'JP'
-      return "正解です！"
-    else
-      return "Correct!"
-
-
-
-
-Template.skilled.rendered = () ->
-
-  $('.skilled').css
-    color: 'white'
-  $('.skilled').animate
-    color: 'aqua',
-    500
-
-Template.skilled.helpers
-
-  skilled: ->
-    if Localization.findOne().region == 'JP'
-      return "また正解です！！"
-    else
-      return "Skilled!!"
-
-
-
-
-Template.mastered.rendered = () ->
-
-  $('.mastered').css
-    color: 'white'
-  $('.mastered').animate
-    color: 'blue',
-    500
-
-Template.mastered.helpers
-
-  mastered: ->
-    if Localization.findOne().region == 'JP'
-      return "覚えましたね！！！"
-    else
-      return "MASTERED!!!"
-
-
-
-
-Template.incorrect.rendered = () ->
-
-  $('.incorrect').css
-    color: 'white'
-  $('.incorrect').animate
-    color: 'red',
-    1500
-
-Template.incorrect.helpers
-
-  incorrect: ->
-    if Localization.findOne().region == 'JP'
-      return "が正解でした..."
-    else
-      return "...is the correct answer"
-
-
-
 # Helpers
 
 @sectionSetup = () ->
@@ -337,11 +262,6 @@ Template.incorrect.helpers
       outscoredUpdate({isCorrect: true})
   else
     outscoredUpdate({isCorrect: true})
-  $('.correct').css
-    color: 'white'
-  $('.correct').animate
-    color: 'lime',
-    1500
   Meteor.setTimeout questionOut, 1000
 
 @incorrectClick = (event) ->
