@@ -90,6 +90,28 @@ Template.sectionPage.helpers
   sectionName: ->
     return TestSections.findOne().filePath
 
+  correctBarWidth: ->
+    if Meteor.userId() && Meteor.user().questionsCorrect
+      user = Meteor.user()
+      numQuestions = QuestionResults.find().count()
+      (_.intersection(outscoredFind('questionIDArray'), user.questionsCorrect).length) / numQuestions / 3 * 100
+    else 0
+
+  skilledBarWidth: ->
+    if Meteor.userId() && Meteor.user().questionsSkilled
+      user = Meteor.user()
+      numQuestions = QuestionResults.find().count()
+      (_.intersection(outscoredFind('questionIDArray'), user.questionsSkilled).length) / numQuestions / 3 * 100
+    else 0
+
+  masteredBarWidth: ->
+    if Meteor.userId() && Meteor.user().questionsMastered
+      user = Meteor.user()
+      numQuestions = QuestionResults.find().count()
+      (_.intersection(outscoredFind('questionIDArray'), user.questionsMastered).length) / numQuestions / 3 * 100
+    else 0
+
+
 
 
 Template.question.helpers
@@ -216,6 +238,8 @@ Template.question.helpers
       originals = normalArr.concat(masteredArr)
     else if !normalArr
       alert('Everything mastered!')
+    return originals
+  else
     return originals
 
 @sectionStyleSetup = () ->

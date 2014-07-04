@@ -22,7 +22,7 @@ Template.skilled.rendered = () ->
   $('.skilled').css
     color: 'white'
   $('.skilled').animate
-    color: 'rgb(0,128,128)',
+    color: 'rgb(0,200,184)',
     500
 
 Template.skilled.helpers
