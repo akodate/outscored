@@ -242,8 +242,10 @@ Template.question.helpers
   reloadQuestion()
   resetQuestion()
   QuestionResults.update({}, {$set: {result: false}}, {multi: true})
-  # QuestionResults.update(order: outscoredFind('currentQuestionNum'), {$set: {result: true}})
-  QuestionResults.update(_id: outscoredFind('questionIDArray')[0], {$set: {result: true}})
+  if Meteor.userId()
+    QuestionResults.update(_id: outscoredFind('questionIDArray')[0], {$set: {result: true}})
+  else
+    QuestionResults.update(order: outscoredFind('currentQuestionNum'), {$set: {result: true}})
   shuffleChoices()
 
 @reloadQuestion = () ->
