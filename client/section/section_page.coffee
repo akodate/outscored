@@ -100,6 +100,19 @@ Template.question.helpers
     else
       return "Question"
 
+  currentQuestionNum: ->
+    if Meteor.userId()
+      user = Meteor.user()
+      questionID = getCurrentQuestionID()
+      if (user.questionsMastered && questionID in user.questionsMastered) || (user.questionsSkilled && questionID in user.questionsSkilled)
+        (_.intersection(outscoredFind('questionIDArray'), user.questionsMastered).length + 1) || 1
+      else if user.questionsCorrect && questionID in user.questionsCorrect
+        (_.intersection(outscoredFind('questionIDArray'), user.questionsSkilled).length + 1) || 1
+      else
+        (_.intersection(outscoredFind('questionIDArray'), user.questionsCorrect).length + 1) || 1
+    else
+      return @.order
+
   totalQuestions: ->
     return QuestionResults.find().count()
 
@@ -240,12 +253,12 @@ Template.question.helpers
 
 @cycleQuestion = () ->
   reloadQuestion()
-  resetQuestion()
   QuestionResults.update({}, {$set: {result: false}}, {multi: true})
   if Meteor.userId()
     QuestionResults.update(_id: outscoredFind('questionIDArray')[0], {$set: {result: true}})
   else
     QuestionResults.update(order: outscoredFind('currentQuestionNum'), {$set: {result: true}})
+  resetQuestion()
   shuffleChoices()
 
 @reloadQuestion = () ->
