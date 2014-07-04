@@ -197,11 +197,26 @@ Template.question.helpers
     console.log "Order: " + doc.order
     originals.push(doc.original)
   # Fill client-side questions collection with originals, assign order and active tag
+  originals = QIDArrayShuffle(originals)
   outscoredUpdate({questionIDArray: originals})
   for original, i in originals
     thisID = QuestionResults.insert(Questions.findOne(_id: original))
     QuestionResults.update(thisID, {$set: {order: (i + 1), result: false}})
   QuestionResults.update(order: outscoredFind('currentQuestionNum'), {$set: {result: true}})
+
+@QIDArrayShuffle = (originals) ->
+  if Meteor.userId()
+    user = Meteor.user()
+    originals = _.shuffle(originals)
+    normalArr = []
+    masteredArr = []
+    # Partition into normal and mastered arrays, push mastered to end
+    (if id not in user.questionsMastered then normalArr else masteredArr).push id for id in originals
+    if normalArr && masteredArr
+      originals = normalArr.concat(masteredArr)
+    else if !normalArr
+      alert('Everything mastered!')
+    return originals
 
 @sectionStyleSetup = () ->
   $('.previous-question').hide()
