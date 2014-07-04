@@ -164,6 +164,7 @@ Template.question.helpers
     console.log "Order: " + doc.order
     originals.push(doc.original)
   # Fill client-side questions collection with originals, assign order and active tag
+  outscoredUpdate({questionIDArray: originals})
   for original, i in originals
     thisID = QuestionResults.insert(Questions.findOne(_id: original))
     QuestionResults.update(thisID, {$set: {order: (i + 1), result: false}})
@@ -238,17 +239,49 @@ Template.question.helpers
   outscoredUpdate({noChoicesIn: false})
 
 @cycleQuestion = () ->
+  reloadQuestion()
   resetQuestion()
   QuestionResults.update({}, {$set: {result: false}}, {multi: true})
-  QuestionResults.update(order: outscoredFind('currentQuestionNum'), {$set: {result: true}})
+  # QuestionResults.update(order: outscoredFind('currentQuestionNum'), {$set: {result: true}})
+  QuestionResults.update(_id: outscoredFind('questionIDArray')[0], {$set: {result: true}})
   shuffleChoices()
-  outscoredUpdate({clickedChoice: false})
+
+@reloadQuestion = () ->
+  if Meteor.userId()
+    questionIDArray = outscoredFind('questionIDArray')
+    console.log questionIDArray
+    arrLength = questionIDArray.length
+    questionID = questionIDArray.shift()
+    console.log questionIDArray
+    if outscoredFind('isMastered')
+      console.log "Mastered, pushed to end of array."
+      questionIDArray.push(questionID)
+    else if outscoredFind('isSkilled')
+      index = getIndex(30, 100, arrLength)
+      console.log "Skilled, new index is: " + index + "/" + arrLength
+      questionIDArray.splice((index - 1), 0, questionID)
+    else if outscoredFind('isCorrect')
+      index = getIndex(10, 50, arrLength)
+      console.log "Correct, new index is: " + index + "/" + arrLength
+      questionIDArray.splice((index - 1), 0, questionID)
+    else if outscoredFind('isIncorrect')
+      index = getIndex(10, 30, arrLength)
+      console.log "Incorrect, new index is: " + index + "/" + arrLength
+      questionIDArray.splice((index - 1), 0, questionID)
+    console.log questionIDArray
+    outscoredUpdate({questionIDArray: questionIDArray})
+
+@getIndex = (lower, upper, arrLength) ->
+  lowerLimit = Math.round(lower * arrLength / 100)
+  upperLimit = Math.round(upper * arrLength / 100)
+  return Math.floor(Math.random() * (upperLimit - lowerLimit)) + lowerLimit
 
 @resetQuestion = () ->
   outscoredUpdate({isCorrect: false})
   outscoredUpdate({isSkilled: false})
   outscoredUpdate({isMastered: false})
   outscoredUpdate({isIncorrect: false})
+  outscoredUpdate({clickedChoice: false})
 
 # @processSelection = (choice) ->
 #   if choice.match(JP_DIGIT_REGEX)
