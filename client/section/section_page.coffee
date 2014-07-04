@@ -95,10 +95,30 @@ Template.sectionPage.helpers
 Template.question.helpers
 
   questionHeading: ->
-    if Localization.findOne().region == 'JP'
-      return "問題"
+    if Meteor.userId()
+      user = Meteor.user()
+      questionID = getCurrentQuestionID()
+      if (user.questionsMastered && questionID in user.questionsMastered) || (user.questionsSkilled && questionID in user.questionsSkilled)
+        if Localization.findOne().region == 'JP'
+          return "マステリー問題"
+        else
+          return "Mastery question"
+      else if user.questionsCorrect && questionID in user.questionsCorrect
+        if Localization.findOne().region == 'JP'
+          return "復習問題"
+        else
+          return "Review question"
+      else
+        if Localization.findOne().region == 'JP'
+          return "問題"
+        else
+          return "Question"
     else
-      return "Question"
+      if Localization.findOne().region == 'JP'
+        return "問題"
+      else
+        return "Question"
+
 
   currentQuestionNum: ->
     if Meteor.userId()
