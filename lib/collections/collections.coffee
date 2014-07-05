@@ -44,13 +44,13 @@ Meteor.methods
   # User-side methods
 
   testViewed: (testID) ->
-    if !! Meteor.userId()
+    if Meteor.userId()
       userID = Meteor.userId()
       console.log testID + " test viewed, current user is: " + userID
       Meteor.users.update({_id: userID}, {$addToSet: {testsViewed: testID}})
 
   testStatus: (testID) ->
-    if !! Meteor.userId() && !@isSimulation
+    if Meteor.userId() && !@isSimulation
       user = Meteor.user()
       test = Tests.findOne(_id: testID)
       userTestCorrect = _.intersection(test.hasQuestions, (user.questionsCorrect ||= []))
@@ -70,13 +70,13 @@ Meteor.methods
         Meteor.users.update({_id: user._id}, {$addToSet: {testsAnswered: testID}})
 
   sectionViewed: (sectionID) ->
-    if !! Meteor.userId()
+    if Meteor.userId()
       userID = Meteor.userId()
       console.log sectionID + " section viewed, current user is: " + userID
       Meteor.users.update({_id: userID}, {$addToSet: {sectionsViewed: sectionID}})
 
   sectionStatus: (sectionID) ->
-    if !! Meteor.userId() && !@isSimulation
+    if Meteor.userId() && !@isSimulation
       user = Meteor.user()
       section = Sections.findOne(_id: sectionID)
       userSectionCorrect = _.intersection(section.hasQuestions, (user.questionsCorrect ||= []))
@@ -96,14 +96,14 @@ Meteor.methods
         Meteor.users.update({_id: user._id}, {$addToSet: {sectionsAnswered: sectionID}})
 
   questionViewed: (questionID) ->
-    if !! Meteor.userId()
+    if Meteor.userId()
       userID = Meteor.userId()
       console.log questionID + " question viewed, current user is: " + userID
       Meteor.users.update({_id: userID}, {$addToSet: {questionsViewed: questionID}})
       Meteor.users.update({_id: userID}, {$addToSet: {questionsSkipped: questionID}})
 
   questionCorrect: (questionID) ->
-    if !! Meteor.userId()
+    if Meteor.userId()
       userID = Meteor.userId()
       user = Meteor.user()
       if user.questionsSkilled && questionID in user.questionsSkilled # Question mastered
@@ -119,7 +119,7 @@ Meteor.methods
         Meteor.users.update({_id: userID}, {$pull: {questionsSkipped: questionID}})
 
   questionIncorrect: (questionID) ->
-    if !! Meteor.userId()
+    if Meteor.userId()
       userID = Meteor.userId()
       console.log questionID + " question incorrect, current user is: " + userID
       Meteor.users.update({_id: userID}, {$pull: {questionsCorrect: questionID}})
@@ -127,13 +127,6 @@ Meteor.methods
       Meteor.users.update({_id: userID}, {$pull: {questionsMastered: questionID}})
       Meteor.users.update({_id: userID}, {$addToSet: {questionsIncorrect: questionID}})
       Meteor.users.update({_id: userID}, {$pull: {questionsSkipped: questionID}})
-
-# testsAnswered
-# testsSkilled
-# testsMastered
-# sectionsAnswered
-# sectionsSkilled
-# sectionsMastered
 
 
 

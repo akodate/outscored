@@ -1,4 +1,5 @@
 @Outscored = new Meteor.Collection(null)
+@SubUser = new Meteor.Collection(null)
 @Results = new Meteor.Collection(null)
 @SectionResults = new Meteor.Collection(null)
 @Localization = new Meteor.Collection(null)
@@ -13,6 +14,9 @@ Template.home.rendered = () ->
   if Outscored.find().count() == 0
     Outscored.insert({})
   outscoredUpdate({clickedTest: false, clickedSection: false, testsEntered: false})
+  if SubUser.find().count() == 0
+    SubUser.insert({})
+
   renderSetup()
   setDivHeights()
   searchArrowSetup()
@@ -58,7 +62,7 @@ Template.home.events
     unless outscoredFind('clickedSection')
       outscoredUpdate({clickedSection: true})
       clickHighlight(event)
-    if Meteor.userId()
+    if Meteor.userId() || subUser()
       sectionViewCount(sectionResult.original)
       testViewCount(test._id)
     Router.go('sectionPage', {testSecID: sectionResult._id, secID: sectionResult.original, testID: test._id})
@@ -144,6 +148,12 @@ Template.home.helpers
 @outscoredFind = (field) ->
   Outscored.findOne()[field]
 
+@subUser = () ->
+  SubUser.findOne()
+
+@subUserUpdate = (query, fields) ->
+  SubUser.update(query, fields)
+
 @setDivHeights = () ->
   $('#main').css('height', ($('.sheet')[0].offsetHeight - $('#main')[0].offsetTop) + 72)
   $('.result-box').css('height', ($('#main')[0].offsetHeight - $('.result-box')[0].offsetTop))
@@ -168,7 +178,7 @@ Template.home.helpers
 @sectionsIn = () ->
   if $('.not-animated-section')[0] # jQuery found a test
     outscoredUpdate({testsEntered: true})
-    if Meteor.userId()
+    if Meteor.userId() || subUser()
       colorTest($('.not-animated-section')[0])
   $($('.not-animated-section')[0]).removeClass('not-animated-section').addClass('animated bounceInUp').show() # Animate the first remaining test
   # Execute while jQuery hasn't found a test yet or tests can still be found
@@ -179,7 +189,7 @@ Template.home.helpers
   testText = testElement.innerText.replace(/^\s+|\s+$/g, "")
   # console.log "Test text: " + testText
   currentTestID = Results.findOne(name: testText)._id
-  user = Meteor.user()
+  user = Meteor.user() || subUser()
   if user.testsMastered && currentTestID in user.testsMastered
     $(testElement).addClass('mastered-test')
   else if user.testsSkilled && currentTestID in user.testsSkilled
@@ -247,7 +257,7 @@ Template.home.helpers
   TestSections.find({_id: {$in: testResult.children}}).forEach( (doc) ->
     doc.name = (/[^\/]+$/.exec(doc.filePath))[0] ||= ''
     SectionResults.insert(doc)
-    if Meteor.userId()
+    if Meteor.userId() || subUser()
       Meteor.setTimeout (() ->
         colorSection(doc)
       ), 30
@@ -256,7 +266,7 @@ Template.home.helpers
 @colorSection = (section) ->
   for sectionElement in $('.section-result')
     if sectionElement.innerText == section.name
-      user = Meteor.user()
+      user = Meteor.user() || subUser()
       if user.sectionsMastered && section.original in user.sectionsMastered
         $(sectionElement).addClass('mastered-section')
       else if user.sectionsSkilled && section.original in user.sectionsSkilled
@@ -308,13 +318,31 @@ Template.home.helpers
   sectionViewed(sectionID)
 
 @testViewed = (testID) ->
-  Meteor.call( "testViewed", testID, (error, id) ->
-    if (error)
-      alert error.reason
-  )
+  if Meteor.userId()
+    Meteor.call( "testViewed", testID, (error, id) ->
+      if (error)
+        alert error.reason
+    )
+  else if subUser()
+    subTestViewed(testID)
 
 @sectionViewed = (sectionID) ->
-  Meteor.call( "sectionViewed", sectionID, (error, id) ->
-    if (error)
-      alert error.reason
-  )
+  if Meteor.userId()
+    Meteor.call( "sectionViewed", sectionID, (error, id) ->
+      if (error)
+        alert error.reason
+    )
+  else if subUser()
+    subSectionViewed(sectionID)
+
+# Sub-user methods
+
+@subTestViewed = (testID) ->
+  userID = subUser()._id
+  console.log testID + " test viewed, current user is: " + userID
+  subUserUpdate({_id: userID}, {$addToSet: {testsViewed: testID}})
+
+@subSectionViewed = (sectionID) ->
+  userID = subUser()._id
+  console.log sectionID + " section viewed, current user is: " + userID
+  subUserUpdate({_id: userID}, {$addToSet: {sectionsViewed: sectionID}})
