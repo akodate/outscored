@@ -43,6 +43,17 @@ Meteor.methods
 
   # User-side methods
 
+  subTransfer: (subUser) ->
+    console.log "Checked for sub-user"
+    userID = Meteor.userId()
+    for arrKey, arrValue of subUser
+      console.log arrKey
+      console.log arrValue
+      if arrKey != '_id'
+        dynObj = {}
+        dynObj[arrKey] = {$each: arrValue}
+        Meteor.users.update({_id: userID}, {$addToSet: dynObj})
+
   testViewed: (testID) ->
     if Meteor.userId()
       userID = Meteor.userId()
