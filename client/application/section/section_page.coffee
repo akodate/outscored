@@ -244,12 +244,15 @@ Template.question.helpers
     return originals
 
 @masteredToBack = (user, originals) ->
-  normalArr = []
-  masteredArr = []
-  # Partition into normal and mastered arrays, push mastered to end
-  (if id not in user.questionsMastered then normalArr else masteredArr).push id for id in originals
-  if normalArr && masteredArr
-    originals = normalArr.concat(masteredArr)
+  if user.questionsMastered
+    normalArr = []
+    masteredArr = []
+    # Partition into normal and mastered arrays, push mastered to end
+    (if id not in user.questionsMastered then normalArr else masteredArr).push id for id in originals
+    if normalArr && masteredArr
+      originals = normalArr.concat(masteredArr)
+    else
+      originals
   else
     originals
 
@@ -353,6 +356,7 @@ Template.question.helpers
       index = getIndex(10, 30, arrLength)
       console.log "Incorrect, new index is: " + index + "/" + arrLength
       questionIDArray.splice((index - 1), 0, questionID)
+    console.log (Meteor.user() || subUser())
     questionIDArray = masteredToBack((Meteor.user() || subUser()), questionIDArray)
     console.log questionIDArray
     outscoredUpdate({questionIDArray: questionIDArray})
