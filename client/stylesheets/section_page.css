@@ -122,7 +122,6 @@
 
 .progress-bar {
   position: absolute;
-  background-color: black;
   overflow: hidden;
   height: 40px;
   width: 90%;
@@ -130,13 +129,21 @@
   left: 5%;
   border: 1px solid yellow;
   border-radius: 20px;
+  background: #7d7e7d; /* Old browsers */
+  background: -moz-linear-gradient(-45deg,  #7d7e7d 0%, #0e0e0e 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, right bottom, color-stop(0%,#7d7e7d), color-stop(100%,#0e0e0e)); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(-45deg,  #7d7e7d 0%,#0e0e0e 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(-45deg,  #7d7e7d 0%,#0e0e0e 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(-45deg,  #7d7e7d 0%,#0e0e0e 100%); /* IE10+ */
+  background: linear-gradient(135deg,  #7d7e7d 0%,#0e0e0e 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7d7e7d', endColorstr='#0e0e0e',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
 }
 
 .correct-bar, .skilled-bar, .mastered-bar {
   display: inline-block;
   float: left;
   height: 100%;
-  border: 1px solid white;
+  border-right: 2px solid gray;
 }
 
 .correct-bar {
