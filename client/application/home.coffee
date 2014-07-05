@@ -288,11 +288,10 @@ Template.home.helpers
       when 'JP'
         loginDropdown.css("font-size", "16px")
         loginDropdown.css("font-family", "Belgrano")
-        loginDropdownMenu.css("left", "-70px")
+        loginDropdownMenu.css("left", "-50px")
       else
         loginDropdown.css("font-size", "20px")
         loginDropdown.css("font-family", "La Belle Aurore")
-        loginDropdownMenu.css("left", "-93px")
 
 @setLocalization()
 

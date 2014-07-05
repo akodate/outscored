@@ -68,24 +68,44 @@ a.navbar-brand {
     background-color: transparent !important;
 }
 
+/*Area behind dropdown buttons*/
+#login-dropdown-list > div > li > a {
+  position: absolute;
+  background-color: transparent;
+}
+
 .login-button, #login-buttons-logout {
   font-size: 24px;
   border: 1px solid white;
   padding: 7px;
 }
 
+#login-dropdown-list> div > li > a > button {
+  position: absolute;
+  left: 10px;
+  width: 200px;
+}
+
 /*Facebook button*/
 #login-dropdown-list > div > li:nth-child(1) > a > button {
+  top: 6px;
   background-color: #3b5998;
 }
 
 /*Google button*/
 #login-dropdown-list > div > li:nth-child(2) > a > button {
+  top: 51px;
   color: #ffffff;
   background-color: #db4437;
 }
 
+#login-dropdown-list > div {
+  position: relative;
+}
+
 /*Logout button*/
 #login-buttons-logout {
-  background-image: url(/blackboard.jpg);
+  position: absolute;
+  top: 8px;
+  background-color: black;
 }

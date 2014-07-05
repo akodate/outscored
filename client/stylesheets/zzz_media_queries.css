@@ -2,6 +2,7 @@
 
 @media (min-width: 1051px) {
   .sheet {
+    max-width: 1280px
   }
 }
 
