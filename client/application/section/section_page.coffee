@@ -41,8 +41,8 @@ Template.sectionPage.events
       outscoredUpdate({clickedChoice: true})
       choice = event.target.innerText
       thisQuestion = QuestionResults.findOne({result: true})
-      choice = choice.replace(/^\s+|\s+$/g, "")
-      answer = thisQuestion.answer.replace(/^\s+|\s+$/g, "")
+      choice = choice.replace(/^\s*\$*|\s+$/g, "")
+      answer = thisQuestion.answer.replace(/^\s*\$*|\s+$/g, "")
       console.log "CHOICE: " + choice
       console.log "ANSWER: " + answer
       if answer.match('^' + choice + '$')
@@ -237,17 +237,21 @@ Template.question.helpers
     user = Meteor.user() || subUser()
     originals = _.shuffle(originals)
     if user.questionsMastered
-      normalArr = []
-      masteredArr = []
-      # Partition into normal and mastered arrays, push mastered to end
-      (if id not in user.questionsMastered then normalArr else masteredArr).push id for id in originals
-      if normalArr && masteredArr
-        originals = normalArr.concat(masteredArr)
-      else if !normalArr
-        alert('Everything mastered!')
+      console.log "Mastered questions found, pushing to back."
+      originals = masteredToBack(user, originals)
     return originals
   else
     return originals
+
+@masteredToBack = (user, originals) ->
+  normalArr = []
+  masteredArr = []
+  # Partition into normal and mastered arrays, push mastered to end
+  (if id not in user.questionsMastered then normalArr else masteredArr).push id for id in originals
+  if normalArr && masteredArr
+    originals = normalArr.concat(masteredArr)
+  else
+    originals
 
 @sectionStyleSetup = () ->
   $('.previous-question').hide()
@@ -325,6 +329,8 @@ Template.question.helpers
   else
     QuestionResults.update(order: outscoredFind('currentQuestionNum'), {$set: {result: true}})
   resetQuestion()
+  QIDArray = masteredToBack((Meteor.user() || subUser()), outscoredFind('questionIDArray'))
+  outscoredUpdate({questionIDArray: QIDArray})
   shuffleChoices()
 
 @reloadQuestion = () ->
