@@ -2,6 +2,10 @@ html {
 
 }
 
+body {
+  -webkit-overflow-scrolling: touch;
+}
+
 .sheet {
   background-image: url(/blackboard.jpg);
   background-size: auto 100%;
