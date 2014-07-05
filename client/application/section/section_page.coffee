@@ -41,8 +41,8 @@ Template.sectionPage.events
       outscoredUpdate({clickedChoice: true})
       choice = event.target.innerText
       thisQuestion = QuestionResults.findOne({result: true})
-      choice = choice.replace(/^\s*\$*|\s+$/g, "")
-      answer = thisQuestion.answer.replace(/^\s*\$*|\s+$/g, "")
+      choice = choice.replace(/^\s|[$()]+|\s*$/g, "")
+      answer = thisQuestion.answer.replace(/^\s|[$()]+|\s*$/g, "")
       console.log "CHOICE: " + choice
       console.log "ANSWER: " + answer
       if answer.match('^' + choice + '$')
@@ -329,8 +329,6 @@ Template.question.helpers
   else
     QuestionResults.update(order: outscoredFind('currentQuestionNum'), {$set: {result: true}})
   resetQuestion()
-  QIDArray = masteredToBack((Meteor.user() || subUser()), outscoredFind('questionIDArray'))
-  outscoredUpdate({questionIDArray: QIDArray})
   shuffleChoices()
 
 @reloadQuestion = () ->
@@ -355,6 +353,7 @@ Template.question.helpers
       index = getIndex(10, 30, arrLength)
       console.log "Incorrect, new index is: " + index + "/" + arrLength
       questionIDArray.splice((index - 1), 0, questionID)
+    questionIDArray = masteredToBack((Meteor.user() || subUser()), questionIDArray)
     console.log questionIDArray
     outscoredUpdate({questionIDArray: questionIDArray})
 
