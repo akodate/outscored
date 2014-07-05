@@ -14,8 +14,6 @@ Template.home.rendered = () ->
   if Outscored.find().count() == 0
     Outscored.insert({})
   outscoredUpdate({clickedTest: false, clickedSection: false, testsEntered: false})
-  if SubUser.find().count() == 0
-    SubUser.insert({})
 
   renderSetup()
   setDivHeights()

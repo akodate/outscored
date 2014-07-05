@@ -8,8 +8,6 @@ Template.sectionPage.created = () ->
 
   if Outscored.find().count() == 0
     Outscored.insert({})
-  if SubUser.find().count() == 0
-    SubUser.insert({})
 
   outscoredUpdate({currentQuestionNum: 1})
   outscoredUpdate({clickedChoice: false})
@@ -97,7 +95,7 @@ Template.sectionPage.helpers
       user = Meteor.user() || subUser()
       numQuestions = QuestionResults.find().count()
       width = (_.intersection(outscoredFind('questionIDArray'), user.questionsCorrect).length) / numQuestions / 3 * 100
-      if width < 2 then width += 1
+      if width < 2 then width = 2
       return width
     else 0
 
@@ -106,7 +104,7 @@ Template.sectionPage.helpers
       user = Meteor.user() || subUser()
       numQuestions = QuestionResults.find().count()
       width = (_.intersection(outscoredFind('questionIDArray'), user.questionsSkilled).length) / numQuestions / 3 * 100
-      if width < 1 && width > 0 then width = 1
+      if width < 2 && width > 0 then width = 2
       return width
     else 0
 
@@ -115,7 +113,7 @@ Template.sectionPage.helpers
       user = Meteor.user() || subUser()
       numQuestions = QuestionResults.find().count()
       width = (_.intersection(outscoredFind('questionIDArray'), user.questionsMastered).length) / numQuestions / 3 * 100
-      if width < 1 && width > 0 then width = 1
+      if width < 2 && width > 0 then width = 2
       return width
     else 0
 

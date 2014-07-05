@@ -6,6 +6,7 @@
     "glob": {},
     "iron-router-progress": {},
     "jquery-color-animation": {},
-    "fastclick": {}
+    "fastclick": {},
+    "session-amplify": {}
   }
 }

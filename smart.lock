@@ -8,7 +8,8 @@
       "glob": {},
       "iron-router-progress": {},
       "jquery-color-animation": {},
-      "fastclick": {}
+      "fastclick": {},
+      "session-amplify": {}
     },
     "packages": {
       "iron-router": {
@@ -18,8 +19,8 @@
       },
       "bootstrap-3": {
         "git": "https://github.com/mangasocial/meteor-bootstrap-3.git",
-        "tag": "v3.1.1-1",
-        "commit": "63dd38968828bb8963636df93e9a1c45e2dfe67e"
+        "tag": "v3.2.0-1",
+        "commit": "17a63902fc6cf1096c5289d963c66cf28b474727"
       },
       "accounts-ui-bootstrap-3-blaze": {
         "git": "https://github.com/rajit/meteor-accounts-ui-bootstrap-3.git",
@@ -33,8 +34,8 @@
       },
       "iron-router-progress": {
         "git": "https://github.com/Multiply/iron-router-progress.git",
-        "tag": "v0.4.0",
-        "commit": "02f78bdaca4c13d59f548d5a0ce83408c34b56d1"
+        "tag": "v0.4.1",
+        "commit": "496fcda9a6ec352b4733725f60c6f280250c3541"
       },
       "jquery-color-animation": {
         "git": "https://github.com/jonjamz/meteor-jquery-color-animation.git",
@@ -45,6 +46,11 @@
         "git": "https://github.com/percolatestudio/meteor-fastclick",
         "tag": "v0.6.7",
         "commit": "fcb3bfd34d9f6874e626b4e24e8f54107938db41"
+      },
+      "session-amplify": {
+        "git": "https://github.com/cramrov/meteor-session-amplify.git",
+        "tag": "v0.1.1",
+        "commit": "4306d0c60f5c6bd633db237bd4200d832e73a122"
       },
       "blaze-layout": {
         "git": "https://github.com/EventedMind/blaze-layout.git",
