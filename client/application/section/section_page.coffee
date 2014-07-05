@@ -93,24 +93,30 @@ Template.sectionPage.helpers
     return TestSections.findOne().filePath
 
   correctBarWidth: ->
-    if (Meteor.userId() && Meteor.user().questionsCorrect) || (subUser() && subUser.questionsCorrect)
+    if (Meteor.userId() && Meteor.user().questionsCorrect) || (subUser() && subUser().questionsCorrect)
       user = Meteor.user() || subUser()
       numQuestions = QuestionResults.find().count()
-      (_.intersection(outscoredFind('questionIDArray'), user.questionsCorrect).length) / numQuestions / 3 * 100
+      width = (_.intersection(outscoredFind('questionIDArray'), user.questionsCorrect).length) / numQuestions / 3 * 100
+      if width < 2 then width += 1
+      return width
     else 0
 
   skilledBarWidth: ->
-    if (Meteor.userId() && Meteor.user().questionsSkilled) || (subUser() && subUser.questionsSkilled)
+    if (Meteor.userId() && Meteor.user().questionsSkilled) || (subUser() && subUser().questionsSkilled)
       user = Meteor.user() || subUser()
       numQuestions = QuestionResults.find().count()
-      (_.intersection(outscoredFind('questionIDArray'), user.questionsSkilled).length) / numQuestions / 3 * 100
+      width = (_.intersection(outscoredFind('questionIDArray'), user.questionsSkilled).length) / numQuestions / 3 * 100
+      if width < 1 && width > 0 then width = 1
+      return width
     else 0
 
   masteredBarWidth: ->
-    if (Meteor.userId() && Meteor.user().questionsMastered) || (subUser() && subUser.questionsMastered)
+    if (Meteor.userId() && Meteor.user().questionsMastered) || (subUser() && subUser().questionsMastered)
       user = Meteor.user() || subUser()
       numQuestions = QuestionResults.find().count()
-      (_.intersection(outscoredFind('questionIDArray'), user.questionsMastered).length) / numQuestions / 3 * 100
+      width = (_.intersection(outscoredFind('questionIDArray'), user.questionsMastered).length) / numQuestions / 3 * 100
+      if width < 1 && width > 0 then width = 1
+      return width
     else 0
 
 
@@ -504,18 +510,7 @@ Template.question.helpers
 
 
 # Meteor methods
-
-@testStatus = (testID) ->
-  Meteor.call( "testStatus", testID, (error, id) ->
-    if (error)
-      alert error.reason
-  )
-
-@sectionStatus = (sectionID) ->
-  Meteor.call( "sectionStatus", sectionID, (error, id) ->
-    if (error)
-      alert error.reason
-  )
+  # Question side:
 
 @questionViewCount = (questionID) ->
   Meteor.call( "questionViewCount", questionID, (error, id) ->
@@ -538,95 +533,122 @@ Template.question.helpers
   )
   questionIncorrect(questionID)
 
+  # User side:
+
+@testStatus = (testID) ->
+  if Meteor.userId()
+    Meteor.call( "testStatus", testID, (error, id) ->
+      if (error)
+        alert error.reason
+    )
+  else if subUser()
+    subTestStatus(testID)
+
+@sectionStatus = (sectionID) ->
+  if Meteor.userId()
+    Meteor.call( "sectionStatus", sectionID, (error, id) ->
+      if (error)
+        alert error.reason
+    )
+  else if subUser()
+    subSectionStatus(sectionID)
+
 @questionViewed = (questionID) ->
-  Meteor.call( "questionViewed", questionID, (error, id) ->
-    if (error)
-      alert error.reason
-  )
+  if Meteor.userId()
+    Meteor.call( "questionViewed", questionID, (error, id) ->
+      if (error)
+        alert error.reason
+    )
+  else if subUser()
+    subQuestionViewed(questionID)
 
 @questionCorrect = (questionID) ->
-  Meteor.call( "questionCorrect", questionID, (error, id) ->
-    if (error)
-      alert error.reason
-  )
+  if Meteor.userId()
+    Meteor.call( "questionCorrect", questionID, (error, id) ->
+      if (error)
+        alert error.reason
+    )
+  else if subUser()
+    subQuestionCorrect(questionID)
 
 @questionIncorrect = (questionID) ->
-  Meteor.call( "questionIncorrect", questionID, (error, id) ->
-    if (error)
-      alert error.reason
-  )
+  if Meteor.userId()
+    Meteor.call( "questionIncorrect", questionID, (error, id) ->
+      if (error)
+        alert error.reason
+    )
+  else if subUser()
+    subQuestionIncorrect(questionID)
+
+
+
 
 # Sub-user methods
 
-testStatus: (testID) ->
-  if !! Meteor.userId() && !@isSimulation
-    user = Meteor.user()
-    test = Tests.findOne(_id: testID)
-    userTestCorrect = _.intersection(test.hasQuestions, (user.questionsCorrect ||= []))
-    numCorrect = userTestCorrect.length
-    numSkilled = _.intersection(userTestCorrect, (user.questionsSkilled ||= [])).length
-    numMastered = _.intersection(userTestCorrect, (user.questionsMastered ||= [])).length
-    mastery = (numCorrect + numSkilled + numMastered) / 3 / (test.hasQuestions.length) * 100
-    console.log "Test mastery is: " + mastery
-    if mastery == 100
-      console.log "TEST STATUS IS MASTERED!!!"
-      Meteor.users.update({_id: user._id}, {$addToSet: {testsMastered: testID}})
-    else if mastery > 66
-      Meteor.users.update({_id: user._id}, {$addToSet: {testsSkilled: testID}})
-    else if mastery > 33
-      Meteor.users.update({_id: user._id}, {$addToSet: {testsExperienced: testID}})
-    else if mastery > 0
-      Meteor.users.update({_id: user._id}, {$addToSet: {testsAnswered: testID}})
+subTestStatus = (testID) ->
+  user = subUser()
+  test = Tests.findOne(_id: testID)
+  userTestCorrect = _.intersection(test.hasQuestions, (user.questionsCorrect ||= []))
+  numCorrect = userTestCorrect.length
+  numSkilled = _.intersection(userTestCorrect, (user.questionsSkilled ||= [])).length
+  numMastered = _.intersection(userTestCorrect, (user.questionsMastered ||= [])).length
+  mastery = (numCorrect + numSkilled + numMastered) / 3 / (test.hasQuestions.length) * 100
+  console.log "Test mastery is: " + mastery
+  if mastery == 100
+    console.log "TEST STATUS IS MASTERED!!!"
+    subUserUpdate({_id: user._id}, {$addToSet: {testsMastered: testID}})
+  else if mastery > 66
+    subUserUpdate({_id: user._id}, {$addToSet: {testsSkilled: testID}})
+  else if mastery > 33
+    subUserUpdate({_id: user._id}, {$addToSet: {testsExperienced: testID}})
+  else if mastery > 0
+    subUserUpdate({_id: user._id}, {$addToSet: {testsAnswered: testID}})
 
-sectionStatus: (sectionID) ->
-  if Meteor.userId() && !@isSimulation
-    user = Meteor.user()
-    section = Sections.findOne(_id: sectionID)
-    userSectionCorrect = _.intersection(section.hasQuestions, (user.questionsCorrect ||= []))
-    numCorrect = userSectionCorrect.length
-    numSkilled = _.intersection(userSectionCorrect, (user.questionsSkilled ||= [])).length
-    numMastered = _.intersection(userSectionCorrect, (user.questionsMastered ||= [])).length
-    mastery = (numCorrect + numSkilled + numMastered) / 3 / (section.hasQuestions.length) * 100
-    console.log "Section mastery is: " + mastery
-    if mastery == 100
-      console.log "SECTION STATUS IS MASTERED!!!"
-      Meteor.users.update({_id: user._id}, {$addToSet: {sectionsMastered: sectionID}})
-    else if mastery > 66
-      Meteor.users.update({_id: user._id}, {$addToSet: {sectionsSkilled: sectionID}})
-    else if mastery > 33
-      Meteor.users.update({_id: user._id}, {$addToSet: {sectionsExperienced: sectionID}})
-    else if mastery > 0
-      Meteor.users.update({_id: user._id}, {$addToSet: {sectionsAnswered: sectionID}})
+subSectionStatus = (sectionID) ->
+  user = subUser()
+  section = Sections.findOne(_id: sectionID)
+  userSectionCorrect = _.intersection(section.hasQuestions, (user.questionsCorrect ||= []))
+  numCorrect = userSectionCorrect.length
+  numSkilled = _.intersection(userSectionCorrect, (user.questionsSkilled ||= [])).length
+  numMastered = _.intersection(userSectionCorrect, (user.questionsMastered ||= [])).length
+  mastery = (numCorrect + numSkilled + numMastered) / 3 / (section.hasQuestions.length) * 100
+  console.log "Section mastery is: " + mastery
+  if mastery == 100
+    console.log "SECTION STATUS IS MASTERED!!!"
+    subUserUpdate({_id: user._id}, {$addToSet: {sectionsMastered: sectionID}})
+  else if mastery > 66
+    subUserUpdate({_id: user._id}, {$addToSet: {sectionsSkilled: sectionID}})
+  else if mastery > 33
+    subUserUpdate({_id: user._id}, {$addToSet: {sectionsExperienced: sectionID}})
+  else if mastery > 0
+    subUserUpdate({_id: user._id}, {$addToSet: {sectionsAnswered: sectionID}})
 
-questionViewed: (questionID) ->
-  if Meteor.userId()
-    userID = Meteor.userId()
-    console.log questionID + " question viewed, current user is: " + userID
-    Meteor.users.update({_id: userID}, {$addToSet: {questionsViewed: questionID}})
-    Meteor.users.update({_id: userID}, {$addToSet: {questionsSkipped: questionID}})
+subQuestionViewed = (questionID) ->
+  userID = subUser()._id
+  console.log questionID + " question viewed, current user is: " + userID
+  subUserUpdate({_id: userID}, {$addToSet: {questionsViewed: questionID}})
+  subUserUpdate({_id: userID}, {$addToSet: {questionsSkipped: questionID}})
 
-questionCorrect: (questionID) ->
-  if Meteor.userId()
-    userID = Meteor.userId()
-    user = Meteor.user()
-    if user.questionsSkilled && questionID in user.questionsSkilled # Question mastered
-      console.log questionID + " question mastered, current user is: " + userID
-      Meteor.users.update({_id: userID}, {$addToSet: {questionsMastered: questionID}})
-    else if user.questionsCorrect && questionID in user.questionsCorrect # Question skilled
-      console.log questionID + " question skilled, current user is: " + userID
-      Meteor.users.update({_id: userID}, {$addToSet: {questionsSkilled: questionID}})
-    else # Question correct
-      console.log questionID + " question correct, current user is: " + userID
-      Meteor.users.update({_id: userID}, {$pull: {questionsIncorrect: questionID}})
-      Meteor.users.update({_id: userID}, {$addToSet: {questionsCorrect: questionID}})
-      Meteor.users.update({_id: userID}, {$pull: {questionsSkipped: questionID}})
+subQuestionCorrect = (questionID) ->
+  userID = subUser()._id
+  user = subUser()
+  if user.questionsSkilled && questionID in user.questionsSkilled # Question mastered
+    console.log questionID + " question mastered, current user is: " + userID
+    subUserUpdate({_id: userID}, {$addToSet: {questionsMastered: questionID}})
+  else if user.questionsCorrect && questionID in user.questionsCorrect # Question skilled
+    console.log questionID + " question skilled, current user is: " + userID
+    subUserUpdate({_id: userID}, {$addToSet: {questionsSkilled: questionID}})
+  else # Question correct
+    console.log questionID + " question correct, current user is: " + userID
+    subUserUpdate({_id: userID}, {$pull: {questionsIncorrect: questionID}})
+    subUserUpdate({_id: userID}, {$addToSet: {questionsCorrect: questionID}})
+    subUserUpdate({_id: userID}, {$pull: {questionsSkipped: questionID}})
 
-questionIncorrect: (questionID) ->
-  if Meteor.userId()
-    userID = Meteor.userId()
-    console.log questionID + " question incorrect, current user is: " + userID
-    Meteor.users.update({_id: userID}, {$pull: {questionsCorrect: questionID}})
-    Meteor.users.update({_id: userID}, {$pull: {questionsSkilled: questionID}})
-    Meteor.users.update({_id: userID}, {$pull: {questionsMastered: questionID}})
-    Meteor.users.update({_id: userID}, {$addToSet: {questionsIncorrect: questionID}})
-    Meteor.users.update({_id: userID}, {$pull: {questionsSkipped: questionID}})
+subQuestionIncorrect = (questionID) ->
+  userID = subUser()._id
+  console.log questionID + " question incorrect, current user is: " + userID
+  subUserUpdate({_id: userID}, {$pull: {questionsCorrect: questionID}})
+  subUserUpdate({_id: userID}, {$pull: {questionsSkilled: questionID}})
+  subUserUpdate({_id: userID}, {$pull: {questionsMastered: questionID}})
+  subUserUpdate({_id: userID}, {$addToSet: {questionsIncorrect: questionID}})
+  subUserUpdate({_id: userID}, {$pull: {questionsSkipped: questionID}})

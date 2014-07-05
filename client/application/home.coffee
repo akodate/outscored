@@ -302,6 +302,7 @@ Template.home.helpers
 
 
 # Meteor methods
+  # Question side:
 
 @testViewCount = (testID) ->
   Meteor.call( "testViewCount", testID, (error, id) ->
@@ -316,6 +317,8 @@ Template.home.helpers
       alert error.reason
   )
   sectionViewed(sectionID)
+
+  # User side:
 
 @testViewed = (testID) ->
   if Meteor.userId()
@@ -334,6 +337,9 @@ Template.home.helpers
     )
   else if subUser()
     subSectionViewed(sectionID)
+
+
+
 
 # Sub-user methods
 

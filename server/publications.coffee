@@ -1,6 +1,9 @@
 Meteor.publish 'tests', () ->
   Tests.find({}, {fields: {name: 1, children: 1}})
 
+Meteor.publish 'test', (id) ->
+  Tests.find(_id: id)
+
 Meteor.publish 'testSections', () ->
   TestSections.find({}, {fields: {filePath: 1, original: 1}})
 

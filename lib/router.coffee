@@ -18,6 +18,7 @@ Router.map(() ->
     waitOn: () ->
       return [
         Meteor.subscribe('userData') if Meteor.userId()
+        Meteor.subscribe('test', @params.testID)
         Meteor.subscribe('section', @params.secID)
         Meteor.subscribe('testSection', @params.testSecID)
         Meteor.subscribe('testQuestions', @params.testSecID)
