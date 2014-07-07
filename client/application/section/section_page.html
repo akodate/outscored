@@ -6,16 +6,17 @@
     {{/each}}
   </div>
   <nav class='navbar navbar-default navbar-fixed-bottom' role='navigation'>
-    <div class='container'>
-      <ul class='pager'>
+    <div class='container container-bottom'>
+<!--       <ul class='pager'> -->
 <!--         <li class='previous previous-question'><a id='previous-link' href='#'>&larr; Previous</a></li> -->
       <div class='progress-bar'>
         <div class='correct-bar' style="width: {{correctBarWidth}}%"></div>
         <div class='skilled-bar' style="width: {{skilledBarWidth}}%"></div>
         <div class='mastered-bar' style="width: {{masteredBarWidth}}%"></div>
       </div>
+      <div class='skip'>Skip</div>
 <!--         <li class='next next-question'><a id='next-link' href='#'>Next &rarr;</a></li> -->
-      </ul>
+<!--       </ul> -->
     </div>
   </nav>
 </template>

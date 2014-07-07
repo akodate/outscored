@@ -34,6 +34,10 @@ Template.sectionPage.events
     unless $(event.currentTarget).hasClass('finish') && outscoredFind('grayedOut')
       nextQuestion()
 
+  "click .skip": (event, ui) ->
+    console.log "Skip question"
+    skipQuestion()
+
   "click .choice": (event, ui) ->
     if outscoredFind('clickedChoice') == false
       $('.next-question, .previous-question').hide()
@@ -324,6 +328,13 @@ Template.question.helpers
   cycleQuestion()
   outscoredUpdate({noChoicesIn: false})
 
+@skipQuestion = () ->
+   questionIDArray = outscoredFind('questionIDArray')
+   questionIDArray.push(questionIDArray.shift())
+   outscoredUpdate({questionIDArray: questionIDArray})
+   console.log questionIDArray
+   cycleQuestion()
+
 @cycleQuestion = () ->
   reloadQuestion()
   QuestionResults.update({}, {$set: {result: false}}, {multi: true})
@@ -345,15 +356,15 @@ Template.question.helpers
       console.log "Mastered, pushed to end of array."
       questionIDArray.push(questionID)
     else if outscoredFind('isSkilled')
-      index = getIndex(30, 100, arrLength)
+      index = getIndex(50, 100, arrLength)
       console.log "Skilled, new index is: " + index + "/" + arrLength
       questionIDArray.splice((index - 1), 0, questionID)
     else if outscoredFind('isCorrect')
-      index = getIndex(10, 50, arrLength)
+      index = getIndex(20, 50, arrLength)
       console.log "Correct, new index is: " + index + "/" + arrLength
       questionIDArray.splice((index - 1), 0, questionID)
     else if outscoredFind('isIncorrect')
-      index = getIndex(10, 30, arrLength)
+      index = getIndex(15, 40, arrLength)
       console.log "Incorrect, new index is: " + index + "/" + arrLength
       questionIDArray.splice((index - 1), 0, questionID)
     console.log (Meteor.user() || subUser())

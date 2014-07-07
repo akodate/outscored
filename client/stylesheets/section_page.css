@@ -124,9 +124,9 @@
   position: absolute;
   overflow: hidden;
   height: 40px;
-  width: 90%;
+  width: 75%;
   top: 5px;
-  left: 5%;
+  left: 3%;
   border: 1px solid yellow;
   border-radius: 20px;
   background: #7d7e7d; /* Old browsers */
@@ -181,6 +181,11 @@
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b7e7ed', endColorstr='#b7e7ed',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
 }
 
+.container-bottom {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
 .next-button {
   right: 25px;
 }
@@ -193,6 +198,22 @@
   border: none;
   color: white;
   font-size: 24px;
+}
+
+.skip {
+  float: right;
+  height: 40px;
+  width: 18%;
+  margin-top: 5px;
+  line-height: 25px;
+  background-color: black;
+  border: 1px solid yellow;
+  border-radius: 10px;
+  padding: 5px;
+  padding-left: 7px;
+  font-size: 18px;
+  font-family: 'Belgrano';
+  color: white;
 }
 
 .navbar-fixed-bottom {
