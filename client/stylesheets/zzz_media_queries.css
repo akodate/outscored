@@ -327,21 +327,26 @@
   .x {
     font-size: 120px;
   }
-  .question {
-    height: 60%;
-  }
   .answer {
     font-size: 14px;
-  }
-  .choices {
-    height: 40%;
   }
   .choices > p {
     font-size: 15px;
   }
+  .finish {
+    top: 75px;
+  }
 }
 
+
+
 @media (max-height: 450px) {
+  .question {
+    height: 60%;
+  }
+  .choices {
+    height: 40%;
+  }
   .finish {
     top: 62px;
   }
