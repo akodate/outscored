@@ -10,7 +10,6 @@ Template.sectionPage.created = () ->
     Outscored.insert({})
 
   outscoredUpdate({currentQuestionNum: 1})
-  outscoredUpdate({clickedChoice: false})
   outscoredUpdate({isTextCovered: false})
   outscoredUpdate({grayedOut: false})
   outscoredUpdate({noChoicesIn: false})
@@ -157,7 +156,11 @@ Template.question.helpers
       user = Meteor.user() || subUser()
       questionID = getCurrentQuestionID()
       if (user.questionsMastered && questionID in user.questionsMastered) || (user.questionsSkilled && questionID in user.questionsSkilled)
-        (_.intersection(outscoredFind('questionIDArray'), user.questionsMastered).length + 1) || 1
+        currentQuestionNum = (_.intersection(outscoredFind('questionIDArray'), user.questionsMastered).length + 1) || 1
+        if currentQuestionNum < QuestionResults.find().count()
+          currentQuestionNum
+        else
+          QuestionResults.find().count()
       else if user.questionsCorrect && questionID in user.questionsCorrect
         (_.intersection(outscoredFind('questionIDArray'), user.questionsSkilled).length + 1) || 1
       else
@@ -248,13 +251,19 @@ Template.question.helpers
     return originals
 
 @masteredToBack = (user, originals) ->
+  console.log "Mastered to back: " + user
+  console.log originals
   if user.questionsMastered
     normalArr = []
     masteredArr = []
     # Partition into normal and mastered arrays, push mastered to end
     (if id not in user.questionsMastered then normalArr else masteredArr).push id for id in originals
     if normalArr && masteredArr
+      console.log normalArr
+      console.log masteredArr
       originals = normalArr.concat(masteredArr)
+      console.log originals
+      originals
     else
       originals
   else
@@ -329,11 +338,14 @@ Template.question.helpers
   outscoredUpdate({noChoicesIn: false})
 
 @skipQuestion = () ->
-   questionIDArray = outscoredFind('questionIDArray')
-   questionIDArray.push(questionIDArray.shift())
-   outscoredUpdate({questionIDArray: questionIDArray})
-   console.log questionIDArray
-   cycleQuestion()
+  if Meteor.userId() || subUser()
+    questionIDArray = outscoredFind('questionIDArray')
+    questionIDArray.push(questionIDArray.shift())
+    console.log questionIDArray
+    outscoredUpdate({isSkipped: true})
+    questionIDArray = masteredToBack((Meteor.user() || subUser()), questionIDArray)
+    outscoredUpdate({questionIDArray: questionIDArray})
+    cycleQuestion()
 
 @cycleQuestion = () ->
   reloadQuestion()
@@ -346,7 +358,7 @@ Template.question.helpers
   shuffleChoices()
 
 @reloadQuestion = () ->
-  if Meteor.userId() || subUser()
+  if (Meteor.userId() || subUser()) && !outscoredFind('isSkipped')
     questionIDArray = outscoredFind('questionIDArray')
     console.log questionIDArray
     arrLength = questionIDArray.length
@@ -382,6 +394,7 @@ Template.question.helpers
   outscoredUpdate({isSkilled: false})
   outscoredUpdate({isMastered: false})
   outscoredUpdate({isIncorrect: false})
+  outscoredUpdate({isSkipped: false})
   outscoredUpdate({clickedChoice: false})
 
 # @processSelection = (choice) ->

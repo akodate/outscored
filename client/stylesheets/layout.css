@@ -6,7 +6,12 @@ body {
 
 }
 
+.outer-sheet {
+
+}
+
 .sheet {
+  margin: auto;
   background-image: url(/blackboard.jpg);
   background-size: auto 100%;
 /*  background-color: rgba(0, 0, 0, 1);*/
