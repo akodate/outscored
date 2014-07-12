@@ -72,19 +72,19 @@
 }
 
 .correct{
-  font-size: 24px;
+  font-size: 34px;
   color: lime;
   text-align: center;
 }
 
 .skilled{
-  font-size: 30px;
+  font-size: 34px;
   color: teal;
   text-align: center;
 }
 
 .mastered{
-  font-size: 30px;
+  font-size: 34px;
   color: aqua;
   text-align: center;
 }
