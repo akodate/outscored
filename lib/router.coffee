@@ -14,6 +14,7 @@ Router.map( ->
       ]
     onAfterAction: ->
       document.title = "Outsco.red"
+      GAnalytics.pageview()
   })
   @route('sectionPage', {
     path: ':testName/:sectionName/:testID/:secID/:testSecID',
@@ -30,6 +31,7 @@ Router.map( ->
       return Sections.findOne(@params.secID)
     onAfterAction: ->
       document.title = (Tests.findOne(_id: @params.testID).name) + " | " + (/[^\/]+$/.exec(TestSections.findOne(_id: @params.testSecID).filePath))
+      GAnalytics.pageview()
   })
 )
 

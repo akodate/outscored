@@ -10,7 +10,8 @@
       "jquery-color-animation": {},
       "fastclick": {},
       "session-amplify": {},
-      "sitemaps": {}
+      "sitemaps": {},
+      "GAnalytics": {}
     },
     "packages": {
       "iron-router": {
@@ -57,6 +58,11 @@
         "git": "https://github.com/gadicohen/meteor-sitemaps.git",
         "tag": "v0.0.16",
         "commit": "ed4d908c581071d1302b37c6ba77dbce55333dd3"
+      },
+      "GAnalytics": {
+        "git": "https://github.com/datariot/meteor-ganalytics.git",
+        "tag": "v0.2.0",
+        "commit": "2d5e48d5cc4c2f88edd40c0b2341d378bd4a702b"
       },
       "blaze-layout": {
         "git": "https://github.com/EventedMind/blaze-layout.git",

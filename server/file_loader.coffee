@@ -1,3 +1,5 @@
+console.log process.env
+
 if Tests.find().fetch().length != 77
 
   COLLECTION_TYPES = [Tests, Questions, Sections, MidSections]

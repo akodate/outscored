@@ -8,6 +8,7 @@
     "jquery-color-animation": {},
     "fastclick": {},
     "session-amplify": {},
-    "sitemaps": {}
+    "sitemaps": {},
+    "GAnalytics": {}
   }
 }
