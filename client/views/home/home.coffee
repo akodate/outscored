@@ -64,8 +64,11 @@ Template.home.events
     if Meteor.userId() || subUser()
       sectionViewCount(sectionResult.original)
       testViewCount(test._id)
-    testName = test.name.replace(/[^a-z0-9]+/gi,'-')
-    sectionName = sectionName.replace(/[^a-z0-9]+/gi,'-')
+      if sectionName.charCodeAt(0) < 127
+        testName = test.name.replace(/[^a-z0-9]+/gi,'-')
+        sectionName = sectionName.replace(/[^a-z0-9]+/gi,'-')
+      else
+        testName = test.name
     Router.go('sectionPage', {testName: testName, sectionName: sectionName, testSecID: sectionResult._id, secID: sectionResult.original, testID: test._id})
 
   "click #localization": (event, ui) ->
