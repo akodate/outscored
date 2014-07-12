@@ -611,8 +611,6 @@ Template.question.helpers
   else if subUser()
     subQuestionIncorrect(questionID)
 
-@sectionComplete = () ->
-  $("#completeModal").modal "show"
 
 
 
@@ -646,9 +644,9 @@ subSectionStatus = (sectionID) ->
   numMastered = _.intersection(userSectionCorrect, (user.questionsMastered ||= [])).length
   mastery = (numCorrect + numSkilled + numMastered) / 3 / (section.hasQuestions.length) * 100
   console.log "Section mastery is: " + mastery
-  if mastery == 100 && sectionID not in user.sectionsMastered
+  if mastery == 100 && sectionID not in (user.sectionsMastered ||= [])
     console.log "SECTION STATUS IS MASTERED!!!"
-    sectionComplete()
+    $("#completeModal").modal "show"
     subUserUpdate({_id: user._id}, {$addToSet: {sectionsMastered: sectionID}})
   else if mastery > 66
     subUserUpdate({_id: user._id}, {$addToSet: {sectionsSkilled: sectionID}})

@@ -1,8 +1,7 @@
-if Meteor.isClient
-  Template.projectImageItem.events = "click .open-modal": (e, t) ->
-    e.preventDefault()
-    $("#completeModal").modal "show"
-    return
+# Template.modalClicker.events
+#   "click .open-modal": (e, t) ->
+#     e.preventDefault()
+#     $("#completeModal").modal "show"
 
 Template.completeModal.events
 
