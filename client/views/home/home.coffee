@@ -94,6 +94,12 @@ Template.home.helpers
     else
       return 'us'
 
+  autofocus: ->
+    if window.matchMedia("(min-width: 1000px)").matches
+      return true
+    else
+      return false
+
   # Set search heading text
   searchHeading: ->
     localization = Localization.findOne()
