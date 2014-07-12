@@ -1,0 +1,36 @@
+.modal-content {
+  background-image: url(/blackboard.jpg);
+  background-size: auto 100%;
+  border: 2px solid white;
+  color: white;
+}
+
+.modal-title {
+  font-family: 'Homemade Apple';
+  font-size: 26px;
+}
+
+.modal-body {
+  font-family: 'Belgrano';
+  font-size: 18px;
+  font-style: italic;
+}
+
+.modal-nav {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  font-style: normal;
+}
+
+.modal-nav-text {
+  background-color: black;
+  padding: 7px;
+  border: 1px solid white;
+  border-radius: 10px;
+  font-size: 18px;
+}
+
+.close {
+  color: white;
+  opacity: 1;
+}

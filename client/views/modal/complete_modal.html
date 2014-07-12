@@ -1,0 +1,23 @@
+<!-- A modal that contains the bigger view of the image selected -->
+<template name="completeModal">
+  <div class="modal fade in" id="completeModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <p class="modal-title">{{complete}}</p>
+        </div>
+        <div class="modal-body">
+          <p>{{heading}}</p>
+          <p class='modal-nav' data-dismiss="modal"><span class='modal-nav-text mastered-choice modal-stop'>{{stop}}</span></p>
+          <p class='modal-nav' data-dismiss="modal"><span class='modal-nav-text mastered-choice modal-continue'>{{continue}}</span></p>
+<!--           <img src="/us.gif" alt="..." class="img-rounded"> -->
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<template name="projectImageItem">
+  <input type="button" class="open-modal" value="Show modal." />
+</template>

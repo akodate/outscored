@@ -74,6 +74,7 @@
 .correct{
   font-size: 24px;
   color: lime;
+  text-align: center;
 }
 
 .skilled{
@@ -218,16 +219,4 @@
 
 .navbar-fixed-bottom {
   background: black;
-}
-
-.modal-content {
-  background-image: url(/blackboard.jpg);
-  background-size: auto 100%;
-  color: white;
-  font-family: 'Homemade Apple'
-}
-
-.close {
-  color: white;
-  opacity: 1;
 }

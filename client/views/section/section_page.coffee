@@ -1,8 +1,8 @@
 @QuestionResults = new Meteor.Collection(null)
 
-JP_DIGIT_REGEX = /^(\d):/
-JP_PARENTH_REGEX = /^（(\d)）/
-JP_CIRCLE_REGEX = /^[①②③④]/
+# JP_DIGIT_REGEX = /^(\d):/
+# JP_PARENTH_REGEX = /^（(\d)）/
+# JP_CIRCLE_REGEX = /^[①②③④]/
 
 Template.sectionPage.created = () ->
 
@@ -18,15 +18,14 @@ Template.sectionPage.created = () ->
   sectionSetup()
 
 
-
 Template.sectionPage.rendered = () ->
 
   sectionStyleSetup()
   shuffleChoices()
 
 Template.sectionPage.events
-  "click .previous-question": (event, ui) ->
-    previousQuestion()
+  # "click .previous-question": (event, ui) ->
+  #   previousQuestion()
 
   "click .next": (event, ui) ->
     # Unless user clicks on grayed-out next button
@@ -151,22 +150,23 @@ Template.question.helpers
         return "Question"
 
 
-  currentQuestionNum: ->
-    if Meteor.userId() || subUser()
-      user = Meteor.user() || subUser()
-      questionID = getCurrentQuestionID()
-      if (user.questionsMastered && questionID in user.questionsMastered) || (user.questionsSkilled && questionID in user.questionsSkilled)
-        currentQuestionNum = (_.intersection(outscoredFind('questionIDArray'), user.questionsMastered).length + 1) || 1
-        if currentQuestionNum < QuestionResults.find().count()
-          currentQuestionNum
-        else
-          QuestionResults.find().count()
-      else if user.questionsCorrect && questionID in user.questionsCorrect
-        (_.intersection(outscoredFind('questionIDArray'), user.questionsSkilled).length + 1) || 1
-      else
-        (_.intersection(outscoredFind('questionIDArray'), user.questionsCorrect).length + 1) || 1
-    else
-      return @.order
+  # currentQuestionNum: ->
+  #   if Meteor.userId() || subUser()
+  #     user = Meteor.user() || subUser()
+  #     questionID = getCurrentQuestionID()
+  #     if (user.questionsMastered && questionID in user.questionsMastered) || (user.questionsSkilled && questionID in user.questionsSkilled)
+  #       currentQuestionNum = (_.intersection(outscoredFind('questionIDArray'), user.questionsMastered).length + 1) || 1
+  #       if currentQuestionNum < QuestionResults.find().count()
+  #         currentQuestionNum
+  #       else
+  #         console.log "COMPLETE!!!!!!!!!!!!!!"
+  #         QuestionResults.find().count()
+  #     else if user.questionsCorrect && questionID in user.questionsCorrect
+  #       (_.intersection(outscoredFind('questionIDArray'), user.questionsSkilled).length + 1) || 1
+  #     else
+  #       (_.intersection(outscoredFind('questionIDArray'), user.questionsCorrect).length + 1) || 1
+  #   else
+  #     return @.order
 
   totalQuestions: ->
     return QuestionResults.find().count()
@@ -611,6 +611,8 @@ Template.question.helpers
   else if subUser()
     subQuestionIncorrect(questionID)
 
+@sectionComplete = () ->
+  $("#completeModal").modal "show"
 
 
 
@@ -644,8 +646,9 @@ subSectionStatus = (sectionID) ->
   numMastered = _.intersection(userSectionCorrect, (user.questionsMastered ||= [])).length
   mastery = (numCorrect + numSkilled + numMastered) / 3 / (section.hasQuestions.length) * 100
   console.log "Section mastery is: " + mastery
-  if mastery == 100
+  if mastery == 100 && sectionID not in user.sectionsMastered
     console.log "SECTION STATUS IS MASTERED!!!"
+    sectionComplete()
     subUserUpdate({_id: user._id}, {$addToSet: {sectionsMastered: sectionID}})
   else if mastery > 66
     subUserUpdate({_id: user._id}, {$addToSet: {sectionsSkilled: sectionID}})
