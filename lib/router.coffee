@@ -14,7 +14,7 @@ Router.map(() ->
       ]
   })
   @route('sectionPage', {
-    path: ':testName/:sectionName&:testID&:secID&:testSecID',
+    path: ':testName/:sectionName/:testID/:secID/:testSecID',
     waitOn: () ->
       return [
         Meteor.subscribe('userData') if Meteor.userId()

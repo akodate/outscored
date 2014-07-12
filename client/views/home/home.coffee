@@ -266,7 +266,6 @@ Template.home.helpers
   # Find children of clicked test and display them by their dir name
   testResult = Results.findOne(result: true)
   SectionResults.remove({})
-  TestSections.find({_id: {$in: testResult.children}}).fetch()
   TestSections.find({_id: {$in: testResult.children}}).forEach( (doc) ->
     doc.name = (/[^\/]+$/.exec(doc.filePath))[0] ||= ''
     SectionResults.insert(doc)
@@ -294,19 +293,21 @@ Template.home.helpers
   if window.matchMedia("(min-width: 1000px)").matches || window.matchMedia("(min-height: 1000px)").matches
     $('.search-box').focus()
 
-@internationalCSS = (regionSelect) ->
+@internationalCSS = (region) ->
   # Login dropdown styling
   loginDropdown = $(".login, .login-button, #login-buttons-logout")
   loginDropdownMenu = $("#login-dropdown-list > .dropdown-menu")
   if window.matchMedia("(max-width: 370px)").matches
-    switch regionSelect
+    switch region
       when 'JP'
         loginDropdown.css("font-size", "16px")
         loginDropdown.css("font-family", "Belgrano")
         loginDropdownMenu.css("left", "-50px")
+        $(".search-heading").css("font-size", "24px")
       else
         loginDropdown.css("font-size", "20px")
         loginDropdown.css("font-family", "La Belle Aurore")
+        $(".search-heading").css("font-size", "20px")
 
 @setLocalization()
 
