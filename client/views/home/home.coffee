@@ -167,8 +167,14 @@ Template.home.helpers
 
 @setLocalization = () ->
   Localization.remove({})
-  Localization.insert(region: 'US')
-  internationalCSS('US')
+  lang = window.navigator.language
+  console.log lang
+  if lang.match(/jp/i)
+    region = 'JP'
+  else
+    region = 'US'
+  Localization.insert(region: region)
+  internationalCSS(region)
 
 @renderSetup = () ->
   # Clear data
