@@ -54,7 +54,8 @@ Template.home.events
 
   "click .section-result": (event, ui) ->
     # Find section by clicked title and go to section page, use test to subscribe to questions
-    sectionResult = SectionResults.findOne({name: event.target.innerText})
+    sectionName = event.target.innerText
+    sectionResult = SectionResults.findOne({name: sectionName})
     console.log sectionResult
     test = Results.findOne({result: true})
     unless outscoredFind('clickedSection')
@@ -63,7 +64,9 @@ Template.home.events
     if Meteor.userId() || subUser()
       sectionViewCount(sectionResult.original)
       testViewCount(test._id)
-    Router.go('sectionPage', {testSecID: sectionResult._id, secID: sectionResult.original, testID: test._id})
+    testName = test.name.replace(/[^a-z0-9]+/gi,'-')
+    sectionName = sectionName.replace(/[^a-z0-9]+/gi,'-')
+    Router.go('sectionPage', {testName: testName, sectionName: sectionName, testSecID: sectionResult._id, secID: sectionResult.original, testID: test._id})
 
   "click #localization": (event, ui) ->
     # Get 2-letter region from localization dropdown text
