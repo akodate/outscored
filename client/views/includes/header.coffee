@@ -28,3 +28,7 @@ Template._loginButtonsLoggedOutSingleLoginButton.helpers
       return "でログイン"
     else
       return ""
+
+# Template._loginButtonsLoggedInDropdown.displayName = function() {
+#   return Accounts._loginButtons.displayName().match(/^[^\s]*/);
+# };
