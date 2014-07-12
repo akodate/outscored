@@ -1,23 +1,8 @@
-html {
-
-}
-
-body {
-
-}
-
-.outer-sheet {
-
-}
-
 .sheet {
   margin: auto;
   background-image: url(/blackboard.jpg);
   background-size: auto 100%;
-/*  background-color: rgba(0, 0, 0, 1);*/
   font-family: 'La Belle Aurore', cursive;
-/*  bottom: 0px;
-  overflow: hidden;*/
   padding: 0px 0px 0px 0px;
   width: 100%;
   position: absolute;
@@ -32,19 +17,13 @@ body {
 
 .header {
   background-color: rgba(150, 150, 150, 0.3);
-/*  max-height: 62px;*/
 }
 
 .navbar-header {
   width: 100%;
 }
 
-.navbar {
-/*  margin-bottom: 0px;*/
-}
-
 a.navbar-brand {
-/*  color: #E3DE4B !important;*/
   color: white !important;
 }
 
@@ -63,6 +42,13 @@ a.navbar-brand {
   font-family: 'La Belle Aurore';
   font-size: 35px;
   margin-top: 20px;
+  width: 185px;
+}
+
+.dropdown-menu {
+  background: transparent;
+  box-shadow: none;
+  border: none;
 }
 
 #login-dropdown-list > a {
@@ -70,7 +56,7 @@ a.navbar-brand {
 }
 
 .open > a {
-    background-color: transparent !important;
+  background-color: transparent !important;
 }
 
 /*Area behind dropdown buttons*/
@@ -83,34 +69,26 @@ a.navbar-brand {
   font-size: 24px;
   border: 1px solid white;
   padding: 7px;
+  width: 200px;
 }
 
 #login-dropdown-list> div > li > a > button {
   position: absolute;
-  left: 10px;
-  width: 200px;
 }
 
 /*Facebook button*/
 #login-dropdown-list > div > li:nth-child(1) > a > button {
-  top: 6px;
   background-color: #3b5998;
 }
 
 /*Google button*/
 #login-dropdown-list > div > li:nth-child(2) > a > button {
-  top: 51px;
   color: #ffffff;
   background-color: #db4437;
-}
-
-#login-dropdown-list > div {
-  position: relative;
 }
 
 /*Logout button*/
 #login-buttons-logout {
   position: absolute;
-  top: 8px;
   background-color: black;
 }

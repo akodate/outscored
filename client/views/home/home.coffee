@@ -305,7 +305,7 @@ Template.home.helpers
       when 'JP'
         loginDropdown.css("font-size", "16px")
         loginDropdown.css("font-family", "Belgrano")
-        loginDropdownMenu.css("left", "-50px")
+        # loginDropdownMenu.css("left", "0px")
         $(".search-heading").css("font-size", "24px")
       else
         loginDropdown.css("font-size", "20px")

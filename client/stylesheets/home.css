@@ -57,7 +57,6 @@
   text-indent: 10px;
   font-family: 'Homemade Apple';
   color: white;
-/*  opacity: .4;*/
   font-size: 50px;
   width: 90%;
   height: 100px;
@@ -68,16 +67,10 @@
   height: 100%;
   overflow: scroll;
   -webkit-overflow-scrolling: touch;
-/*  box-shadow: 0px 0px 15px white;*/
   border-top: 2px solid yellow;
 }
 
 .search-result {
-/*  position: absolute;
-  width: 800px;
-  bottom: 0px;
-  background-color: white;*/
-/*  background: url(/construction-paper-600x400.jpg);*/
   margin: 10px 0px;
   border: 1px solid white;
   border-radius: 5px;
@@ -87,22 +80,6 @@
   font-size: 36px;
   font-family: 'Belgrano';
   color: white;
-/*  text-align: center;*/
-
-/*  -webkit-animation-duration: .2s;
-     -moz-animation-duration: .2s;
-      -MS-animation-duration: .2s;
-       -o-animation-duration: .2s;
-          animation-duration: .2s;*/
-}
-
-.search-results {
-/*  width: 800px;
-  height: 390px;
-  margin-top: 30px;
-  padding: 0px 50px;
-  position: relative;
-  overflow: scroll;*/
 }
 
 .section-result {
