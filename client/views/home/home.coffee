@@ -6,6 +6,12 @@
 
 Template.home.rendered = () ->
 
+  console.log "Running width"
+  if $('.outer-sheet').width() - $('.sheet').width() != 0
+    extraWidth = $('.outer-sheet').width() - $('.sheet').width()
+    console.log "extraWidth is " + extraWidth
+    $('.sheet').css('margin-left', ((extraWidth / 2).toString() + 'px'))
+
   # unless window.matchMedia("(max-width: 370px)").matches || window.matchMedia("(max-height: 400px)").matches
   #   window.alert "Please access outsco.red from a mobile device"
   #   window.stop()
@@ -119,8 +125,8 @@ Template.home.helpers
   searchPlaceholder: ->
     localization = Localization.findOne()
     if localization
+      region = localization.region
       if window.matchMedia("(max-width: 370px)").matches
-        region = localization.region
         switch region
           when 'JP' then 'ここで検索！'
           else 'Search here!'

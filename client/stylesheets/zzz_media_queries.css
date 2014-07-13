@@ -7,15 +7,22 @@
 }
 
 @media (max-width: 1000px) {
+  .navbar {
+    margin-bottom: 10px;
+  }
   .navbar-brand {
     margin: 15px;
-    font-size: 30px;
+    font-size: 38px;
+  }
+  .navbar-nav.navbar-right:last-child {
+    margin-right: -15px;
   }
   .login {
-    font-size: 24px;
+    margin-top: 30px;
+    font-size: 30px;
   }
   .login-button, #login-buttons-logout {
-  font-size: 20px;
+    font-size: 28px;
   }
 }
 
@@ -24,11 +31,14 @@
     background-color: transparent !important;
   }
   a.dropdown-toggle {
+    font-size: 32px;
     padding: 0px !important;
+  }
+  .navbar-nav.navbar-right:last-child {
+    margin-top: 30px;
   }
   #login-dropdown-list > .dropdown-menu {
     padding: 0px !important;
-
   }
   #login-buttons-logout {
     position: absolute;
@@ -41,7 +51,6 @@
   }
   .login-button, #login-buttons-logout {
     font-size: 20px;
-
   }
 }
 
@@ -54,21 +63,21 @@
     margin: 2px;
     font-size: 20px;
   }
+  .navbar-nav.navbar-right:last-child {
+    margin-top: 20px;
+  }
   .login {
 
-
-    font-size: 20px;
   }
   #login-dropdown-list {
-
     text-align: right;
   }
   a.dropdown-toggle {
     padding: 0px !important;
+    font-size: 24px;
   }
   #login-dropdown-list > .dropdown-menu {
     padding: 0px !important;
-
   }
 }
 
@@ -89,22 +98,24 @@
 }
 
 @media (max-width: 1000px) {
+  .localization-button {
+    margin-top: 32px;
+  }
   .search-group {
-    margin: 55px 0px 0px 35px;
+    margin: 25px 0px 0px 35px;
   }
   .search-heading {
     font-size: 40px;
   }
   .search-arrow {
-    top: -20px;
+    top: 0px;
     left: -10px;
-    font-size: 60px;
+    font-size: 80px;
   }
   .search-box {
-    top: -30px;
     font-size: 40px;
-    height: 50px;
-    line-height: 50px;
+    height: 70px;
+    line-height: 70px;
   }
   .search-result {
     width: 600px;
@@ -125,8 +136,11 @@
 }
 
 @media (max-width: 750px), (max-height: 599px) {
+  .localization-button {
+    margin-top: 20px;
+  }
   .search-group {
-    margin: 65px 0px 0px 10px;
+    margin: 30px 0px 0px 10px;
   }
   .search-heading {
     font-size: 25px;
@@ -137,7 +151,9 @@
     font-size: 40px;
   }
   .search-box {
-    top: -10px;
+    top: 0px;
+    height: 50px;
+    line-height: 50px;
     font-size: 25px;
   }
   .search-result {
@@ -182,6 +198,9 @@
 
 /*Expecting phone portrait - min height of 480px*/
 @media (max-width: 370px) {
+  .localization-button {
+    margin-top: 0px;
+  }
   .search-group {
     margin: 17px 0px 0px 10px;
   }

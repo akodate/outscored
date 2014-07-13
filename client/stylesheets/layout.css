@@ -1,3 +1,8 @@
+.outer-sheet {
+  height: 2000px;
+  background-color: black;
+}
+
 .sheet {
   margin: auto;
   background-image: url(/blackboard.jpg);
@@ -19,6 +24,11 @@
   background-color: rgba(150, 150, 150, 0.3);
 }
 
+.navbar {
+  min-height: 50px;
+  margin-bottom: 0px;
+}
+
 .navbar-header {
   width: 100%;
 }
@@ -38,14 +48,28 @@ a.navbar-brand {
   float: right !important;
 }
 
+.navbar-nav.navbar-right:last-child {
+  margin-top: 20px;
+  margin-right: 15px;
+}
+
 .login {
   font-family: 'La Belle Aurore';
   font-size: 35px;
-  margin-top: 20px;
   width: 185px;
 }
 
+#login-dropdown-list, #login-dropdown-list .dropdown-menu{
+  width: 185px;
+}
+
+.dropdown-toggle {
+  float: right;
+  text-align: right;
+}
+
 .dropdown-menu {
+  top: 25px;
   background: transparent;
   box-shadow: none;
   border: none;
