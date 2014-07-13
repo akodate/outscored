@@ -267,6 +267,7 @@
     font-size: 18px;
   }
   .correct, .skilled, .mastered, .incorrect {
+    line-height: 48px;
     font-size: 48px;
     text-align: center;
   }
@@ -286,9 +287,14 @@
   .question, .choices {
     padding: 10px;
   }
-  .correct, .skilled, .mastered, .incorrect {
+  .correct, .skilled, .mastered {
+    line-height: 34px;
     font-size: 34px;
     text-align: center;
+  }
+  .incorrect {
+    line-height: 24px;
+    font-size: 24px;
   }
   .answer {
     font-size: 18px;

@@ -86,7 +86,7 @@ Template.home.events
     searchText = $('.search-box')[0].value
     Meteor.setTimeout (() ->
       runSearch(searchText)
-    ), 30
+    ), 10
 
 
 
@@ -207,7 +207,7 @@ Template.home.helpers
   $($('.not-animated-section')[0]).removeClass('not-animated-section').addClass('animated bounceInUp').show() # Animate the first remaining test
   # Execute while jQuery hasn't found a test yet or tests can still be found
   if !outscoredFind('testsEntered') || $('.not-animated-section')[0]
-    Meteor.setTimeout sectionsIn, 30
+    Meteor.setTimeout sectionsIn, 10
 
 @colorTest = (testElement) ->
   testText = testElement.innerText.replace(/^\s+|\s+$/g, "")
@@ -283,7 +283,7 @@ Template.home.helpers
     if Meteor.userId() || subUser()
       Meteor.setTimeout (() ->
         colorSection(doc)
-      ), 30
+      ), 10
   )
 
 @colorSection = (section) ->
@@ -300,7 +300,9 @@ Template.home.helpers
         $(sectionElement).addClass('answered-section')
 
 @resetScroll = () ->
-  $('.result-box').scrollTop(0)
+  Meteor.setTimeout (() ->
+    $('.result-box').scrollTop(0)
+  ), 10
   if window.matchMedia("(min-width: 1000px)").matches || window.matchMedia("(min-height: 1000px)").matches
     $('.search-box').focus()
 

@@ -1,5 +1,11 @@
 @QuestionResults = new Meteor.Collection(null)
 
+# Event handler for grayed out items
+$(document).click (e) ->
+  if outscoredFind('grayedOut')
+    outscoredUpdate({grayedOut: false})
+    grayIn()
+
 # JP_DIGIT_REGEX = /^(\d):/
 # JP_PARENTH_REGEX = /^（(\d)）/
 # JP_CIRCLE_REGEX = /^[①②③④]/
@@ -68,11 +74,6 @@ Template.sectionPage.events
         outscoredUpdate({grayedOut: true})
         grayOut()
       ), 10
-
-  "click .finish": (event, ui) ->
-    if outscoredFind('grayedOut')
-      outscoredUpdate({grayedOut: false})
-      grayIn()
 
 
 Template.question.rendered = () ->
