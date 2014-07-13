@@ -1,5 +1,4 @@
 .outer-sheet {
-  height: 2000px;
   background-color: black;
 }
 
@@ -10,6 +9,7 @@
   font-family: 'La Belle Aurore', cursive;
   padding: 0px 0px 0px 0px;
   width: 100%;
+  max-width: 1280px;
   position: absolute;
   height: 100%;
   bottom: 0px;

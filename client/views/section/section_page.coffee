@@ -9,7 +9,7 @@ Template.sectionPage.created = () ->
   if Outscored.find().count() == 0
     Outscored.insert({})
 
-  setWindowWidth()
+  setWindowDimensions()
   outscoredUpdate({currentQuestionNum: 1})
   outscoredUpdate({isTextCovered: false})
   outscoredUpdate({grayedOut: false})
@@ -45,8 +45,8 @@ Template.sectionPage.events
       outscoredUpdate({clickedChoice: true})
       choice = event.target.innerText
       thisQuestion = QuestionResults.findOne({result: true})
-      choice = choice.replace(/^\s|[$()]+|\s*$/g, "")
-      answer = thisQuestion.answer.replace(/^\s|[$()]+|\s*$/g, "")
+      choice = choice.replace(/^\s|[$(),]+|\s*$/g, "")
+      answer = thisQuestion.answer.replace(/^\s|[$(),]+|\s*$/g, "")
       console.log "CHOICE: " + choice
       console.log "ANSWER: " + answer
       if answer.match('^' + choice + '$')

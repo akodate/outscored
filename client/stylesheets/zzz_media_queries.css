@@ -1,11 +1,5 @@
 /*LAYOUT*/
 
-@media (min-width: 1051px) {
-  .sheet {
-    max-width: 1280px
-  }
-}
-
 @media (max-width: 1000px) {
   .navbar {
     margin-bottom: 10px;
@@ -46,9 +40,6 @@
   .navbar-nav > .open > .dropdown-menu {
     position: absolute;
   }
-  #login-dropdown-list > .dropdown-menu {
-
-  }
   .login-button, #login-buttons-logout {
     font-size: 20px;
   }
@@ -65,9 +56,6 @@
   }
   .navbar-nav.navbar-right:last-child {
     margin-top: 20px;
-  }
-  .login {
-
   }
   #login-dropdown-list {
     text-align: right;

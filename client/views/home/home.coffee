@@ -15,7 +15,7 @@ Template.home.rendered = () ->
     Outscored.insert({})
   outscoredUpdate({clickedTest: false, clickedSection: false, testsEntered: false})
 
-  setWindowWidth()
+  setWindowDimensions()
   renderSetup()
   setDivHeights()
   searchArrowSetup()
@@ -166,10 +166,11 @@ Template.home.helpers
   SubUser.update(query, fields)
 
 @setDivHeights = () ->
-  $('#main').css('height', ($('.sheet')[0].offsetHeight - $('#main')[0].offsetTop) + 72)
+  $('#main').css('height', ($('.sheet')[0].offsetHeight - $('#main')[0].offsetTop) + 172)
   $('.result-box').css('height', ($('#main')[0].offsetHeight - $('.result-box')[0].offsetTop))
 
-@setWindowWidth = () ->
+@setWindowDimensions = () ->
+  $('.outer-sheet').css('height', $('.sheet').height() + 'px')
   if $('.outer-sheet').width() - $('.sheet').width() != 0
     extraWidth = $('.outer-sheet').width() - $('.sheet').width()
     console.log "extraWidth is " + extraWidth
