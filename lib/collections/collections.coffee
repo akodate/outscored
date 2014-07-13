@@ -98,8 +98,8 @@ Meteor.methods
       console.log "Section mastery is: " + mastery
       if mastery == 100 && sectionID not in (user.sectionsMastered ||= [])
         console.log "SECTION STATUS IS MASTERED!!!"
-        $("#completeModal").modal "show"
         Meteor.users.update({_id: user._id}, {$addToSet: {sectionsMastered: sectionID}})
+        return "complete"
       else if mastery > 66
         Meteor.users.update({_id: user._id}, {$addToSet: {sectionsSkilled: sectionID}})
       else if mastery > 33

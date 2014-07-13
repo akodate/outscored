@@ -231,7 +231,6 @@ Template.question.helpers
   # Get IDs of original questions from test questions
   originals = []
   TestQuestions.find({}, {sort: {order: 1}}).forEach (doc) ->
-    console.log "Order: " + doc.order
     originals.push(doc.original)
   # Fill client-side questions collection with originals, assign order and active tag
   originals = QIDArrayShuffle(originals)
@@ -253,16 +252,13 @@ Template.question.helpers
     return originals
 
 @masteredToBack = (user, originals) ->
-  console.log "Mastered to back: " + user
-  console.log originals
+  console.log "Mastered to back..."
   if user.questionsMastered
     normalArr = []
     masteredArr = []
     # Partition into normal and mastered arrays, push mastered to end
     (if id not in user.questionsMastered then normalArr else masteredArr).push id for id in originals
     if normalArr && masteredArr
-      console.log normalArr
-      console.log masteredArr
       originals = normalArr.concat(masteredArr)
       console.log originals
       originals
@@ -357,15 +353,14 @@ Template.question.helpers
   else
     QuestionResults.update(order: outscoredFind('currentQuestionNum'), {$set: {result: true}})
   resetQuestion()
+  blankQuestion(outscoredFind('questionIDArray')[0])
   shuffleChoices()
 
 @reloadQuestion = () ->
   if (Meteor.userId() || subUser()) && !outscoredFind('isSkipped')
     questionIDArray = outscoredFind('questionIDArray')
-    console.log questionIDArray
     arrLength = questionIDArray.length
     questionID = questionIDArray.shift()
-    console.log questionIDArray
     if outscoredFind('isMastered')
       console.log "Mastered, pushed to end of array."
       questionIDArray.push(questionID)
@@ -374,7 +369,7 @@ Template.question.helpers
       console.log "Skilled, new index is: " + index + "/" + arrLength
       questionIDArray.splice((index - 1), 0, questionID)
     else if outscoredFind('isCorrect')
-      index = getIndex(20, 50, arrLength)
+      index = getIndex(30, 70, arrLength)
       console.log "Correct, new index is: " + index + "/" + arrLength
       questionIDArray.splice((index - 1), 0, questionID)
     else if outscoredFind('isIncorrect')
@@ -398,6 +393,14 @@ Template.question.helpers
   outscoredUpdate({isIncorrect: false})
   outscoredUpdate({isSkipped: false})
   outscoredUpdate({clickedChoice: false})
+
+@blankQuestion = (questionID) ->
+  if $('.question-content').text() == ''
+    questionCorrect(questionID)
+    questionCorrect(questionID)
+    questionCorrect(questionID)
+    cycleQuestion()
+
 
 # @processSelection = (choice) ->
 #   if choice.match(JP_DIGIT_REGEX)
@@ -527,11 +530,21 @@ Template.question.helpers
 
 @masteryStatus = () ->
   if Meteor.userId() || subUser()
+    user = Meteor.user() || subUser()
     currentTestSection = TestSections.findOne()
     currentTestID = currentTestSection.inTest
     testStatus(currentTestID)
     currentSectionID = currentTestSection.original
+    if currentSectionID in (user.sectionsMastered ||= [])
+      mastered = true
+    else
+      mastered = false
     sectionStatus(currentSectionID)
+    if Meteor.user()
+      Meteor.setTimeout (() ->
+        if mastered == false && currentSectionID in (Meteor.user().sectionsMastered ||= [])
+          $("#completeModal").modal "show"
+      ), 1000
 
 @getCurrentQuestion = () ->
   QuestionResults.findOne(result: true)
