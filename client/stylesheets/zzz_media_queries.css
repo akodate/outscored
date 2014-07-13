@@ -98,7 +98,7 @@
 }
 
 @media (max-width: 1000px) {
-  .localization-button {
+  .localization-button, .section-page {
     margin-top: 32px;
   }
   .search-group {
@@ -136,7 +136,7 @@
 }
 
 @media (max-width: 750px), (max-height: 599px) {
-  .localization-button {
+  .localization-button, .section-page {
     margin-top: 20px;
   }
   .search-group {
@@ -198,7 +198,7 @@
 
 /*Expecting phone portrait - min height of 480px*/
 @media (max-width: 370px) {
-  .localization-button {
+  .localization-button, .section-page {
     margin-top: 0px;
   }
   .search-group {
@@ -276,8 +276,11 @@
     margin: 0px;
   }
   .section-page {
-    padding: 30px;
     font-size: 18px;
+  }
+  .correct, .skilled, .mastered, .incorrect {
+    font-size: 48px;
+    text-align: center;
   }
   #next-link, #previous-link {
     font-size: 22px;
@@ -294,6 +297,10 @@
   }
   .question, .choices {
     padding: 10px;
+  }
+  .correct, .skilled, .mastered, .incorrect {
+    font-size: 34px;
+    text-align: center;
   }
   .answer {
     font-size: 18px;

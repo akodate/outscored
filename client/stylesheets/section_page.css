@@ -6,13 +6,13 @@
   max-height: 100%;
   overflow: hidden;
   border-top: 1px solid white;
-  padding: 45px;
   font-size: 20px;
   font-family: 'Belgrano';
   color: white;
 }
 
 .question, .choices {
+  padding: 20px 45px;
   width: 100%;
   overflow: scroll;
 }
@@ -71,26 +71,25 @@
   padding: 5px;
 }
 
-.correct{
-  font-size: 34px;
-  color: lime;
+.correct, .skilled, .mastered, .incorrect {
+  font-size: 60px;
+  line-height: 60px;
   text-align: center;
+}
+
+.correct{
+  color: lime;
 }
 
 .skilled{
-  font-size: 34px;
   color: teal;
-  text-align: center;
 }
 
 .mastered{
-  font-size: 34px;
   color: aqua;
-  text-align: center;
 }
 
 .incorrect {
-  font-size: 24px;
   color: red;
 }
 

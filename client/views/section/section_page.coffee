@@ -9,6 +9,7 @@ Template.sectionPage.created = () ->
   if Outscored.find().count() == 0
     Outscored.insert({})
 
+  setWindowWidth()
   outscoredUpdate({currentQuestionNum: 1})
   outscoredUpdate({isTextCovered: false})
   outscoredUpdate({grayedOut: false})
@@ -16,6 +17,7 @@ Template.sectionPage.created = () ->
   resetQuestion()
   QuestionResults.remove({})
   sectionSetup()
+
 
 
 Template.sectionPage.rendered = () ->

@@ -6,12 +6,6 @@
 
 Template.home.rendered = () ->
 
-  console.log "Running width"
-  if $('.outer-sheet').width() - $('.sheet').width() != 0
-    extraWidth = $('.outer-sheet').width() - $('.sheet').width()
-    console.log "extraWidth is " + extraWidth
-    $('.sheet').css('margin-left', ((extraWidth / 2).toString() + 'px'))
-
   # unless window.matchMedia("(max-width: 370px)").matches || window.matchMedia("(max-height: 400px)").matches
   #   window.alert "Please access outsco.red from a mobile device"
   #   window.stop()
@@ -21,6 +15,7 @@ Template.home.rendered = () ->
     Outscored.insert({})
   outscoredUpdate({clickedTest: false, clickedSection: false, testsEntered: false})
 
+  setWindowWidth()
   renderSetup()
   setDivHeights()
   searchArrowSetup()
@@ -173,6 +168,12 @@ Template.home.helpers
 @setDivHeights = () ->
   $('#main').css('height', ($('.sheet')[0].offsetHeight - $('#main')[0].offsetTop) + 72)
   $('.result-box').css('height', ($('#main')[0].offsetHeight - $('.result-box')[0].offsetTop))
+
+@setWindowWidth = () ->
+  if $('.outer-sheet').width() - $('.sheet').width() != 0
+    extraWidth = $('.outer-sheet').width() - $('.sheet').width()
+    console.log "extraWidth is " + extraWidth
+    $('.sheet').css('margin-left', ((extraWidth / 2).toString() + 'px'))
 
 @setLocalization = () ->
   Localization.remove({})
