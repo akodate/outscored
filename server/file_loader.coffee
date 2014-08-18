@@ -1,6 +1,6 @@
 console.log process.env
 
-if Tests.find().fetch().length != 77
+if Tests.find().fetch().length != 66
 
   COLLECTION_TYPES = [Tests, Questions, Sections, MidSections]
 

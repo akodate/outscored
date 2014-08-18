@@ -20,7 +20,7 @@ sitemaps.add "/sitemap.xml", ->
         sectionName = section.name
       out.push
         page: testName + '/' + sectionName + '/' + test._id + '/' + section.original + '/' + section._id
-        lastmod: '2014-07-12'
+        lastmod: '2014-07-13'
       console.log _.last(out).page
 
   return out
